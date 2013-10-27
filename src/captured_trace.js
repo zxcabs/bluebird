@@ -1,4 +1,5 @@
 "use strict";
+module.exports = function() {
 var ASSERT = require("./assert.js");
 var inherits = require( "./util.js").inherits;
 
@@ -10,14 +11,17 @@ var rignore = new RegExp(
 
 var rtraceline = null;
 var formatStack = null;
+var areNamesMangled = false;
 
 function CapturedTrace( ignoreUntil, isTopLevel ) {
     ASSERT( typeof ignoreUntil === "function" );
-    ASSERT( typeof ignoreUntil.name === "string" );
-    //Polyfills for V8's stacktrace API work on strings
-    //instead of function identities so the function must have
-    //an unique name
-    ASSERT( ignoreUntil.name.length > 0 );
+    if( !areNamesMangled ) {
+        ASSERT( typeof ignoreUntil.name === "string" );
+        //Polyfills for V8's stacktrace API work on strings
+        //instead of function identities so the function must have
+        //an unique name
+        ASSERT( ignoreUntil.name.length > 0 );
+    }
     this.captureStackTrace( ignoreUntil, isTopLevel );
 
 }
@@ -41,6 +45,9 @@ function CapturedTrace$PossiblyUnhandledRejection( reason ) {
         }
     }
 };
+
+areNamesMangled = CapturedTrace.prototype.captureStackTrace.name !==
+    "CapturedTrace$captureStackTrace";
 
 CapturedTrace.combine = function CapturedTrace$Combine( current, prev ) {
     var curLast = current.length - 1;
@@ -132,7 +139,8 @@ var captureStackTrace = (function stackDetection() {
     var err = new Error();
 
     //SpiderMonkey
-    if( typeof err.stack === "string" &&
+    //Relies on .name strings which must not be mangled
+    if( !areNamesMangled && typeof err.stack === "string" &&
         typeof "".startsWith === "function" &&
         ( err.stack.startsWith("stackDetection@")) &&
         stackDetection.name === "stackDetection" ) {
@@ -186,4 +194,5 @@ var captureStackTrace = (function stackDetection() {
     }
 })();
 
-module.exports = CapturedTrace;
+return CapturedTrace;
+};

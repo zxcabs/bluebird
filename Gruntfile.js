@@ -8,9 +8,94 @@ Q.longStackSupport = true;
 
 module.exports = function( grunt ) {
 
+    var optionalModuleRequireMap = {
+        "any.js": true,
+        "call_get.js": true,
+        "filter.js": true,
+        "generators.js": true,
+        "map.js": true,
+        "nodeify.js": true,
+        "promisify.js": true,
+        "props.js": true,
+        "reduce.js": true,
+        "settle.js": true,
+        "some.js": true,
+        "progress.js": true,
+        "cancel.js": true,
+        "simple_thenables.js": true,
+        "complex_thenables.js": true,
+        "synchronous_inspection.js": true
+
+    };
+
+    function getOptionalRequireCode( srcs ) {
+        return srcs.reduce(function(ret, cur){
+            if( optionalModuleRequireMap[cur] ) {
+                ret += "require('./"+cur+"')(Promise, Promise$_All);\n";
+            }
+            return ret;
+        }, "") + "\nPromise.prototype = Promise.prototype;\nreturn Promise;\n";
+    }
+
+    function getBrowserBuildHeader( sources ) {
+        var header = "/**\n * bluebird build version " + gruntConfig.pkg.version + "\n";
+        var enabledFeatures = ["core"];
+        var disabledFeatures = [];
+        featureLoop: for( var key in optionalModuleRequireMap ) {
+            for( var i = 0, len = sources.length; i < len; ++i ) {
+                var source = sources[i];
+                if( source.fileName === key ) {
+                    enabledFeatures.push( key.replace( ".js", "") );
+                    continue featureLoop;
+                }
+            }
+            disabledFeatures.push( key.replace( ".js", "") );
+        }
+
+        header += ( " * Features enabled: " + enabledFeatures.join(", ") + "\n" );
+
+        if( disabledFeatures.length ) {
+            header += " * Features disabled: " + disabledFeatures.join(", ") + "\n";
+        }
+        header += "*/\n";
+        return header;
+    }
+
+    function applyOptionalRequires( src, optionalRequireCode ) {
+        return src.replace( /};([^}]*)$/, optionalRequireCode + "\n};$1");
+    }
 
     var CONSTANTS_FILE = './src/constants.js';
-    var BUILD_DEBUG_DEST = "./js/main/promise.js";
+    var BUILD_DEBUG_DEST = "./js/main/bluebird.js";
+
+    var license;
+    function getLicense() {
+        if( !license ) {
+            var fs = require("fs");
+            var text = fs.readFileSync("LICENSE", "utf8");
+            text = text.split("\n").map(function(line, index){
+                return " * " + line;
+            }).join("\n")
+            license = "/**\n" + text + "\n */\n";
+        }
+        return license
+    }
+
+    var preserved;
+    function getLicensePreserve() {
+        if( !preserved ) {
+            var fs = require("fs");
+            var text = fs.readFileSync("LICENSE", "utf8");
+            text = text.split("\n").map(function(line, index){
+                if( index === 0 ) {
+                    return " * @preserve " + line;
+                }
+                return " * " + line;
+            }).join("\n")
+            preserved = "/**\n" + text + "\n */\n";
+        }
+        return preserved;
+    }
 
     function writeFile( dest, content ) {
         grunt.file.write( dest, content );
@@ -35,6 +120,7 @@ module.exports = function( grunt ) {
         var globals = {
             TypeError: true,
             __DEBUG__: false,
+            __BROWSER__: false,
             process: false,
             "console": false,
             "require": false,
@@ -109,13 +195,28 @@ module.exports = function( grunt ) {
 
             files: {
                 src: [
+                    "./src/synchronous_inspection.js",
+                    "./src/simple_thenables.js",
+                    "./src/complex_thenables.js",
+                    "./src/progress.js",
+                    "./src/cancel.js",
+                    "./src/any.js",
+                    "./src/call_get.js",
+                    "./src/filter.js",
+                    "./src/generators.js",
+                    "./src/map.js",
+                    "./src/nodeify.js",
+                    "./src/promisify.js",
+                    "./src/props.js",
+                    "./src/reduce.js",
+                    "./src/settle.js",
+                    "./src/some.js",
                     "./src/util.js",
                     "./src/schedule.js",
                     "./src/queue.js",
                     "./src/errors.js",
                     "./src/captured_trace.js",
                     "./src/async.js",
-                    "./src/thenable.js",
                     "./src/catch_filter.js",
                     "./src/promise.js",
                     "./src/promise_array.js",
@@ -190,7 +291,7 @@ module.exports = function( grunt ) {
 
     }
 
-    function buildMain( sources ) {
+    function buildMain( sources, optionalRequireCode ) {
         var fs = require("fs");
         var Q = require("q");
         var root = "./js/main/";
@@ -199,14 +300,17 @@ module.exports = function( grunt ) {
         return Q.all(sources.map(function( source ) {
             var src = astPasses.removeAsserts( source.sourceCode, source.fileName );
             src = astPasses.expandConstants( src, source.fileName );
-            src = src.replace( /__DEBUG__/g, false );
-
+            src = src.replace( /__DEBUG__/g, "false" );
+            src = src.replace( /__BROWSER__/g, "false" );
+            if( source.fileName === "promise.js" ) {
+                src = applyOptionalRequires( src, optionalRequireCode );
+            }
             var path = root + source.fileName;
             return writeFileAsync(path, src);
         }));
     }
 
-    function buildDebug( sources ) {
+    function buildDebug( sources, optionalRequireCode ) {
         var fs = require("fs");
         var Q = require("q");
         var root = "./js/debug/";
@@ -214,13 +318,17 @@ module.exports = function( grunt ) {
         return Q.all(sources.map(function( source ) {
             var src = astPasses.expandAsserts( source.sourceCode, source.fileName );
             src = astPasses.expandConstants( src, source.fileName );
-            src = src.replace( /__DEBUG__/g, true );
+            src = src.replace( /__DEBUG__/g, "true" );
+            src = src.replace( /__BROWSER__/g, "false" );
+            if( source.fileName === "promise.js" ) {
+                src = applyOptionalRequires( src, optionalRequireCode );
+            }
             var path = root + source.fileName;
             return writeFileAsync(path, src);
         }));
     }
 
-    function buildZalgo( sources ) {
+    function buildZalgo( sources, optionalRequireCode ) {
         var fs = require("fs");
         var Q = require("q");
         var root = "./js/zalgo/";
@@ -229,55 +337,122 @@ module.exports = function( grunt ) {
             var src = astPasses.removeAsserts( source.sourceCode, source.fileName );
             src = astPasses.expandConstants( src, source.fileName );
             src = astPasses.asyncConvert( src, "async", "invoke", source.fileName);
-            src = src.replace( /__DEBUG__/g, false );
-
+            src = src.replace( /__DEBUG__/g, "false" );
+            src = src.replace( /__BROWSER__/g, "false" );
+            if( source.fileName === "promise.js" ) {
+                src = applyOptionalRequires( src, optionalRequireCode );
+            }
             var path = root + source.fileName;
             return writeFileAsync(path, src);
         }));
     }
 
-    function buildBrowser() {
+    function buildBrowser( sources ) {
+        var fs = require("fs");
         var browserify = require("browserify");
-        var b = browserify("./js/main/promise.js");
+        var b = browserify("./js/main/bluebird.js");
+        var dest = "./js/browser/bluebird.js";
+
+        var header = getBrowserBuildHeader( sources );
 
         return Q.nbind(b.bundle, b)({
-            detectGlobals: false,
-            standalone: "Promise"
+                detectGlobals: false,
+                standalone: "Promise"
         }).then(function(src) {
-            return writeFileAsync( "./js/browser/bluebird.js", src)
+            return writeFileAsync( dest,
+                getLicensePreserve() + src )
+        }).then(function() {
+            return Q.nfcall(fs.readFile, dest, "utf8" );
+        }).then(function( src ) {
+            src = header + src;
+            src = src.replace( "longStackTraces = false", "longStackTraces = true" );
+            return Q.nfcall(fs.writeFile, dest, src );
         });
-
     }
 
-    function build() {
+    function getOptionalPathsFromOption( opt ) {
+        opt = (opt + "").toLowerCase().split(/\s+/g);
+        return optionalPaths.filter(function(v){
+            v = v.replace("./src/", "").replace( ".js", "" ).toLowerCase();
+            return opt.indexOf(v) > -1;
+        });
+    }
+
+    var optionalPaths = [
+        "./src/synchronous_inspection.js",
+        "./src/any.js",
+        "./src/call_get.js",
+        "./src/filter.js",
+        "./src/generators.js",
+        "./src/map.js",
+        "./src/nodeify.js",
+        "./src/promisify.js",
+        "./src/props.js",
+        "./src/reduce.js",
+        "./src/settle.js",
+        "./src/some.js",
+        "./src/progress.js",
+        "./src/cancel.js"
+    ];
+
+    var mandatoryPaths = [
+        "./src/bluebird.js",
+        "./src/assert.js",
+        "./src/global.js",
+        "./src/get_promise.js",
+        "./src/util.js",
+        "./src/schedule.js",
+        "./src/queue.js",
+        "./src/errors.js",
+        "./src/captured_trace.js",
+        "./src/async.js",
+        "./src/catch_filter.js",
+        "./src/promise.js",
+        "./src/promise_array.js",
+        "./src/settled_promise_array.js",
+        "./src/any_promise_array.js",
+        "./src/some_promise_array.js",
+        "./src/properties_promise_array.js",
+        "./src/promise_inspection.js",
+        "./src/promise_resolver.js",
+        "./src/promise_spawn.js"
+    ];
+
+    var mutExPaths = [
+        {
+            feature: "simple_thenables",
+            featureDisabled: "./src/complex_thenables.js",
+            featureEnabled: "./src/simple_thenables.js"
+        }
+    ];
+
+    function applyMutExPaths( paths, features ) {
+        if( !Array.isArray( features ) ) {
+            features = features.toLowerCase().split( /\s+/g );
+        }
+        mutExPaths.forEach(function( mutExPath ){
+            if( features.indexOf( mutExPath.feature ) > -1 ) {
+                paths.push( mutExPath.featureEnabled );
+            }
+            else {
+                paths.push( mutExPath.featureDisabled );
+            }
+        });
+        return paths;
+    }
+
+    function build( paths ) {
         var fs = require("fs");
         astPasses.readConstants(fs.readFileSync(CONSTANTS_FILE, "utf8"), CONSTANTS_FILE);
-        var paths = [
-            "./src/bluebird.js",
-            "./src/assert.js",
-            "./src/global.js",
-            "./src/get_promise.js",
-            "./src/util.js",
-            "./src/schedule.js",
-            "./src/queue.js",
-            "./src/errors.js",
-            "./src/captured_trace.js",
-            "./src/async.js",
-            "./src/thenable.js",
-            "./src/catch_filter.js",
-            "./src/promise.js",
-            "./src/promise_array.js",
-            "./src/settled_promise_array.js",
-            "./src/any_promise_array.js",
-            "./src/some_promise_array.js",
-            "./src/properties_promise_array.js",
-            "./src/promise_inspection.js",
-            "./src/promise_resolver.js",
-            "./src/promise_spawn.js"
-        ];
+        if( !paths ) {
+            paths = applyMutExPaths( optionalPaths.concat(mandatoryPaths), [] );
+        }
+        var optionalRequireCode = getOptionalRequireCode(paths.map(function(v) {
+            return v.replace("./src/", "");
+        }));
 
         var Q = require("q");
-        //spion this is why Promise.props is necessary
+
         var promises = [];
         var sources = paths.map(function(v){
             var promise = Q.nfcall(fs.readFile, v, "utf8");
@@ -296,12 +471,16 @@ module.exports = function( grunt ) {
             sources.forEach( function( source ) {
                 var src = source.sourceCode
                 src = astPasses.removeComments(src, source.fileName);
+                src = getLicense() + src;
                 source.sourceCode = src;
             });
+
             return Q.all([
-                buildMain( sources ).then(buildBrowser),
-                buildDebug( sources ),
-                buildZalgo( sources )
+                buildMain( sources, optionalRequireCode ).then( function() {
+                    return buildBrowser( sources );
+                }),
+                buildDebug( sources, optionalRequireCode ),
+                buildZalgo( sources, optionalRequireCode )
             ]);
         });
     }
@@ -398,7 +577,15 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( "build", function() {
         var done = this.async();
-        build().then(function(){
+
+        var features = grunt.option("features");
+        var paths = null;
+        if( features ) {
+            paths = getOptionalPathsFromOption( features ).concat( mandatoryPaths );
+            applyMutExPaths( paths, features );
+        }
+
+        build( paths ).then(function() {
             done();
         }).catch(function(e) {
             if( e.fileName && e.stack ) {

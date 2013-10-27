@@ -1,7 +1,7 @@
 {
   "name": "bluebird",
   "description": "Full featured Promises/A+ implementation with exceptionally good performance",
-  "version": "0.9.2-0",
+  "version": "0.9.3-0",
   "keywords": [
     "promise",
     "performance",
@@ -50,5 +50,5 @@
     "text-table": "~0.2.0"
   },
   "readmeFilename": "README.md",
-  "main": "./js/main/promise.js"
+  "main": "./js/main/bluebird.js"
 }

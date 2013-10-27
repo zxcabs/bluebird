@@ -1,3 +1,29 @@
+/**
+ * bluebird build version 0.9.2-1
+ * Features enabled: core, any, call_get, filter, generators, map, nodeify, promisify, props, reduce, settle, some, progress, cancel, complex_thenables, synchronous_inspection
+ * Features disabled: simple_thenables
+*/
+/**
+ * @preserve Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 ;(function (f) {
   // CommonJS
   if (typeof exports === "object") {
@@ -20,6 +46,72 @@
 
 })(function () {var define,module,exports;
 return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise, Promise$_All ) {
+    var AnyPromiseArray = require( "./any_promise_array.js" );
+
+    function Promise$_Any( promises, useBound, caller ) {
+        return Promise$_All(
+            promises,
+            AnyPromiseArray,
+            caller,
+            useBound === true ? promises._boundTo : void 0
+        ).promise();
+    }
+
+    Promise.any = function Promise$Any( promises ) {
+        return Promise$_Any( promises, false, Promise.any );
+    };
+
+    Promise.prototype.any = function Promise$any() {
+        return Promise$_Any( this, true, this.any );
+    };
+
+};
+
+},{"./any_promise_array.js":2}],2:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ASSERT = require("./assert.js");
 var PromiseArray = require( "./promise_array.js" );
@@ -54,7 +146,29 @@ function AnyPromiseArray$_promiseRejected( reason, index ) {
 
 module.exports = AnyPromiseArray;
 
-},{"./assert.js":2,"./promise_array.js":10,"./util.js":20}],2:[function(require,module,exports){
+},{"./assert.js":3,"./promise_array.js":20,"./util.js":35}],3:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
 module.exports = (function(){
     var AssertionError = (function() {
         function AssertionError( a ) {
@@ -83,7 +197,28 @@ module.exports = (function(){
     };
 })();
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ASSERT = require("./assert.js");
 var schedule = require( "./schedule.js" );
@@ -159,8 +294,180 @@ Async.prototype._reset = function Async$_reset() {
 
 module.exports = new Async();
 
-},{"./assert.js":2,"./queue.js":15,"./schedule.js":16,"./util.js":20}],4:[function(require,module,exports){
+},{"./assert.js":3,"./queue.js":27,"./schedule.js":29,"./util.js":35}],5:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
+var Promise = require("./promise.js")();
+module.exports = Promise;
+
+},{"./promise.js":19}],6:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+    Promise.prototype.call = function Promise$call( propertyName ) {
+        var len = arguments.length;
+
+        var args = new Array(len-1);
+        for( var i = 1; i < len; ++i ) {
+            args[ i - 1 ] = arguments[ i ];
+        }
+
+        return this._then( function( obj ) {
+                return obj[ propertyName ].apply( obj, args );
+            },
+            void 0,
+            void 0,
+            void 0,
+            void 0,
+            this.call
+        );
+    };
+
+    function Promise$getter( obj ) {
+        var prop = typeof this === "string"
+            ? this
+            : ("" + this);
+        return obj[ prop ];
+    }
+    Promise.prototype.get = function Promise$get( propertyName ) {
+        return this._then(
+            Promise$getter,
+            void 0,
+            void 0,
+            propertyName,
+            void 0,
+            this.get
+        );
+    };
+};
+
+},{}],7:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+    var errors = require( "./errors.js" );
+    var async = require( "./async.js" );
+    var CancellationError = errors.CancellationError;
+
+    Promise.prototype.cancel = function Promise$cancel() {
+        if( !this.isCancellable() ) return this;
+        var cancelTarget = this;
+        while( cancelTarget._cancellationParent !== void 0 ) {
+            cancelTarget = cancelTarget._cancellationParent;
+        }
+        if( cancelTarget === this ) {
+            var err = new CancellationError();
+            this._attachExtraTrace( err );
+            this._reject( err );
+        }
+        else {
+            async.invoke( cancelTarget.cancel, cancelTarget, void 0 );
+        }
+        return this;
+    };
+
+    Promise.prototype.uncancellable = function Promise$uncancellable() {
+        var ret = new Promise();
+        ret._setTrace( this.uncancellable, this );
+        ret._unsetCancellable();
+        ret._assumeStateOf( this, true );
+        ret._boundTo = this._boundTo;
+        return ret;
+    };
+
+    Promise.prototype.fork =
+    function Promise$fork( didFulfill, didReject, didProgress ) {
+        var ret = this._then( didFulfill, didReject, didProgress,
+            void 0, void 0, this.fork );
+        ret._cancellationParent = void 0;
+        return ret;
+    };
+};
+
+},{"./async.js":4,"./errors.js":11}],8:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function() {
 var ASSERT = require("./assert.js");
 var inherits = require( "./util.js").inherits;
 
@@ -172,8 +479,11 @@ var rignore = new RegExp(
 
 var rtraceline = null;
 var formatStack = null;
+var areNamesMangled = false;
 
 function CapturedTrace( ignoreUntil, isTopLevel ) {
+    if( !areNamesMangled ) {
+    }
     this.captureStackTrace( ignoreUntil, isTopLevel );
 
 }
@@ -197,6 +507,9 @@ function CapturedTrace$PossiblyUnhandledRejection( reason ) {
         }
     }
 };
+
+areNamesMangled = CapturedTrace.prototype.captureStackTrace.name !==
+    "CapturedTrace$captureStackTrace";
 
 CapturedTrace.combine = function CapturedTrace$Combine( current, prev ) {
     var curLast = current.length - 1;
@@ -280,7 +593,7 @@ var captureStackTrace = (function stackDetection() {
     }
     var err = new Error();
 
-    if( typeof err.stack === "string" &&
+    if( !areNamesMangled && typeof err.stack === "string" &&
         typeof "".startsWith === "function" &&
         ( err.stack.startsWith("stackDetection@")) &&
         stackDetection.name === "stackDetection" ) {
@@ -333,9 +646,31 @@ var captureStackTrace = (function stackDetection() {
     }
 })();
 
-module.exports = CapturedTrace;
+return CapturedTrace;
+};
 
-},{"./assert.js":2,"./util.js":20}],5:[function(require,module,exports){
+},{"./assert.js":3,"./util.js":35}],9:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ensureNotHandled = require( "./errors.js" ).ensureNotHandled;
 var util = require( "./util.js");
@@ -368,13 +703,360 @@ CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
 
 module.exports = CatchFilter;
 
-},{"./errors.js":6,"./util.js":20}],6:[function(require,module,exports){
+},{"./errors.js":11,"./util.js":35}],10:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
+module.exports = function( Promise ) {
+    var ASSERT = require("./assert.js");
+    var async = require( "./async.js" );
+    var util = require( "./util.js" );
+    var isPrimitive = util.isPrimitive;
+    var errorObj = util.errorObj;
+    var isObject = util.isObject;
+    var tryCatch2 = util.tryCatch2;
+
+    function Thenable() {
+        this.errorObj = errorObj;
+        this.__id__ = 0;
+        this.treshold = 1000;
+        this.thenableCache = new Array( this.treshold );
+        this.promiseCache = new Array( this.treshold );
+        this._compactQueued = false;
+    }
+    Thenable.prototype.couldBe = function Thenable$couldBe( ret ) {
+        if( isPrimitive( ret ) ) {
+            return false;
+        }
+        var id = ret.__id_$thenable__;
+        if( typeof id === "number" &&
+            this.thenableCache[id] !== void 0 ) {
+            return true;
+        }
+        return ("then" in ret);
+    };
+
+    Thenable.prototype.is = function Thenable$is( ret, ref ) {
+        var id = ret.__id_$thenable__;
+        if( typeof id === "number" &&
+            this.thenableCache[id] !== void 0 ) {
+            ref.ref = this.thenableCache[id];
+            ref.promise = this.promiseCache[id];
+            return true;
+        }
+        return this._thenableSlowCase( ret, ref );
+    };
+
+    Thenable.prototype.addCache =
+    function Thenable$_addCache( thenable, promise ) {
+        var id = this.__id__;
+        this.__id__ = id + 1;
+        var descriptor = this._descriptor( id );
+        Object.defineProperty( thenable, "__id_$thenable__", descriptor );
+        this.thenableCache[id] = thenable;
+        this.promiseCache[id] = promise;
+        if( this.thenableCache.length > this.treshold &&
+            !this._compactQueued) {
+            this._compactQueued = true;
+            async.invokeLater( this._compactCache, this, void 0 );
+        }
+    };
+
+    Thenable.prototype.deleteCache = function Thenable$deleteCache( thenable ) {
+        var id = thenable.__id_$thenable__;
+        if( id === -1 ) {
+            return;
+        }
+        this.thenableCache[id] = void 0;
+        this.promiseCache[id] = void 0;
+        thenable.__id_$thenable__ = -1;    };
+
+    var descriptor = {
+        value: 0,
+        enumerable: false,
+        writable: true,
+        configurable: true
+    };
+    Thenable.prototype._descriptor = function Thenable$_descriptor( id ) {
+        descriptor.value = id;
+        return descriptor;
+    };
+
+    Thenable.prototype._compactCache = function Thenable$_compactCache() {
+        var arr = this.thenableCache;
+        var promiseArr = this.promiseCache;
+        var skips = 0;
+        var j = 0;
+        for( var i = 0, len = arr.length; i < len; ++i ) {
+            var item = arr[ i ];
+            if( item === void 0 ) {
+                skips++;
+            }
+            else {
+                promiseArr[ j ] = promiseArr[ i ];
+                item.__id_$thenable__ = j;
+                arr[ j++ ] = item;
+            }
+        }
+        var newId = arr.length - skips;
+        if( newId === this.__id__ ) {
+            this.treshold *= 2;
+        }
+        else for( var i = newId, len = arr.length; i < len; ++i ) {
+            promiseArr[ j ] = arr[ i ] = void 0;
+        }
+
+        this.__id__ = newId;
+        this._compactQueued = false;
+    };
+
+    Thenable.prototype._thenableSlowCase =
+    function Thenable$_thenableSlowCase( ret, ref ) {
+        try {
+            var then = ret.then;
+            if( typeof then === "function" ) {
+                ref.ref = then;
+                return true;
+            }
+            return false;
+        }
+        catch(e) {
+            this.errorObj.e = e;
+            ref.ref = this.errorObj;
+            return true;
+        }
+    };
+
+    var thenable = new Thenable( errorObj );
+
+    Promise._couldBeThenable = function( val ) {
+        return thenable.couldBe( val );
+    };
+
+    function doThenable( obj, ref, caller ) {
+        if( ref.promise != null ) {
+            return ref.promise;
+        }
+        var resolver = Promise.pending( caller );
+        var result = ref.ref;
+        if( result === errorObj ) {
+            resolver.reject( result.e );
+            return resolver.promise;
+        }
+        thenable.addCache( obj, resolver.promise );
+        var called = false;
+        var ret = tryCatch2( result, obj, function t( a ) {
+            if( called ) return;
+            called = true;
+            async.invoke( thenable.deleteCache, thenable, obj );
+            var b = Promise$_Cast( a );
+            if( b === a ) {
+                resolver.fulfill( a );
+            }
+            else {
+                if( a === obj ) {
+                    resolver.promise._resolveFulfill( a );
+                }
+                else {
+                    b._then(
+                        resolver.fulfill,
+                        resolver.reject,
+                        void 0,
+                        resolver,
+                        void 0,
+                        t
+                    );
+                }
+            }
+        }, function t( a ) {
+            if( called ) return;
+            called = true;
+            async.invoke( thenable.deleteCache, thenable, obj );
+            resolver.reject( a );
+        });
+        if( ret === errorObj && !called ) {
+            resolver.reject( ret.e );
+            async.invoke( thenable.deleteCache, thenable, obj );
+        }
+        return resolver.promise;
+    }
+
+    function Promise$_Cast( obj, caller ) {
+        if( isObject( obj ) ) {
+            if( obj instanceof Promise ) {
+                return obj;
+            }
+            var ref = { ref: null, promise: null };
+            if( thenable.is( obj, ref ) ) {
+                caller = typeof caller === "function" ? caller : Promise$_Cast;
+                return doThenable( obj, ref, caller );
+            }
+        }
+        return obj;
+    }
+
+    Promise.prototype._resolveThenable =
+    function Promise$_resolveThenable( x, ref ) {
+        if( ref.promise != null ) {
+            this._assumeStateOf( ref.promise, true );
+            return;
+        }
+        if( ref.ref === errorObj ) {
+            this._attachExtraTrace( ref.ref.e );
+            async.invoke( this._reject, this, ref.ref.e );
+        }
+        else {
+            thenable.addCache( x, this );
+            var then = ref.ref;
+            var localX = x;
+            var localP = this;
+            var key = {};
+            var called = false;
+            var t = function t( v ) {
+                if( called && this !== key ) return;
+                called = true;
+                var fn = localP._fulfill;
+                var b = Promise$_Cast( v );
+
+                if( b !== v ||
+                    ( b instanceof Promise && b.isPending() ) ) {
+                    if( v === x ) {
+                        async.invoke( fn, localP, v );
+                        async.invoke( thenable.deleteCache, thenable, localX );
+                    }
+                    else {
+                        b._then( t, r, void 0, key, void 0, t);
+                    }
+                    return;
+                }
+
+
+                if( b instanceof Promise ) {
+                    var fn = b.isFulfilled()
+                        ? localP._fulfill : localP._reject;
+                    v = v._resolvedValue;
+                    b = Promise$_Cast( v );
+                    if( b !== v ||
+                        ( b instanceof Promise && b !== v ) ) {
+                        b._then( t, r, void 0, key, void 0, t);
+                        return;
+                    }
+                }
+                async.invoke( fn, localP, v );
+                async.invoke( thenable.deleteCache,
+                        thenable, localX );
+            };
+
+            var r = function r( v ) {
+                if( called && this !== key ) return;
+                var fn = localP._reject;
+                called = true;
+
+                var b = Promise$_Cast( v );
+
+                if( b !== v ||
+                    ( b instanceof Promise && b.isPending() ) ) {
+                    if( v === x ) {
+                        async.invoke( fn, localP, v );
+                        async.invoke( thenable.deleteCache, thenable, localX );
+                    }
+                    else {
+                        b._then( t, r, void 0, key, void 0, t);
+                    }
+                    return;
+                }
+
+
+                if( b instanceof Promise ) {
+                    var fn = b.isFulfilled()
+                        ? localP._fulfill : localP._reject;
+                    v = v._resolvedValue;
+                    b = Promise$_Cast( v );
+                    if( b !== v ||
+                        ( b instanceof Promise && b.isPending() ) ) {
+                        b._then( t, r, void 0, key, void 0, t);
+                        return;
+                    }
+                }
+
+                async.invoke( fn, localP, v );
+                async.invoke( thenable.deleteCache,
+                    thenable, localX );
+
+            };
+            var threw = tryCatch2( then, x, t, r);
+            if( threw === errorObj &&
+                !called ) {
+                this._attachExtraTrace( threw.e );
+                async.invoke( this._reject, this, threw.e );
+                async.invoke( thenable.deleteCache, thenable, x );
+            }
+        }
+    };
+
+    Promise.prototype._tryThenable = function Promise$_tryThenable( x ) {
+        var ref;
+        if( !thenable.is( x, ref = {ref: null, promise: null} ) ) {
+            return false;
+        }
+        this._resolveThenable( x, ref );
+        return true;
+    };
+
+
+    Promise._cast = Promise$_Cast;
+};
+
+
+},{"./assert.js":3,"./async.js":4,"./util.js":35}],11:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+var getPromise = require( "./get_promise.js" );
 var global = require("./global.js");
 var util = require( "./util.js");
 var inherits = util.inherits;
 var isObject = util.isObject;
 var notEnumerableProp = util.notEnumerableProp;
+var Promise = getPromise.get();
 
 function isStackAttached( val ) {
     return ( val & 1 ) > 0;
@@ -402,6 +1084,16 @@ function ensureNotHandled( reason ) {
         ( ( field = reason["__promiseHandled__"] ) !== void 0 ) ) {
         reason["__promiseHandled__"] = withHandledUnmarked( field );
     }
+}
+
+function apiRejection( msg ) {
+    var error = new TypeError( msg );
+    var ret = Promise.rejected( error );
+    var parent = ret._peekContext();
+    if( parent != null ) {
+        parent._attachExtraTrace( error );
+    }
+    return ret;
 }
 
 function attachDefaultState( obj ) {
@@ -459,11 +1151,182 @@ module.exports = {
     withStackAttached: withStackAttached,
     isStackAttached: isStackAttached,
     isHandled: isHandled,
-    canAttach: canAttach
+    canAttach: canAttach,
+    apiRejection: apiRejection
 };
 
 
-},{"./global.js":8,"./util.js":20}],7:[function(require,module,exports){
+},{"./get_promise.js":14,"./global.js":15,"./util.js":35}],12:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise, Promise$_All ) {
+
+    var errors = require( "./errors.js");
+    var apiRejection = errors.apiRejection;
+    var PromiseArray = require( "./promise_array.js" );
+    var ASSERT = require( "./assert.js" );
+
+    function Promise$_filterer( fulfilleds ) {
+        var fn = this;
+        var receiver = void 0;
+        if( typeof fn !== "function" )  {
+            receiver = fn.receiver;
+            fn = fn.fn;
+        }
+        var ret = new Array( fulfilleds.length );
+        var j = 0;
+        if( receiver === void 0 ) {
+             for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
+                var item = fulfilleds[i];
+                if( item === void 0 &&
+                    !( i in fulfilleds ) ) {
+                    continue;
+                }
+                if( fn( item, i, len ) ) {
+                    ret[j++] = item;
+                }
+            }
+        }
+        else {
+            for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
+                var item = fulfilleds[i];
+                if( item === void 0 &&
+                    !( i in fulfilleds ) ) {
+                    continue;
+                }
+                if( fn.call( receiver, item, i, len ) ) {
+                    ret[j++] = item;
+                }
+            }
+        }
+        ret.length = j;
+        return ret;
+    }
+
+    function Promise$_Filter( promises, fn, useBound, caller ) {
+        if( typeof fn !== "function" ) {
+            return apiRejection( "fn is not a function" );
+        }
+
+        if( useBound === true ) {
+            fn = {
+                fn: fn,
+                receiver: promises._boundTo
+            };
+        }
+
+        return Promise$_All( promises, PromiseArray, caller,
+                useBound === true ? promises._boundTo : void 0 )
+            .promise()
+            ._then( Promise$_filterer, void 0, void 0, fn, void 0, caller );
+    }
+
+    Promise.filter = function Promise$Filter( promises, fn ) {
+        return Promise$_Filter( promises, fn, false, Promise.filter );
+    };
+
+    Promise.prototype.filter = function Promise$filter( fn ) {
+        return Promise$_Filter( this, fn, true, this.filter );
+    };
+};
+
+},{"./assert.js":3,"./errors.js":11,"./promise_array.js":20}],13:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+    var PromiseSpawn = require( "./promise_spawn.js" );
+    var errors = require( "./errors.js");
+    var TypeError = errors.TypeError;
+    var apiRejection = errors.apiRejection;
+
+    Promise.coroutine = function Promise$Coroutine( generatorFunction ) {
+         if( typeof generatorFunction !== "function" ) {
+            throw new TypeError( "generatorFunction must be a function" );
+        }
+        var PromiseSpawn$ = PromiseSpawn;
+        return function anonymous() {
+            var generator = generatorFunction.apply( this, arguments );
+            var spawn = new PromiseSpawn$( void 0, void 0, anonymous );
+            spawn._generator = generator;
+            spawn._next( void 0 );
+            return spawn.promise();
+        };
+    };
+
+    Promise.spawn = function Promise$Spawn( generatorFunction ) {
+        if( typeof generatorFunction !== "function" ) {
+            return apiRejection( "generatorFunction must be a function" );
+        }
+        var spawn = new PromiseSpawn( generatorFunction, this, Promise.spawn );
+        var ret = spawn.promise();
+        spawn._run( Promise.spawn );
+        return ret;
+    };
+};
+
+},{"./errors.js":11,"./promise_spawn.js":23}],14:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
 var P;
 
 module.exports = {
@@ -475,7 +1338,28 @@ module.exports = {
     }
 };
 
-},{}],8:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 module.exports = (function(){
     if( typeof this !== "undefined" ) {
@@ -494,8 +1378,303 @@ module.exports = (function(){
     }
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
+module.exports = function( Promise, Promise$_All ) {
+
+    var errors = require( "./errors.js" );
+    var PromiseArray = require( "./promise_array.js" );
+    var apiRejection = errors.apiRejection;
+    var ASSERT = require( "./assert.js" );
+
+    function Promise$_mapper( fulfilleds ) {
+        var fn = this;
+        var receiver = void 0;
+
+        if( typeof fn !== "function" )  {
+            receiver = fn.receiver;
+            fn = fn.fn;
+        }
+        var shouldDefer = false;
+
+        if( receiver === void 0 ) {
+            for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
+                if( fulfilleds[i] === void 0 &&
+                    !(i in fulfilleds) ) {
+                    continue;
+                }
+                var fulfill = fn( fulfilleds[ i ], i, len );
+                if( !shouldDefer && Promise.is( fulfill ) ) {
+                    if( fulfill.isFulfilled() ) {
+                        fulfilleds[i] = fulfill._resolvedValue;
+                        continue;
+                    }
+                    else {
+                        shouldDefer = true;
+                    }
+                }
+                fulfilleds[i] = fulfill;
+            }
+        }
+        else {
+            for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
+                if( fulfilleds[i] === void 0 &&
+                    !(i in fulfilleds) ) {
+                    continue;
+                }
+                var fulfill = fn.call( receiver, fulfilleds[ i ], i, len );
+                if( !shouldDefer && Promise.is( fulfill ) ) {
+                    if( fulfill.isFulfilled() ) {
+                        fulfilleds[i] = fulfill._resolvedValue;
+                        continue;
+                    }
+                    else {
+                        shouldDefer = true;
+                    }
+                }
+                fulfilleds[i] = fulfill;
+            }
+        }
+        return shouldDefer
+            ? Promise$_All( fulfilleds, PromiseArray,
+                Promise$_mapper, void 0 ).promise()
+            : fulfilleds;
+    }
+
+    function Promise$_Map( promises, fn, useBound, caller ) {
+        if( typeof fn !== "function" ) {
+            return apiRejection( "fn is not a function" );
+        }
+
+        if( useBound === true ) {
+            fn = {
+                fn: fn,
+                receiver: promises._boundTo
+            };
+        }
+
+        return Promise$_All(
+            promises,
+            PromiseArray,
+            caller,
+            useBound === true ? promises._boundTo : void 0
+        ).promise()
+        ._then(
+            Promise$_mapper,
+            void 0,
+            void 0,
+            fn,
+            void 0,
+            caller
+        );
+    }
+
+    Promise.prototype.map = function Promise$map( fn ) {
+        return Promise$_Map( this, fn, true, this.map );
+    };
+
+    Promise.map = function Promise$Map( promises, fn ) {
+        return Promise$_Map( promises, fn, false, Promise.map );
+    };
+};
+
+},{"./assert.js":3,"./errors.js":11,"./promise_array.js":20}],17:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+
+    var util = require( "./util.js" );
+    var async = require( "./async.js" );
+    var ASSERT = require( "./assert.js" );
+    var tryCatch2 = util.tryCatch2;
+    var tryCatch1 = util.tryCatch1;
+    var errorObj = util.errorObj;
+
+    function thrower( r ) {
+        throw r;
+    }
+
+    function Promise$_successAdapter( val, receiver ) {
+        var nodeback = this;
+        var ret = tryCatch2( nodeback, receiver, null, val );
+        if( ret === errorObj ) {
+            async.invokeLater( thrower, void 0, ret.e );
+        }
+    }
+    function Promise$_errorAdapter( reason, receiver ) {
+        var nodeback = this;
+        var ret = tryCatch1( nodeback, receiver, reason );
+        if( ret === errorObj ) {
+            async.invokeLater( thrower, void 0, ret.e );
+        }
+    }
+
+    Promise.prototype.nodeify = function Promise$nodeify( nodeback ) {
+        if( typeof nodeback == "function" ) {
+            this._then(
+                Promise$_successAdapter,
+                Promise$_errorAdapter,
+                void 0,
+                nodeback,
+                this._isBound() ? this._boundTo : null,
+                this.nodeify
+            );
+        }
+        return this;
+    };
+};
+
+},{"./assert.js":3,"./async.js":4,"./util.js":35}],18:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+    var ASSERT = require( "./assert.js");
+    var util = require( "./util.js" );
+    var async = require( "./async.js" );
+    var tryCatch1 = util.tryCatch1;
+    var errorObj = util.errorObj;
+
+    Promise.prototype.progressed = function Promise$progressed( fn ) {
+        return this._then( void 0, void 0, fn,
+                            void 0, void 0, this.progressed );
+    };
+
+    Promise.prototype._progress = function Promise$_progress( progressValue ) {
+        if( this._isFollowingOrFulfilledOrRejected() ) return;
+        this._resolveProgress( progressValue );
+
+    };
+
+    Promise.prototype._progressAt = function Promise$_progressAt( index ) {
+        if( index === 0 ) return this._progress0;
+        return this[ index + 2 - 5 ];
+    };
+
+    Promise.prototype._resolveProgress =
+    function Promise$_resolveProgress( progressValue ) {
+        var len = this._length();
+        for( var i = 0; i < len; i += 5 ) {
+            var fn = this._progressAt( i );
+            var promise = this._promiseAt( i );
+            if( !Promise.is( promise ) ) {
+                fn.call( this._receiverAt( i ), progressValue, promise );
+                continue;
+            }
+            var ret = progressValue;
+            if( fn !== void 0 ) {
+                this._pushContext();
+                ret = tryCatch1( fn, this._receiverAt( i ), progressValue );
+                this._popContext();
+                if( ret === errorObj ) {
+                    if( ret.e != null &&
+                        ret.e.name === "StopProgressPropagation" ) {
+                        ret.e["__promiseHandled__"] = 2;
+                    }
+                    else {
+                        promise._attachExtraTrace( ret.e );
+                        async.invoke( promise._progress, promise, ret.e );
+                    }
+                }
+                else if( Promise.is( ret ) ) {
+                    ret._then( promise._progress, null, null, promise, void 0,
+                        this._progress );
+                }
+                else {
+                    async.invoke( promise._progress, promise, ret );
+                }
+            }
+            else {
+                async.invoke( promise._progress, promise, ret );
+            }
+        }
+    };
+};
+
+},{"./assert.js":3,"./async.js":4,"./util.js":35}],19:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function() {
 var global = require("./global.js");
 var ASSERT = require("./assert.js");
 var getPromise = require("./get_promise.js");
@@ -504,26 +1683,15 @@ var util = require( "./util.js" );
 var async = require( "./async.js" );
 var errors = require( "./errors.js" );
 var PromiseArray = require( "./promise_array.js" );
-var SomePromiseArray = require( "./some_promise_array.js" );
-var AnyPromiseArray = require( "./any_promise_array.js" );
-var PropertiesPromiseArray = require( "./properties_promise_array.js" );
-var SettledPromiseArray = require( "./settled_promise_array.js" );
 
-var CapturedTrace = require( "./captured_trace.js");
+var CapturedTrace = require( "./captured_trace.js")();
 var CatchFilter = require( "./catch_filter.js");
-var PromiseInspection = require( "./promise_inspection.js" );
 var PromiseResolver = require( "./promise_resolver.js" );
-var PromiseSpawn = require( "./promise_spawn.js" );
-var Thenable = require( "./thenable.js" );
 
 var isArray = util.isArray;
-var makeNodePromisified = util.makeNodePromisified;
-var THIS = util.THIS;
 var notEnumerableProp = util.notEnumerableProp;
-var isPrimitive = util.isPrimitive;
 var isObject = util.isObject;
 var ensurePropertyExpansion = util.ensurePropertyExpansion;
-var deprecated = util.deprecated;
 var errorObj = util.errorObj;
 var tryCatch1 = util.tryCatch1;
 var tryCatch2 = util.tryCatch2;
@@ -538,9 +1706,10 @@ var withStackAttached = errors.withStackAttached;
 var isStackAttached = errors.isStackAttached;
 var isHandled = errors.isHandled;
 var canAttach = errors.canAttach;
+var apiRejection = errors.apiRejection;
 
 var APPLY = {};
-var thenable = new Thenable( errorObj );
+
 
 function isPromise( obj ) {
     if( typeof obj !== "object" ) return false;
@@ -606,11 +1775,6 @@ function Promise$catch( fn ) {
     return this._then( void 0, fn, void 0, void 0, void 0, this.caught );
 };
 
-Promise.prototype.progressed = function Promise$progressed( fn ) {
-    return this._then( void 0, void 0, fn, void 0, void 0, this.progressed );
-};
-
-
 function thrower( r ) {
     throw r;
 }
@@ -642,80 +1806,6 @@ function Promise$finally( fn ) {
         return reasonOrValue;
     };
     return this._then( r, r, void 0, this, void 0, this.lastly );
-};
-
-Promise.prototype.inspect = function Promise$inspect() {
-    return new PromiseInspection( this );
-};
-
-Promise.prototype.cancel = function Promise$cancel() {
-    if( !this.isCancellable() ) return this;
-    var cancelTarget = this;
-    while( cancelTarget._cancellationParent !== void 0 ) {
-        cancelTarget = cancelTarget._cancellationParent;
-    }
-    if( cancelTarget === this ) {
-        var err = new CancellationError();
-        this._attachExtraTrace( err );
-        this._reject( err );
-    }
-    else {
-        async.invoke( cancelTarget.cancel, cancelTarget, void 0 );
-    }
-    return this;
-};
-
-Promise.prototype.uncancellable = function Promise$uncancellable() {
-    var ret = new Promise();
-    ret._setTrace( this.uncancellable, this );
-    ret._unsetCancellable();
-    ret._assumeStateOf( this, true );
-    ret._boundTo = this._boundTo;
-    return ret;
-};
-
-Promise.prototype.fork =
-function Promise$fork( didFulfill, didReject, didProgress ) {
-    var ret = this._then( didFulfill, didReject, didProgress,
-        void 0, void 0, this.fork );
-    ret._cancellationParent = void 0;
-    return ret;
-};
-
-Promise.prototype.call = function Promise$call( propertyName ) {
-    var len = arguments.length;
-
-    var args = new Array(len-1);
-    for( var i = 1; i < len; ++i ) {
-        args[ i - 1 ] = arguments[ i ];
-    }
-
-    return this._then( function( obj ) {
-            return obj[ propertyName ].apply( obj, args );
-        },
-        void 0,
-        void 0,
-        void 0,
-        void 0,
-        this.call
-    );
-};
-
-function Promise$getter( obj ) {
-    var prop = typeof this === "string"
-        ? this
-        : ("" + this);
-    return obj[ prop ];
-}
-Promise.prototype.get = function Promise$get( propertyName ) {
-    return this._then(
-        Promise$getter,
-        void 0,
-        void 0,
-        propertyName,
-        void 0,
-        this.get
-    );
 };
 
 Promise.prototype.then =
@@ -757,109 +1847,28 @@ Promise.prototype.isCancellable = function Promise$isCancellable() {
 };
 
 Promise.prototype.toJSON = function Promise$toJSON() {
-    var inspection = this.inspect();
     var ret = {
         isFulfilled: false,
         isRejected: false,
         fulfillmentValue: void 0,
         rejectionReason: void 0
     };
-    if( inspection.isFulfilled() ) {
-        ret.fulfillmentValue = inspection.value();
+    if( this.isFulfilled() ) {
+        ret.fulfillmentValue = this._resolvedValue;
         ret.isFulfilled = true;
     }
-    else if( inspection.isRejected() ) {
-        ret.rejectionReason = inspection.error();
+    else if( this.isRejected() ) {
+        ret.rejectionReason = this._resolvedValue;
         ret.isRejected = true;
     }
     return ret;
-};
-
-function Promise$_successAdapter( val, receiver ) {
-    var nodeback = this;
-    var ret = tryCatch2( nodeback, receiver, null, val );
-    if( ret === errorObj ) {
-        async.invokeLater( thrower, void 0, ret.e );
-    }
-}
-function Promise$_errorAdapter( reason, receiver ) {
-    var nodeback = this;
-    var ret = tryCatch1( nodeback, receiver, reason );
-    if( ret === errorObj ) {
-        async.invokeLater( thrower, void 0, ret.e );
-    }
-}
-
-Promise.prototype.nodeify = function Promise$nodeify( nodeback ) {
-    if( typeof nodeback == "function" ) {
-        this._then(
-            Promise$_successAdapter,
-            Promise$_errorAdapter,
-            void 0,
-            nodeback,
-            this._isBound() ? this._boundTo : null,
-            this.nodeify
-        );
-    }
-    return this;
-};
-
-function apiRejection( msg ) {
-    var error = new TypeError( msg );
-    var ret = Promise.rejected( error );
-    var parent = ret._peekContext();
-    if( parent != null ) {
-        parent._attachExtraTrace( error );
-    }
-    return ret;
-}
-
-Promise.prototype.map = function Promise$map( fn ) {
-    return Promise$_Map( this, fn, true, this.map );
-};
-
-
-Promise.prototype.filter = function Promise$filter( fn ) {
-    return Promise$_Filter( this, fn, true, this.filter );
 };
 
 Promise.prototype.all = function Promise$all() {
     return Promise$_all( this, true, this.all );
 };
 
-Promise.prototype.any = function Promise$any() {
-    return Promise$_Any( this, true, this.any );
-};
-
-Promise.prototype.settle = function Promise$settle() {
-    return Promise$_Settle( this, true, this.settle );
-};
-
-Promise.prototype.some = function Promise$some( count ) {
-    return Promise$_Some( this, count, true, this.some );
-};
-
-Promise.prototype.reduce = function Promise$reduce( fn, initialValue ) {
-    return Promise$_Reduce( this, fn, initialValue, true, this.reduce );
-};
-
- Promise.prototype.props = function Promise$props() {
-    return Promise$_Props( this, true, this.props );
- };
-
 Promise.is = isPromise;
-
-function Promise$_Settle( promises, useBound, caller ) {
-    return Promise$_All(
-        promises,
-        SettledPromiseArray,
-        caller,
-        useBound === true ? promises._boundTo : void 0
-    ).promise();
-}
-Promise.settle = function Promise$Settle( promises ) {
-    return Promise$_Settle( promises, false, Promise.settle );
-};
 
 function Promise$_all( promises, useBound, caller ) {
     return Promise$_All(
@@ -873,33 +1882,6 @@ Promise.all = function Promise$All( promises ) {
     return Promise$_all( promises, false, Promise.all );
 };
 
-function Promise$_Props( promises, useBound, caller ) {
-    var ret;
-    if( isPrimitive( promises ) ) {
-        ret = Promise.fulfilled( promises, caller );
-    }
-    else if( isPromise( promises ) ) {
-        ret = promises._then( Promise.props, void 0, void 0,
-                        void 0, void 0, caller );
-    }
-    else {
-        ret = new PropertiesPromiseArray(
-            promises,
-            caller,
-            useBound === true ? promises._boundTo : void 0
-        ).promise();
-        useBound = false;
-    }
-    if( useBound === true ) {
-        ret._boundTo = promises._boundTo;
-    }
-    return ret;
-}
-
-Promise.props = function Promise$Props( promises ) {
-    return Promise$_Props( promises, false, Promise.props );
-};
-
 Promise.join = function Promise$Join() {
     var ret = new Array( arguments.length );
     for( var i = 0, len = ret.length; i < len; ++i ) {
@@ -907,286 +1889,6 @@ Promise.join = function Promise$Join() {
     }
     return Promise$_All( ret, PromiseArray, Promise.join, void 0 ).promise();
 };
-
-function Promise$_Any( promises, useBound, caller ) {
-    return Promise$_All(
-        promises,
-        AnyPromiseArray,
-        caller,
-        useBound === true ? promises._boundTo : void 0
-    ).promise();
-}
-Promise.any = function Promise$Any( promises ) {
-    return Promise$_Any( promises, false, Promise.any );
-};
-
-function Promise$_Some( promises, howMany, useBound, caller ) {
-    if( ( howMany | 0 ) !== howMany ) {
-        return apiRejection("howMany must be an integer");
-    }
-    var ret = Promise$_All(
-        promises,
-        SomePromiseArray,
-        caller,
-        useBound === true ? promises._boundTo : void 0
-    );
-    ret.setHowMany( howMany );
-    return ret.promise();
-}
-Promise.some = function Promise$Some( promises, howMany ) {
-    return Promise$_Some( promises, howMany, false, Promise.some );
-};
-
-
-function Promise$_mapper( fulfilleds ) {
-    var fn = this;
-    var receiver = void 0;
-
-    if( typeof fn !== "function" )  {
-        receiver = fn.receiver;
-        fn = fn.fn;
-    }
-    var shouldDefer = false;
-
-    if( receiver === void 0 ) {
-        for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
-            if( fulfilleds[i] === void 0 &&
-                !(i in fulfilleds) ) {
-                continue;
-            }
-            var fulfill = fn( fulfilleds[ i ], i, len );
-            if( !shouldDefer && isPromise( fulfill ) ) {
-                if( fulfill.isFulfilled() ) {
-                    fulfilleds[i] = fulfill._resolvedValue;
-                    continue;
-                }
-                else {
-                    shouldDefer = true;
-                }
-            }
-            fulfilleds[i] = fulfill;
-        }
-    }
-    else {
-        for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
-            if( fulfilleds[i] === void 0 &&
-                !(i in fulfilleds) ) {
-                continue;
-            }
-            var fulfill = fn.call( receiver, fulfilleds[ i ], i, len );
-            if( !shouldDefer && isPromise( fulfill ) ) {
-                if( fulfill.isFulfilled() ) {
-                    fulfilleds[i] = fulfill._resolvedValue;
-                    continue;
-                }
-                else {
-                    shouldDefer = true;
-                }
-            }
-            fulfilleds[i] = fulfill;
-        }
-    }
-    return shouldDefer
-        ? Promise$_All( fulfilleds, PromiseArray,
-            Promise$_mapper, void 0 ).promise()
-        : fulfilleds;
-}
-
-function Promise$_Map( promises, fn, useBound, caller ) {
-    if( typeof fn !== "function" ) {
-        return apiRejection( "fn is not a function" );
-    }
-
-    if( useBound === true ) {
-        fn = {
-            fn: fn,
-            receiver: promises._boundTo
-        };
-    }
-
-    return Promise$_All(
-        promises,
-        PromiseArray,
-        caller,
-        useBound === true ? promises._boundTo : void 0
-    ).promise()
-    ._then(
-        Promise$_mapper,
-        void 0,
-        void 0,
-        fn,
-        void 0,
-        caller
-    );
-
-
-}
-Promise.map = function Promise$Map( promises, fn ) {
-    return Promise$_Map( promises, fn, false, Promise.map );
-};
-
-function Promise$_reducer( fulfilleds, initialValue ) {
-    var fn = this;
-    var receiver = void 0;
-    if( typeof fn !== "function" )  {
-        receiver = fn.receiver;
-        fn = fn.fn;
-    }
-    var len = fulfilleds.length;
-    var accum = void 0;
-    var startIndex = 0;
-
-    if( initialValue !== void 0 ) {
-        accum = initialValue;
-        startIndex = 0;
-    }
-    else {
-        startIndex = 1;
-        if( len > 0 ) {
-            for( var i = 0; i < len; ++i ) {
-                if( fulfilleds[i] === void 0 &&
-                    !(i in fulfilleds) ) {
-                    continue;
-                }
-                accum = fulfilleds[i];
-                startIndex = i + 1;
-                break;
-            }
-        }
-    }
-    if( receiver === void 0 ) {
-        for( var i = startIndex; i < len; ++i ) {
-            if( fulfilleds[i] === void 0 &&
-                !(i in fulfilleds) ) {
-                continue;
-            }
-            accum = fn( accum, fulfilleds[i], i, len );
-        }
-    }
-    else {
-        for( var i = startIndex; i < len; ++i ) {
-            if( fulfilleds[i] === void 0 &&
-                !(i in fulfilleds) ) {
-                continue;
-            }
-            accum = fn.call( receiver, accum, fulfilleds[i], i, len );
-        }
-    }
-    return accum;
-}
-
-function Promise$_unpackReducer( fulfilleds ) {
-    var fn = this.fn;
-    var initialValue = this.initialValue;
-    return Promise$_reducer.call( fn, fulfilleds, initialValue );
-}
-
-function Promise$_slowReduce( promises, fn, initialValue, useBound, caller ) {
-    return initialValue._then( function callee( initialValue ) {
-        return Promise$_Reduce( promises, fn, initialValue, useBound, callee );
-    }, void 0, void 0, void 0, void 0, caller);
-}
-
-function Promise$_Reduce( promises, fn, initialValue, useBound, caller ) {
-    if( typeof fn !== "function" ) {
-        return apiRejection( "fn is not a function" );
-    }
-
-    if( useBound === true ) {
-        fn = {
-            fn: fn,
-            receiver: promises._boundTo
-        };
-    }
-
-    if( initialValue !== void 0 ) {
-        if( isPromise( initialValue ) ) {
-            if( initialValue.isFulfilled() ) {
-                initialValue = initialValue._resolvedValue;
-            }
-            else {
-                return Promise$_slowReduce( promises,
-                    fn, initialValue, useBound, caller );
-            }
-        }
-
-        return Promise$_All( promises, PromiseArray, caller,
-            useBound === true ? promises._boundTo : void 0 )
-            .promise()
-            ._then( Promise$_unpackReducer, void 0, void 0, {
-                fn: fn,
-                initialValue: initialValue
-            }, void 0, Promise.reduce );
-    }
-    return Promise$_All( promises, PromiseArray, caller,
-            useBound === true ? promises._boundTo : void 0 ).promise()
-        ._then( Promise$_reducer, void 0, void 0, fn, void 0, caller );
-}
-
-Promise.reduce = function Promise$Reduce( promises, fn, initialValue ) {
-    return Promise$_Reduce( promises, fn,
-        initialValue, false, Promise.reduce);
-};
-
-function Promise$_filterer( fulfilleds ) {
-    var fn = this;
-    var receiver = void 0;
-    if( typeof fn !== "function" )  {
-        receiver = fn.receiver;
-        fn = fn.fn;
-    }
-    var ret = new Array( fulfilleds.length );
-    var j = 0;
-    if( receiver === void 0 ) {
-         for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
-            var item = fulfilleds[i];
-            if( item === void 0 &&
-                !( i in fulfilleds ) ) {
-                continue;
-            }
-            if( fn( item, i, len ) ) {
-                ret[j++] = item;
-            }
-        }
-    }
-    else {
-        for( var i = 0, len = fulfilleds.length; i < len; ++i ) {
-            var item = fulfilleds[i];
-            if( item === void 0 &&
-                !( i in fulfilleds ) ) {
-                continue;
-            }
-            if( fn.call( receiver, item, i, len ) ) {
-                ret[j++] = item;
-            }
-        }
-    }
-    ret.length = j;
-    return ret;
-}
-
-function Promise$_Filter( promises, fn, useBound, caller ) {
-    if( typeof fn !== "function" ) {
-        return apiRejection( "fn is not a function" );
-    }
-
-    if( useBound === true ) {
-        fn = {
-            fn: fn,
-            receiver: promises._boundTo
-        };
-    }
-
-    return Promise$_All( promises, PromiseArray, caller,
-            useBound === true ? promises._boundTo : void 0 )
-        .promise()
-        ._then( Promise$_filterer, void 0, void 0, fn, void 0, caller );
-}
-
-Promise.filter = function Promise$Filter( promises, fn ) {
-    return Promise$_Filter( promises, fn, false, Promise.filter );
-};
-
 Promise.fulfilled = function Promise$Fulfilled( value, caller ) {
     var ret = new Promise();
     ret._setTrace( typeof caller === "function"
@@ -1249,10 +1951,8 @@ Promise.bind = function Promise$Bind( obj ) {
     return ret;
 };
 
-
-Promise._cast = cast;
 Promise.cast = function Promise$Cast( obj, caller ) {
-    var ret = cast( obj, caller );
+    var ret = Promise._cast( obj, caller );
     if( !( ret instanceof Promise ) ) {
         return Promise.fulfilled( ret, caller );
     }
@@ -1269,31 +1969,7 @@ function Promise$OnPossiblyUnhandledRejection( fn ) {
     }
 };
 
-Promise.coroutine = function Promise$Coroutine( generatorFunction ) {
-     if( typeof generatorFunction !== "function" ) {
-        throw new TypeError( "generatorFunction must be a function" );
-    }
-    var PromiseSpawn$ = PromiseSpawn;
-    return function anonymous() {
-        var generator = generatorFunction.apply( this, arguments );
-        var spawn = new PromiseSpawn$( void 0, void 0, anonymous );
-        spawn._generator = generator;
-        spawn._next( void 0 );
-        return spawn.promise();
-    };
-};
-
-Promise.spawn = function Promise$Spawn( generatorFunction ) {
-    if( typeof generatorFunction !== "function" ) {
-        return apiRejection( "generatorFunction must be a function" );
-    }
-    var spawn = new PromiseSpawn( generatorFunction, this, Promise.spawn );
-    var ret = spawn.promise();
-    spawn._run( Promise.spawn );
-    return ret;
-};
-
-var longStackTraces = false || (
+var longStackTraces = true || false || !!(
     typeof process !== "undefined" &&
     typeof process.execPath === "string" &&
     typeof process.env === "object" &&
@@ -1312,72 +1988,6 @@ Promise.longStackTraces = function Promise$LongStackTraces() {
 
 Promise.hasLongStackTraces = function Promise$HasLongStackTraces() {
     return longStackTraces;
-};
-
-function f(){}
-function isPromisified( fn ) {
-    return fn.__isPromisified__ === true;
-}
-var hasProp = {}.hasOwnProperty;
-var roriginal = new RegExp( "__beforePromisified__" + "$" );
-function _promisify( callback, receiver, isAll ) {
-    if( isAll ) {
-        var changed = 0;
-        var o = {};
-        for( var key in callback ) {
-            if( !roriginal.test( key ) &&
-                !hasProp.call( callback,
-                    ( key + "__beforePromisified__" ) ) &&
-                typeof callback[ key ] === "function" ) {
-                var fn = callback[key];
-                if( !isPromisified( fn ) ) {
-                    changed++;
-                    var originalKey = key + "__beforePromisified__";
-                    var promisifiedKey = key + "Async";
-                    notEnumerableProp( callback, originalKey, fn );
-                    o[ promisifiedKey ] =
-                        makeNodePromisified( originalKey, THIS, key );
-                }
-            }
-        }
-        if( changed > 0 ) {
-            for( var key in o ) {
-                if( hasProp.call( o, key ) ) {
-                    callback[key] = o[key];
-                }
-            }
-            f.prototype = callback;
-        }
-
-        return callback;
-    }
-    else {
-        return makeNodePromisified( callback, receiver, void 0 );
-    }
-}
-Promise.promisify = function Promise$Promisify( callback, receiver ) {
-    if( typeof callback === "object" && callback !== null ) {
-        deprecated( "Promise.promisify for promisifying entire objects " +
-            "is deprecated. Use Promise.promisifyAll instead." );
-        return _promisify( callback, receiver, true );
-    }
-    if( typeof callback !== "function" ) {
-        throw new TypeError( "callback must be a function" );
-    }
-    if( isPromisified( callback ) ) {
-        return callback;
-    }
-    return _promisify(
-        callback,
-        arguments.length < 2 ? THIS : receiver,
-        false );
-};
-
-Promise.promisifyAll = function Promise$PromisifyAll( target ) {
-    if( typeof target !== "function" && typeof target !== "object" ) {
-        throw new TypeError( "Cannot promisify " + typeof target );
-    }
-    return _promisify( target, void 0, true );
 };
 
 Promise.prototype._then =
@@ -1511,11 +2121,6 @@ Promise.prototype._rejectAt = function Promise$_rejectAt( index ) {
     return this[ index + 1 - 5 ];
 };
 
-Promise.prototype._progressAt = function Promise$_progressAt( index ) {
-    if( index === 0 ) return this._progress0;
-    return this[ index + 2 - 5 ];
-};
-
 Promise.prototype._unsetAt = function Promise$_unsetAt( index ) {
     if( index === 0 ) {
         this._fulfill0 =
@@ -1603,171 +2208,6 @@ Promise.prototype._isBound = function Promise$_isBound() {
 };
 
 
-function cast( obj, caller ) {
-    if( isObject( obj ) ) {
-        if( obj instanceof Promise ) {
-            return obj;
-        }
-        var ref = { ref: null, promise: null };
-        if( thenable.is( obj, ref ) ) {
-            if( ref.promise != null ) {
-                return ref.promise;
-            }
-            var resolver = Promise.pending( caller );
-            var result = ref.ref;
-            if( result === errorObj ) {
-                resolver.reject( result.e );
-                return resolver.promise;
-            }
-            thenable.addCache( obj, resolver.promise );
-            var called = false;
-            var ret = tryCatch2( result, obj, function t( a ) {
-                if( called ) return;
-                called = true;
-                async.invoke( thenable.deleteCache, thenable, obj );
-                var b = cast( a );
-                if( b === a ) {
-                    resolver.fulfill( a );
-                }
-                else {
-                    if( a === obj ) {
-                        resolver.promise._resolveFulfill( a );
-                    }
-                    else {
-                        b._then(
-                            resolver.fulfill,
-                            resolver.reject,
-                            void 0,
-                            resolver,
-                            void 0,
-                            t
-                        );
-                    }
-                }
-            }, function t( a ) {
-                if( called ) return;
-                called = true;
-                async.invoke( thenable.deleteCache, thenable, obj );
-                resolver.reject( a );
-            });
-            if( ret === errorObj && !called ) {
-                resolver.reject( ret.e );
-                async.invoke( thenable.deleteCache, thenable, obj );
-            }
-            return resolver.promise;
-        }
-    }
-    return obj;
-}
-
-Promise.prototype._resolveThenable =
-function Promise$_resolveThenable( x, ref ) {
-    if( ref.promise != null ) {
-        this._assumeStateOf( ref.promise, true );
-        return;
-    }
-    if( ref.ref === errorObj ) {
-        this._attachExtraTrace( ref.ref.e );
-        async.invoke( this._reject, this, ref.ref.e );
-    }
-    else {
-        thenable.addCache( x, this );
-        var then = ref.ref;
-        var localX = x;
-        var localP = this;
-        var key = {};
-        var called = false;
-        var t = function t( v ) {
-            if( called && this !== key ) return;
-            called = true;
-            var fn = localP._fulfill;
-            var b = cast( v );
-
-            if( b !== v ||
-                ( b instanceof Promise && b.isPending() ) ) {
-                if( v === x ) {
-                    async.invoke( fn, localP, v );
-                    async.invoke( thenable.deleteCache, thenable, localX );
-                }
-                else {
-                    b._then( t, r, void 0, key, void 0, t);
-                }
-                return;
-            }
-
-
-            if( b instanceof Promise ) {
-                var fn = b.isFulfilled()
-                    ? localP._fulfill : localP._reject;
-                v = v._resolvedValue;
-                b = cast( v );
-                if( b !== v ||
-                    ( b instanceof Promise && b !== v ) ) {
-                    b._then( t, r, void 0, key, void 0, t);
-                    return;
-                }
-            }
-            async.invoke( fn, localP, v );
-            async.invoke( thenable.deleteCache,
-                    thenable, localX );
-        };
-
-        var r = function r( v ) {
-            if( called && this !== key ) return;
-            var fn = localP._reject;
-            called = true;
-
-            var b = cast( v );
-
-            if( b !== v ||
-                ( b instanceof Promise && b.isPending() ) ) {
-                if( v === x ) {
-                    async.invoke( fn, localP, v );
-                    async.invoke( thenable.deleteCache, thenable, localX );
-                }
-                else {
-                    b._then( t, r, void 0, key, void 0, t);
-                }
-                return;
-            }
-
-
-            if( b instanceof Promise ) {
-                var fn = b.isFulfilled()
-                    ? localP._fulfill : localP._reject;
-                v = v._resolvedValue;
-                b = cast( v );
-                if( b !== v ||
-                    ( b instanceof Promise && b.isPending() ) ) {
-                    b._then( t, r, void 0, key, void 0, t);
-                    return;
-                }
-            }
-
-            async.invoke( fn, localP, v );
-            async.invoke( thenable.deleteCache,
-                thenable, localX );
-
-        };
-        var threw = tryCatch2( then, x, t, r);
-        if( threw === errorObj &&
-            !called ) {
-            this._attachExtraTrace( threw.e );
-            async.invoke( this._reject, this, threw.e );
-            async.invoke( thenable.deleteCache, thenable, x );
-        }
-    }
-};
-
-Promise.prototype._tryThenable = function Promise$_tryThenable( x ) {
-    var ref;
-    if( !thenable.is( x, ref = {ref: null, promise: null} ) ) {
-        return false;
-    }
-    this._resolveThenable( x, ref );
-    return true;
-};
-
 var ignore = CatchFilter.prototype.doFilter;
 Promise.prototype._resolvePromise = function Promise$_resolvePromise(
     onFulfilledOrRejected, receiver, value, promise
@@ -1843,7 +2283,7 @@ Promise.prototype._resolvePromise = function Promise$_resolvePromise(
         if( promise._tryAssumeStateOf( x, true ) ) {
             return;
         }
-        else if( thenable.couldBe( x ) ) {
+        else if( Promise._couldBeThenable( x ) ) {
 
             if( promise._length() === 0 ) {
                 promise._resolvedValue = x;
@@ -1987,12 +2427,6 @@ Promise.prototype._reject = function Promise$_reject( reason ) {
     this._resolveReject( reason );
 };
 
-Promise.prototype._progress = function Promise$_progress( progressValue ) {
-    if( this._isFollowingOrFulfilledOrRejected() ) return;
-    this._resolveProgress( progressValue );
-
-};
-
 Promise.prototype._doResolveAt = function Promise$_doResolveAt( i ) {
     var fn = this.isFulfilled()
         ? this._fulfillAt( i )
@@ -2102,45 +2536,6 @@ Promise.prototype._resolveReject = function Promise$_resolveReject( reason ) {
 
 };
 
-Promise.prototype._resolveProgress =
-function Promise$_resolveProgress( progressValue ) {
-    var len = this._length();
-    for( var i = 0; i < len; i += 5 ) {
-        var fn = this._progressAt( i );
-        var promise = this._promiseAt( i );
-        if( !isPromise( promise ) ) {
-            fn.call( this._receiverAt( i ), progressValue, promise );
-            continue;
-        }
-        var ret = progressValue;
-        if( fn !== void 0 ) {
-            this._pushContext();
-            ret = tryCatch1( fn, this._receiverAt( i ), progressValue );
-            this._popContext();
-            if( ret === errorObj ) {
-                if( ret.e != null &&
-                    ret.e.name === "StopProgressPropagation" ) {
-                    ret.e["__promiseHandled__"] = 2;
-                }
-                else {
-                    promise._attachExtraTrace( ret.e );
-                    async.invoke( promise._progress, promise, ret.e );
-                }
-            }
-            else if( isPromise( ret ) ) {
-                ret._then( promise._progress, null, null, promise, void 0,
-                    this._progress );
-            }
-            else {
-                async.invoke( promise._progress, promise, ret );
-            }
-        }
-        else {
-            async.invoke( promise._progress, promise, ret );
-        }
-    }
-};
-
 var contextStack = [];
 Promise.prototype._peekContext = function Promise$_peekContext() {
     var lastIndex = contextStack.length - 1;
@@ -2198,14 +2593,53 @@ if( !CapturedTrace.isSupported() ) {
     longStackTraces = false;
 }
 
-
 Promise.CancellationError = CancellationError;
 Promise.TimeoutError = TimeoutError;
 Promise.TypeError = TypeError;
 
-module.exports = Promise;
+require('./synchronous_inspection.js')(Promise, Promise$_All);
+require('./any.js')(Promise, Promise$_All);
+require('./call_get.js')(Promise, Promise$_All);
+require('./filter.js')(Promise, Promise$_All);
+require('./generators.js')(Promise, Promise$_All);
+require('./map.js')(Promise, Promise$_All);
+require('./nodeify.js')(Promise, Promise$_All);
+require('./promisify.js')(Promise, Promise$_All);
+require('./props.js')(Promise, Promise$_All);
+require('./reduce.js')(Promise, Promise$_All);
+require('./settle.js')(Promise, Promise$_All);
+require('./some.js')(Promise, Promise$_All);
+require('./progress.js')(Promise, Promise$_All);
+require('./cancel.js')(Promise, Promise$_All);
+require('./complex_thenables.js')(Promise, Promise$_All);
 
-},{"./any_promise_array.js":1,"./assert.js":2,"./async.js":3,"./captured_trace.js":4,"./catch_filter.js":5,"./errors.js":6,"./get_promise.js":7,"./global.js":8,"./promise_array.js":10,"./promise_inspection.js":11,"./promise_resolver.js":12,"./promise_spawn.js":13,"./properties_promise_array.js":14,"./settled_promise_array.js":17,"./some_promise_array.js":18,"./thenable.js":19,"./util.js":20}],10:[function(require,module,exports){
+Promise.prototype = Promise.prototype;
+return Promise;
+
+};
+
+},{"./any.js":1,"./assert.js":3,"./async.js":4,"./call_get.js":6,"./cancel.js":7,"./captured_trace.js":8,"./catch_filter.js":9,"./complex_thenables.js":10,"./errors.js":11,"./filter.js":12,"./generators.js":13,"./get_promise.js":14,"./global.js":15,"./map.js":16,"./nodeify.js":17,"./progress.js":18,"./promise_array.js":20,"./promise_resolver.js":22,"./promisify.js":24,"./props.js":26,"./reduce.js":28,"./settle.js":30,"./some.js":32,"./synchronous_inspection.js":34,"./util.js":35}],20:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ASSERT = require("./assert.js");
 var Promise = require("./get_promise").get();
@@ -2233,6 +2667,8 @@ function PromiseArray( values, caller, boundTo ) {
     this._totalResolved = 0;
     this._init( void 0, 1 );
 }
+PromiseArray.PropertiesPromiseArray = function() {};
+
 PromiseArray.prototype.length = function PromiseArray$length() {
     return this._length;
 };
@@ -2398,7 +2834,28 @@ function PromiseArray$_promiseRejected( reason ) {
 
 module.exports = PromiseArray;
 
-},{"./assert.js":2,"./async.js":3,"./errors.js":6,"./get_promise":7,"./util.js":20}],11:[function(require,module,exports){
+},{"./assert.js":3,"./async.js":4,"./errors.js":11,"./get_promise":14,"./util.js":35}],21:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var TypeError = require( "./errors.js" ).TypeError;
 
@@ -2446,7 +2903,28 @@ PromiseInspection.prototype.error = function PromiseInspection$error() {
 
 module.exports = PromiseInspection;
 
-},{"./errors.js":6}],12:[function(require,module,exports){
+},{"./errors.js":11}],22:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var util = require( "./util.js" );
 var errors = require( "./errors.js");
@@ -2514,7 +2992,28 @@ PromiseResolver.prototype.toJSON = function PromiseResolver$toJSON() {
 
 module.exports = PromiseResolver;
 
-},{"./async.js":3,"./errors.js":6,"./util.js":20}],13:[function(require,module,exports){
+},{"./async.js":4,"./errors.js":11,"./util.js":35}],23:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var Promise = require("./get_promise.js").get();
 var errors = require( "./errors.js" );
@@ -2589,7 +3088,225 @@ PromiseSpawn.prototype._next = function PromiseSpawn$_next( value ) {
 
 module.exports = PromiseSpawn;
 
-},{"./errors.js":6,"./get_promise.js":7,"./util.js":20}],14:[function(require,module,exports){
+},{"./errors.js":11,"./get_promise.js":14,"./util.js":35}],24:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+    var THIS = {};
+    var util = require( "./util.js");
+    var withAppended = util.withAppended;
+    var maybeWrapAsError = util.maybeWrapAsError;
+    var nodebackForResolver = util.nodebackForResolver;
+    var canEvaluate = util.canEvaluate;
+    var notEnumerableProp = util.notEnumerableProp;
+    var deprecated = util.deprecated;
+    var ASSERT = require( "./assert.js" );
+
+    function makeNodePromisifiedEval( callback, receiver, originalName ) {
+        function getCall(count) {
+            var args = new Array(count);
+            for( var i = 0, len = args.length; i < len; ++i ) {
+                args[i] = "a" + (i+1);
+            }
+            var comma = count > 0 ? "," : "";
+
+            if( typeof callback === "string" &&
+                receiver === THIS ) {
+                return "this['" + callback + "']("+args.join(",") +
+                    comma +" fn);"+
+                    "break;";
+            }
+            return ( receiver === void 0
+                ? "callback("+args.join(",")+ comma +" fn);"
+                : "callback.call("+( receiver === THIS
+                    ? "this"
+                    : "receiver" )+", "+args.join(",") + comma + " fn);" ) +
+            "break;";
+        }
+
+        function getArgs() {
+            return "var args = new Array( len + 1 );" +
+            "var i = 0;" +
+            "for( var i = 0; i < len; ++i ) { " +
+            "   args[i] = arguments[i];" +
+            "}" +
+            "args[i] = fn;";
+        }
+
+        var callbackName = ( typeof originalName === "string" ?
+            originalName + "Async" :
+            "promisified" );
+
+        return new Function("Promise", "callback", "receiver",
+                "withAppended", "maybeWrapAsError", "nodebackForResolver",
+            "var ret = function " + callbackName +
+            "( a1, a2, a3, a4, a5 ) {\"use strict\";" +
+            "var len = arguments.length;" +
+            "var resolver = Promise.pending( " + callbackName + " );" +
+            "var fn = nodebackForResolver( resolver );"+
+            "try{" +
+            "switch( len ) {" +
+            "case 1:" + getCall(1) +
+            "case 2:" + getCall(2) +
+            "case 3:" + getCall(3) +
+            "case 0:" + getCall(0) +
+            "case 4:" + getCall(4) +
+            "case 5:" + getCall(5) +
+            "default: " + getArgs() + (typeof callback === "string"
+                ? "this['" + callback + "'].apply("
+                : "callback.apply("
+            ) +
+                ( receiver === THIS ? "this" : "receiver" ) +
+            ", args ); break;" +
+            "}" +
+            "}" +
+            "catch(e){ " +
+            "" +
+            "resolver.reject( maybeWrapAsError( e ) );" +
+            "}" +
+            "return resolver.promise;" +
+            "" +
+            "}; ret.__isPromisified__ = true; return ret;"
+        )(Promise, callback, receiver, withAppended,
+            maybeWrapAsError, nodebackForResolver);
+    }
+
+    function makeNodePromisifiedClosure( callback, receiver ) {
+        function promisified() {
+            var _receiver = receiver;
+            if( receiver === THIS ) _receiver = this;
+            if( typeof callback === "string" ) {
+                callback = _receiver[callback];
+            }
+            var resolver = Promise.pending( promisified );
+            var fn = nodebackForResolver( resolver );
+            try {
+                callback.apply( _receiver, withAppended( arguments, fn ) );
+            }
+            catch(e) {
+                resolver.reject( maybeWrapAsError( e ) );
+            }
+            return resolver.promise;
+        }
+        promisified.__isPromisified__ = true;
+        return promisified;
+    }
+
+    var makeNodePromisified = canEvaluate
+        ? makeNodePromisifiedEval
+        : makeNodePromisifiedClosure;
+
+    function f(){}
+    function isPromisified( fn ) {
+        return fn.__isPromisified__ === true;
+    }
+    var hasProp = {}.hasOwnProperty;
+    var roriginal = new RegExp( "__beforePromisified__" + "$" );
+    function _promisify( callback, receiver, isAll ) {
+        if( isAll ) {
+            var changed = 0;
+            var o = {};
+            for( var key in callback ) {
+                if( !roriginal.test( key ) &&
+                    !hasProp.call( callback,
+                        ( key + "__beforePromisified__" ) ) &&
+                    typeof callback[ key ] === "function" ) {
+                    var fn = callback[key];
+                    if( !isPromisified( fn ) ) {
+                        changed++;
+                        var originalKey = key + "__beforePromisified__";
+                        var promisifiedKey = key + "Async";
+                        notEnumerableProp( callback, originalKey, fn );
+                        o[ promisifiedKey ] =
+                            makeNodePromisified( originalKey, THIS, key );
+                    }
+                }
+            }
+            if( changed > 0 ) {
+                for( var key in o ) {
+                    if( hasProp.call( o, key ) ) {
+                        callback[key] = o[key];
+                    }
+                }
+                f.prototype = callback;
+            }
+
+            return callback;
+        }
+        else {
+            return makeNodePromisified( callback, receiver, void 0 );
+        }
+    }
+
+    Promise.promisify = function Promise$Promisify( callback, receiver ) {
+        if( typeof callback === "object" && callback !== null ) {
+            deprecated( "Promise.promisify for promisifying entire objects " +
+                "is deprecated. Use Promise.promisifyAll instead." );
+            return _promisify( callback, receiver, true );
+        }
+        if( typeof callback !== "function" ) {
+            throw new TypeError( "callback must be a function" );
+        }
+        if( isPromisified( callback ) ) {
+            return callback;
+        }
+        return _promisify(
+            callback,
+            arguments.length < 2 ? THIS : receiver,
+            false );
+    };
+
+    Promise.promisifyAll = function Promise$PromisifyAll( target ) {
+        if( typeof target !== "function" && typeof target !== "object" ) {
+            throw new TypeError( "Cannot promisify " + typeof target );
+        }
+        return _promisify( target, void 0, true );
+    };
+};
+
+
+},{"./assert.js":3,"./util.js":35}],25:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ASSERT = require("./assert.js");
 var Promise = require("./get_promise.js").get();
@@ -2646,7 +3363,90 @@ PromiseArray.PropertiesPromiseArray = PropertiesPromiseArray;
 
 module.exports = PropertiesPromiseArray;
 
-},{"./assert.js":2,"./get_promise.js":7,"./promise_array.js":10,"./util.js":20}],15:[function(require,module,exports){
+},{"./assert.js":3,"./get_promise.js":14,"./promise_array.js":20,"./util.js":35}],26:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise ) {
+    var PropertiesPromiseArray = require( "./properties_promise_array.js" );
+    var util = require( "./util.js" );
+    var isPrimitive = util.isPrimitive;
+
+    function Promise$_Props( promises, useBound, caller ) {
+        var ret;
+        if( isPrimitive( promises ) ) {
+            ret = Promise.fulfilled( promises, caller );
+        }
+        else if( Promise.is( promises ) ) {
+            ret = promises._then( Promise.props, void 0, void 0,
+                            void 0, void 0, caller );
+        }
+        else {
+            ret = new PropertiesPromiseArray(
+                promises,
+                caller,
+                useBound === true ? promises._boundTo : void 0
+            ).promise();
+            useBound = false;
+        }
+        if( useBound === true ) {
+            ret._boundTo = promises._boundTo;
+        }
+        return ret;
+    }
+
+    Promise.prototype.props = function Promise$props() {
+        return Promise$_Props( this, true, this.props );
+    };
+
+    Promise.props = function Promise$Props( promises ) {
+        return Promise$_Props( promises, false, Promise.props );
+    };
+};
+
+
+
+},{"./properties_promise_array.js":25,"./util.js":35}],27:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ASSERT = require("./assert.js");
 function arrayCopy( src, srcIndex, dst, dstIndex, len ) {
@@ -2762,7 +3562,170 @@ Queue.prototype._resizeTo = function Queue$_resizeTo( capacity ) {
 
 module.exports = Queue;
 
-},{"./assert.js":2}],16:[function(require,module,exports){
+},{"./assert.js":3}],28:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise, Promise$_All ) {
+
+    var ASSERT = require( "./assert.js" );
+    var errors = require( "./errors.js");
+    var PromiseArray = require( "./promise_array.js" );
+    var apiRejection = errors.apiRejection;
+
+    function Promise$_reducer( fulfilleds, initialValue ) {
+        var fn = this;
+        var receiver = void 0;
+        if( typeof fn !== "function" )  {
+            receiver = fn.receiver;
+            fn = fn.fn;
+        }
+        var len = fulfilleds.length;
+        var accum = void 0;
+        var startIndex = 0;
+
+        if( initialValue !== void 0 ) {
+            accum = initialValue;
+            startIndex = 0;
+        }
+        else {
+            startIndex = 1;
+            if( len > 0 ) {
+                for( var i = 0; i < len; ++i ) {
+                    if( fulfilleds[i] === void 0 &&
+                        !(i in fulfilleds) ) {
+                        continue;
+                    }
+                    accum = fulfilleds[i];
+                    startIndex = i + 1;
+                    break;
+                }
+            }
+        }
+        if( receiver === void 0 ) {
+            for( var i = startIndex; i < len; ++i ) {
+                if( fulfilleds[i] === void 0 &&
+                    !(i in fulfilleds) ) {
+                    continue;
+                }
+                accum = fn( accum, fulfilleds[i], i, len );
+            }
+        }
+        else {
+            for( var i = startIndex; i < len; ++i ) {
+                if( fulfilleds[i] === void 0 &&
+                    !(i in fulfilleds) ) {
+                    continue;
+                }
+                accum = fn.call( receiver, accum, fulfilleds[i], i, len );
+            }
+        }
+        return accum;
+    }
+
+    function Promise$_unpackReducer( fulfilleds ) {
+        var fn = this.fn;
+        var initialValue = this.initialValue;
+        return Promise$_reducer.call( fn, fulfilleds, initialValue );
+    }
+
+    function Promise$_slowReduce(
+        promises, fn, initialValue, useBound, caller ) {
+        return initialValue._then( function callee( initialValue ) {
+            return Promise$_Reduce(
+                promises, fn, initialValue, useBound, callee );
+        }, void 0, void 0, void 0, void 0, caller);
+    }
+
+    function Promise$_Reduce( promises, fn, initialValue, useBound, caller ) {
+        if( typeof fn !== "function" ) {
+            return apiRejection( "fn is not a function" );
+        }
+
+        if( useBound === true ) {
+            fn = {
+                fn: fn,
+                receiver: promises._boundTo
+            };
+        }
+
+        if( initialValue !== void 0 ) {
+            if( Promise.is( initialValue ) ) {
+                if( initialValue.isFulfilled() ) {
+                    initialValue = initialValue._resolvedValue;
+                }
+                else {
+                    return Promise$_slowReduce( promises,
+                        fn, initialValue, useBound, caller );
+                }
+            }
+
+            return Promise$_All( promises, PromiseArray, caller,
+                useBound === true ? promises._boundTo : void 0 )
+                .promise()
+                ._then( Promise$_unpackReducer, void 0, void 0, {
+                    fn: fn,
+                    initialValue: initialValue
+                }, void 0, Promise.reduce );
+        }
+        return Promise$_All( promises, PromiseArray, caller,
+                useBound === true ? promises._boundTo : void 0 ).promise()
+            ._then( Promise$_reducer, void 0, void 0, fn, void 0, caller );
+    }
+
+
+    Promise.reduce = function Promise$Reduce( promises, fn, initialValue ) {
+        return Promise$_Reduce( promises, fn,
+            initialValue, false, Promise.reduce);
+    };
+
+    Promise.prototype.reduce = function Promise$reduce( fn, initialValue ) {
+        return Promise$_Reduce( this, fn, initialValue,
+                                true, this.reduce );
+    };
+};
+
+},{"./assert.js":3,"./errors.js":11,"./promise_array.js":20}],29:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var global = require("./global.js");
 var ASSERT = require("./assert.js");
@@ -2873,7 +3836,73 @@ else {
 
 module.exports = schedule;
 
-},{"./assert.js":2,"./global.js":8}],17:[function(require,module,exports){
+},{"./assert.js":3,"./global.js":15}],30:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise, Promise$_All ) {
+
+    var SettledPromiseArray = require( "./settled_promise_array.js" );
+
+    function Promise$_Settle( promises, useBound, caller ) {
+        return Promise$_All(
+            promises,
+            SettledPromiseArray,
+            caller,
+            useBound === true ? promises._boundTo : void 0
+        ).promise();
+    }
+
+    Promise.settle = function Promise$Settle( promises ) {
+        return Promise$_Settle( promises, false, Promise.settle );
+    };
+
+    Promise.prototype.settle = function Promise$settle() {
+        return Promise$_Settle( this, true, this.settle );
+    };
+};
+
+},{"./settled_promise_array.js":31}],31:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var ASSERT = require("./assert.js");
 var PromiseArray = require( "./promise_array.js" );
@@ -2913,7 +3942,81 @@ function SettledPromiseArray$_promiseRejected( reason, index ) {
 
 module.exports = SettledPromiseArray;
 
-},{"./assert.js":2,"./promise_array.js":10,"./promise_inspection.js":11,"./util.js":20}],18:[function(require,module,exports){
+},{"./assert.js":3,"./promise_array.js":20,"./promise_inspection.js":21,"./util.js":35}],32:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+"use strict";
+module.exports = function( Promise, Promise$_All ) {
+    var errors = require( "./errors.js" );
+    var apiRejection = errors.apiRejection;
+    var SomePromiseArray = require( "./some_promise_array.js" );
+    var ASSERT = require( "./assert.js" );
+
+    function Promise$_Some( promises, howMany, useBound, caller ) {
+        if( ( howMany | 0 ) !== howMany ) {
+            return apiRejection("howMany must be an integer");
+        }
+        var ret = Promise$_All(
+            promises,
+            SomePromiseArray,
+            caller,
+            useBound === true ? promises._boundTo : void 0
+        );
+        ret.setHowMany( howMany );
+        return ret.promise();
+    }
+
+    Promise.some = function Promise$Some( promises, howMany ) {
+        return Promise$_Some( promises, howMany, false, Promise.some );
+    };
+
+    Promise.prototype.some = function Promise$some( count ) {
+        return Promise$_Some( this, count, true, this.some );
+    };
+};
+
+
+},{"./assert.js":3,"./errors.js":11,"./some_promise_array.js":33}],33:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var PromiseArray = require( "./promise_array.js" );
 var util = require("./util.js");
@@ -3002,134 +4105,62 @@ function SomePromiseArray$_canPossiblyFulfill() {
 
 module.exports = SomePromiseArray;
 
-},{"./promise_array.js":10,"./util.js":20}],19:[function(require,module,exports){
+},{"./promise_array.js":20,"./util.js":35}],34:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
-var ASSERT = require("./assert.js");
-var util = require( "./util.js" );
-var async = require( "./async.js" );
-var errorObj = util.errorObj;
-function Thenable() {
-    this.errorObj = errorObj;
-    this.__id__ = 0;
-    this.treshold = 1000;
-    this.thenableCache = new Array( this.treshold );
-    this.promiseCache = new Array( this.treshold );
-    this._compactQueued = false;
-}
-Thenable.prototype.couldBe = function Thenable$couldBe( ret ) {
-    if( ret === null ||
-        typeof ret === "undefined" ||
-        typeof ret === "string" ||
-        typeof ret === "boolean" ||
-        typeof ret === "number" ) {
-        return false;
-    }
-    var id = ret.__id_$thenable__;
-    if( typeof id === "number" &&
-        this.thenableCache[id] !== void 0 ) {
-        return true;
-    }
-    return ("then" in ret);
+module.exports = function( Promise ) {
+    var PromiseInspection = require( "./promise_inspection.js" );
+
+    Promise.prototype.inspect = function Promise$inspect() {
+        return new PromiseInspection( this );
+    };
 };
 
-Thenable.prototype.is = function Thenable$is( ret, ref ) {
-    var id = ret.__id_$thenable__;
-    if( typeof id === "number" &&
-        this.thenableCache[id] !== void 0 ) {
-        ref.ref = this.thenableCache[id];
-        ref.promise = this.promiseCache[id];
-        return true;
-    }
-    return this._thenableSlowCase( ret, ref );
-};
-
-Thenable.prototype.addCache = function Thenable$_addCache( thenable, promise ) {
-    var id = this.__id__;
-    this.__id__ = id + 1;
-    var descriptor = this._descriptor( id );
-    Object.defineProperty( thenable, "__id_$thenable__", descriptor );
-    this.thenableCache[id] = thenable;
-    this.promiseCache[id] = promise;
-    if( this.thenableCache.length > this.treshold &&
-        !this._compactQueued) {
-        this._compactQueued = true;
-        async.invokeLater( this._compactCache, this, void 0 );
-    }
-};
-
-Thenable.prototype.deleteCache = function Thenable$deleteCache( thenable ) {
-    var id = thenable.__id_$thenable__;
-    if( id === -1 ) {
-        return;
-    }
-    this.thenableCache[id] = void 0;
-    this.promiseCache[id] = void 0;
-    thenable.__id_$thenable__ = -1;};
-
-var descriptor = {
-    value: 0,
-    enumerable: false,
-    writable: true,
-    configurable: true
-};
-Thenable.prototype._descriptor = function Thenable$_descriptor( id ) {
-    descriptor.value = id;
-    return descriptor;
-};
-
-Thenable.prototype._compactCache = function Thenable$_compactCache() {
-    var arr = this.thenableCache;
-    var promiseArr = this.promiseCache;
-    var skips = 0;
-    var j = 0;
-    for( var i = 0, len = arr.length; i < len; ++i ) {
-        var item = arr[ i ];
-        if( item === void 0 ) {
-            skips++;
-        }
-        else {
-            promiseArr[ j ] = promiseArr[ i ];
-            item.__id_$thenable__ = j;
-            arr[ j++ ] = item;
-        }
-    }
-    var newId = arr.length - skips;
-    if( newId === this.__id__ ) {
-        this.treshold *= 2;
-    }
-    else for( var i = newId, len = arr.length; i < len; ++i ) {
-        promiseArr[ j ] = arr[ i ] = void 0;
-    }
-
-    this.__id__ = newId;
-    this._compactQueued = false;
-};
-
-Thenable.prototype._thenableSlowCase =
-function Thenable$_thenableSlowCase( ret, ref ) {
-    try {
-        var then = ret.then;
-        if( typeof then === "function" ) {
-            ref.ref = then;
-            return true;
-        }
-        return false;
-    }
-    catch(e) {
-        this.errorObj.e = e;
-        ref.ref = this.errorObj;
-        return true;
-    }
-};
-
-module.exports = Thenable;
-
-},{"./assert.js":2,"./async.js":3,"./util.js":20}],20:[function(require,module,exports){
+},{"./promise_inspection.js":21}],35:[function(require,module,exports){
+/**
+ * Copyright (c) 2013 Petka Antonov
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 "use strict";
 var global = require("./global.js");
 var ASSERT = require("./assert.js");
-var getPromise = require("./get_promise.js");
-
 var haveGetters = (function(){
     try {
         var o = {};
@@ -3306,109 +4337,9 @@ function notEnumerableProp( obj, name, value ) {
     return obj;
 }
 
-var THIS = {};
-function makeNodePromisifiedEval( callback, receiver, originalName ) {
-    var Promise = getPromise.get();
-
-    function getCall(count) {
-        var args = new Array(count);
-        for( var i = 0, len = args.length; i < len; ++i ) {
-            args[i] = "a" + (i+1);
-        }
-        var comma = count > 0 ? "," : "";
-
-        if( typeof callback === "string" &&
-            receiver === THIS ) {
-            return "this['" + callback + "']("+args.join(",")+ comma +" fn);"+
-                "break;";
-        }
-        return ( receiver === void 0
-            ? "callback("+args.join(",")+ comma +" fn);"
-            : "callback.call("+( receiver === THIS
-                ? "this"
-                : "receiver" )+", "+args.join(",") + comma + " fn);" ) +
-        "break;";
-    }
-
-    function getArgs() {
-        return "var args = new Array( len + 1 );" +
-        "var i = 0;" +
-        "for( var i = 0; i < len; ++i ) { " +
-        "   args[i] = arguments[i];" +
-        "}" +
-        "args[i] = fn;";
-    }
-
-    var callbackName = ( typeof originalName === "string" ?
-        originalName + "Async" :
-        "promisified" );
-
-    return new Function("Promise", "callback", "receiver",
-            "withAppended", "maybeWrapAsError", "nodebackForResolver",
-        "var ret = function " + callbackName +
-        "( a1, a2, a3, a4, a5 ) {\"use strict\";" +
-        "var len = arguments.length;" +
-        "var resolver = Promise.pending( " + callbackName + " );" +
-        "var fn = nodebackForResolver( resolver );"+
-        "try{" +
-        "switch( len ) {" +
-        "case 1:" + getCall(1) +
-        "case 2:" + getCall(2) +
-        "case 3:" + getCall(3) +
-        "case 0:" + getCall(0) +
-        "case 4:" + getCall(4) +
-        "case 5:" + getCall(5) +
-        "default: " + getArgs() + (typeof callback === "string"
-            ? "this['" + callback + "'].apply("
-            : "callback.apply("
-        ) +
-            ( receiver === THIS ? "this" : "receiver" ) +
-        ", args ); break;" +
-        "}" +
-        "}" +
-        "catch(e){ " +
-        "" +
-        "resolver.reject( maybeWrapAsError( e ) );" +
-        "}" +
-        "return resolver.promise;" +
-        "" +
-        "}; ret.__isPromisified__ = true; return ret;"
-    )(Promise, callback, receiver, withAppended,
-        maybeWrapAsError, nodebackForResolver);
-}
-
-function makeNodePromisifiedClosure( callback, receiver ) {
-    var Promise = getPromise.get();
-    function promisified() {
-        var _receiver = receiver;
-        if( receiver === THIS ) _receiver = this;
-        if( typeof callback === "string" ) {
-            callback = _receiver[callback];
-        }
-        var resolver = Promise.pending( promisified );
-        var fn = nodebackForResolver( resolver );
-        try {
-            callback.apply( _receiver, withAppended( arguments, fn ) );
-        }
-        catch(e) {
-            resolver.reject( maybeWrapAsError( e ) );
-        }
-        return resolver.promise;
-    }
-    promisified.__isPromisified__ = true;
-    return promisified;
-}
-
-var makeNodePromisified = canEvaluate
-    ? makeNodePromisifiedEval
-    : makeNodePromisifiedClosure;
-
-
 module.exports ={
     isArray: isArray,
-    makeNodePromisified: makeNodePromisified,
     haveGetters: haveGetters,
-    THIS: THIS,
     notEnumerableProp: notEnumerableProp,
     isPrimitive: isPrimitive,
     isObject: isObject,
@@ -3426,8 +4357,8 @@ module.exports ={
     nodebackForResolver: nodebackForResolver
 };
 
-},{"./assert.js":2,"./get_promise.js":7,"./global.js":8}]},{},[9])
-(9)
+},{"./assert.js":3,"./global.js":15}]},{},[5])
+(5)
 //trick uglify-js into not minifying
 });
 
