@@ -3211,7 +3211,6 @@ var Promise = require("../js/debug/bluebird.js");
 {fn: function(){ return require('../test/mocha/async.js');}, name: '../test/mocha/async.js'},
 {fn: function(){ return require('../test/mocha/bind.js');}, name: '../test/mocha/bind.js'},
 {fn: function(){ return require('../test/mocha/bluebird-debug-env-flag.js');}, name: '../test/mocha/bluebird-debug-env-flag.js'},
-{fn: function(){ return require('../test/mocha/bluebird-multiple-instances.js');}, name: '../test/mocha/bluebird-multiple-instances.js'},
 {fn: function(){ return require('../test/mocha/cancel.js');}, name: '../test/mocha/cancel.js'},
 {fn: function(){ return require('../test/mocha/cast.js');}, name: '../test/mocha/cast.js'},
 {fn: function(){ return require('../test/mocha/catch_filter.js');}, name: '../test/mocha/catch_filter.js'},
@@ -3243,7 +3242,7 @@ var Promise = require("../js/debug/bluebird.js");
 {fn: function(){ return require('../test/mocha/when_settle.js');}, name: '../test/mocha/when_settle.js'},
 {fn: function(){ return require('../test/mocha/when_some.js');}, name: '../test/mocha/when_some.js'},
 {fn: function(){ return require('../test/mocha/when_spread.js');}, name: '../test/mocha/when_spread.js'}];
-},{"../js/debug/bluebird.js":21,"../test/mocha/2.1.2.js":102,"../test/mocha/2.1.3.js":103,"../test/mocha/2.2.1.js":104,"../test/mocha/2.2.2.js":105,"../test/mocha/2.2.3.js":106,"../test/mocha/2.2.4.js":107,"../test/mocha/2.2.5.js":108,"../test/mocha/2.2.6.js":109,"../test/mocha/2.2.7.js":110,"../test/mocha/2.3.1.js":111,"../test/mocha/2.3.2.js":112,"../test/mocha/2.3.3.js":113,"../test/mocha/2.3.4.js":114,"../test/mocha/3.2.1.js":115,"../test/mocha/3.2.2.js":116,"../test/mocha/3.2.3.js":117,"../test/mocha/3.2.4.js":118,"../test/mocha/3.2.5.js":119,"../test/mocha/3.2.6.js":120,"../test/mocha/api_exceptions.js":121,"../test/mocha/async.js":122,"../test/mocha/bind.js":123,"../test/mocha/bluebird-debug-env-flag.js":124,"../test/mocha/bluebird-multiple-instances.js":125,"../test/mocha/cancel.js":126,"../test/mocha/cast.js":127,"../test/mocha/catch_filter.js":128,"../test/mocha/following.js":129,"../test/mocha/late_buffer_safety.js":133,"../test/mocha/promises_unwrapping.js":134,"../test/mocha/promisify.js":135,"../test/mocha/props.js":136,"../test/mocha/q_all.js":137,"../test/mocha/q_done.js":138,"../test/mocha/q_fin.js":139,"../test/mocha/q_inspect.js":140,"../test/mocha/q_make_node_resolver.js":141,"../test/mocha/q_nodeify.js":142,"../test/mocha/q_progress.js":143,"../test/mocha/q_propagation.js":144,"../test/mocha/q_settle.js":145,"../test/mocha/q_spread.js":146,"../test/mocha/reused_promise.js":147,"../test/mocha/sparsity.js":148,"../test/mocha/try.js":149,"../test/mocha/unhandled_rejections.js":150,"../test/mocha/when_all.js":151,"../test/mocha/when_any.js":152,"../test/mocha/when_defer.js":153,"../test/mocha/when_join.js":154,"../test/mocha/when_map.js":155,"../test/mocha/when_reduce.js":156,"../test/mocha/when_settle.js":157,"../test/mocha/when_some.js":158,"../test/mocha/when_spread.js":159,"assert":2,"sinon":87}],17:[function(require,module,exports){
+},{"../js/debug/bluebird.js":21,"../test/mocha/2.1.2.js":102,"../test/mocha/2.1.3.js":103,"../test/mocha/2.2.1.js":104,"../test/mocha/2.2.2.js":105,"../test/mocha/2.2.3.js":106,"../test/mocha/2.2.4.js":107,"../test/mocha/2.2.5.js":108,"../test/mocha/2.2.6.js":109,"../test/mocha/2.2.7.js":110,"../test/mocha/2.3.1.js":111,"../test/mocha/2.3.2.js":112,"../test/mocha/2.3.3.js":113,"../test/mocha/2.3.4.js":114,"../test/mocha/3.2.1.js":115,"../test/mocha/3.2.2.js":116,"../test/mocha/3.2.3.js":117,"../test/mocha/3.2.4.js":118,"../test/mocha/3.2.5.js":119,"../test/mocha/3.2.6.js":120,"../test/mocha/api_exceptions.js":121,"../test/mocha/async.js":122,"../test/mocha/bind.js":123,"../test/mocha/bluebird-debug-env-flag.js":124,"../test/mocha/cancel.js":125,"../test/mocha/cast.js":126,"../test/mocha/catch_filter.js":127,"../test/mocha/following.js":128,"../test/mocha/late_buffer_safety.js":132,"../test/mocha/promises_unwrapping.js":133,"../test/mocha/promisify.js":134,"../test/mocha/props.js":135,"../test/mocha/q_all.js":136,"../test/mocha/q_done.js":137,"../test/mocha/q_fin.js":138,"../test/mocha/q_inspect.js":139,"../test/mocha/q_make_node_resolver.js":140,"../test/mocha/q_nodeify.js":141,"../test/mocha/q_progress.js":142,"../test/mocha/q_propagation.js":143,"../test/mocha/q_settle.js":144,"../test/mocha/q_spread.js":145,"../test/mocha/reused_promise.js":146,"../test/mocha/sparsity.js":147,"../test/mocha/try.js":148,"../test/mocha/unhandled_rejections.js":149,"../test/mocha/when_all.js":150,"../test/mocha/when_any.js":151,"../test/mocha/when_defer.js":152,"../test/mocha/when_join.js":153,"../test/mocha/when_map.js":154,"../test/mocha/when_reduce.js":155,"../test/mocha/when_settle.js":156,"../test/mocha/when_some.js":157,"../test/mocha/when_spread.js":158,"assert":2,"sinon":87}],17:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
  * 
@@ -3529,7 +3528,7 @@ module.exports = new Async();
  * THE SOFTWARE.
  */
 "use strict";
-var Promise = require("./promise.js")();
+var Promise = require("./promise.js");
 module.exports = Promise;
 
 },{"./promise.js":35}],22:[function(require,module,exports){
@@ -3679,7 +3678,6 @@ module.exports = function( Promise ) {
  * THE SOFTWARE.
  */
 "use strict";
-module.exports = function() {
 var ASSERT = require("./assert.js");
 var inherits = require( "./util.js").inherits;
 
@@ -3871,8 +3869,7 @@ var captureStackTrace = (function stackDetection() {
     }
 })();
 
-return CapturedTrace;
-};
+module.exports = CapturedTrace;
 
 },{"./assert.js":19,"./util.js":51}],25:[function(require,module,exports){
 /**
@@ -4935,7 +4932,6 @@ var process=require("__browserify_process");/**
  * THE SOFTWARE.
  */
 "use strict";
-module.exports = function() {
 var global = require("./global.js");
 var ASSERT = require("./assert.js");
 var getPromise = require("./get_promise.js");
@@ -4945,7 +4941,7 @@ var async = require( "./async.js" );
 var errors = require( "./errors.js" );
 var PromiseArray = require( "./promise_array.js" );
 
-var CapturedTrace = require( "./captured_trace.js")();
+var CapturedTrace = require( "./captured_trace.js");
 var CatchFilter = require( "./catch_filter.js");
 var PromiseResolver = require( "./promise_resolver.js" );
 
@@ -5939,6 +5935,7 @@ Promise.CancellationError = CancellationError;
 Promise.TimeoutError = TimeoutError;
 Promise.TypeError = TypeError;
 
+module.exports = Promise;
 require('./synchronous_inspection.js')(Promise, Promise$_All);
 require('./any.js')(Promise, Promise$_All);
 require('./call_get.js')(Promise, Promise$_All);
@@ -5956,9 +5953,6 @@ require('./cancel.js')(Promise, Promise$_All);
 require('./complex_thenables.js')(Promise, Promise$_All);
 
 Promise.prototype = Promise.prototype;
-return Promise;
-
-};
 
 },{"./any.js":17,"./assert.js":19,"./async.js":20,"./call_get.js":22,"./cancel.js":23,"./captured_trace.js":24,"./catch_filter.js":25,"./complex_thenables.js":26,"./errors.js":27,"./filter.js":28,"./generators.js":29,"./get_promise.js":30,"./global.js":31,"./map.js":32,"./nodeify.js":33,"./progress.js":34,"./promise_array.js":36,"./promise_resolver.js":38,"./promisify.js":40,"./props.js":42,"./reduce.js":44,"./settle.js":46,"./some.js":48,"./synchronous_inspection.js":50,"./util.js":51,"__browserify_process":15}],36:[function(require,module,exports){
 /**
@@ -7946,7 +7940,6 @@ arguments[4][23][0].apply(exports,arguments)
  * THE SOFTWARE.
  */
 "use strict";
-module.exports = function() {
 var ASSERT = require("./assert.js");
 var inherits = require( "./util.js").inherits;
 
@@ -8125,8 +8118,7 @@ var captureStackTrace = (function stackDetection() {
     }
 })();
 
-return CapturedTrace;
-};
+module.exports = CapturedTrace;
 
 },{"./assert.js":54,"./util.js":86}],60:[function(require,module,exports){
 arguments[4][25][0].apply(exports,arguments)
@@ -8852,7 +8844,6 @@ var process=require("__browserify_process");/**
  * THE SOFTWARE.
  */
 "use strict";
-module.exports = function() {
 var global = require("./global.js");
 var ASSERT = require("./assert.js");
 var getPromise = require("./get_promise.js");
@@ -8862,7 +8853,7 @@ var async = require( "./async.js" );
 var errors = require( "./errors.js" );
 var PromiseArray = require( "./promise_array.js" );
 
-var CapturedTrace = require( "./captured_trace.js")();
+var CapturedTrace = require( "./captured_trace.js");
 var CatchFilter = require( "./catch_filter.js");
 var PromiseResolver = require( "./promise_resolver.js" );
 
@@ -9775,6 +9766,7 @@ Promise.CancellationError = CancellationError;
 Promise.TimeoutError = TimeoutError;
 Promise.TypeError = TypeError;
 
+module.exports = Promise;
 require('./synchronous_inspection.js')(Promise, Promise$_All);
 require('./any.js')(Promise, Promise$_All);
 require('./call_get.js')(Promise, Promise$_All);
@@ -9792,9 +9784,6 @@ require('./cancel.js')(Promise, Promise$_All);
 require('./complex_thenables.js')(Promise, Promise$_All);
 
 Promise.prototype = Promise.prototype;
-return Promise;
-
-};
 
 },{"./any.js":52,"./assert.js":54,"./async.js":55,"./call_get.js":57,"./cancel.js":58,"./captured_trace.js":59,"./catch_filter.js":60,"./complex_thenables.js":61,"./errors.js":62,"./filter.js":63,"./generators.js":64,"./get_promise.js":65,"./global.js":66,"./map.js":67,"./nodeify.js":68,"./progress.js":69,"./promise_array.js":71,"./promise_resolver.js":73,"./promisify.js":75,"./props.js":77,"./reduce.js":79,"./settle.js":81,"./some.js":83,"./synchronous_inspection.js":85,"./util.js":86,"__browserify_process":15}],71:[function(require,module,exports){
 /**
@@ -14701,7 +14690,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],103:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],103:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -14779,7 +14768,7 @@ describe("2.1.3.1: When rejected, a promise: must not transition to any other st
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],104:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],104:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var adapter = global.adapter;
@@ -14975,7 +14964,7 @@ describe("2.2.2: If `onFulfilled` is a function,", function () {
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],106:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],106:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -15128,7 +15117,7 @@ describe("2.2.3: If `onRejected` is a function,", function () {
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],107:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],107:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -15312,7 +15301,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],108:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],108:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};/*jshint strict: false */
 
 var assert = require("assert");
@@ -15620,7 +15609,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", func
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2,"sinon":87}],110:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2,"sinon":87}],110:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -15731,7 +15720,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
     });
 });
 
-},{"./helpers/reasons":130,"./helpers/testThreeCases":131,"assert":2}],111:[function(require,module,exports){
+},{"./helpers/reasons":129,"./helpers/testThreeCases":130,"assert":2}],111:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -16890,7 +16879,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", function () {
     });
 });
 
-},{"./helpers/reasons":130,"./helpers/thenables":132,"assert":2}],114:[function(require,module,exports){
+},{"./helpers/reasons":129,"./helpers/thenables":131,"assert":2}],114:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -16961,7 +16950,7 @@ describe("2.3.4: If `x` is not an object or function, fulfill `promise` with `x`
     );
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],115:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],115:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var adapter = global.adapter;
@@ -17193,7 +17182,7 @@ describe("3.2.2: If `onFulfilled` is a function,", function () {
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],117:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],117:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -17382,7 +17371,7 @@ describe("3.2.3: If `onRejected` is a function,", function () {
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],118:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],118:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -17415,7 +17404,7 @@ describe("3.2.4: `then` must return before `onFulfilled` or `onRejected` is call
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],119:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],119:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -17674,7 +17663,7 @@ describe("3.2.5: `then` may be called multiple times on the same promise.", func
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2,"sinon":87}],120:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2,"sinon":87}],120:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var assert = require("assert");
@@ -17997,7 +17986,7 @@ describe("3.2.6: `then` must return a promise: `promise2 = promise1.then(onFulfi
     });
 });
 
-},{"./helpers/testThreeCases":131,"assert":2}],121:[function(require,module,exports){
+},{"./helpers/testThreeCases":130,"assert":2}],121:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -19239,70 +19228,6 @@ if( isNodeJS ) {
 }
 
 },{"../../js/main/bluebird.js":56,"__browserify_process":15,"assert":2}],125:[function(require,module,exports){
-"use strict";
-
-var assert = require("assert");
-
-var Promise1 = require( "../../js/debug/promise.js")();
-var Promise2 = require( "../../js/debug/promise.js")();
-
-var err1 = new Error();
-var err2 = new Error();
-
-
-describe("Separate instances of bluebird", function(){
-
-    specify("Should not be identical", function( done ) {
-        assert( Promise1.onPossiblyUnhandledRejection !==
-                Promise2.onPossiblyUnhandledRejection );
-        assert( Promise1 !== Promise2 );
-        done();
-    });
-
-    specify("Should have different unhandled rejection handlers", function(done) {
-        var dones = 0;
-        var donecall = function() {
-            if( ++dones === 2 ) {
-                done();
-            }
-        }
-        Promise1.onPossiblyUnhandledRejection(function(e, promise) {
-            assert( promise instanceof Promise1 );
-            assert( !(promise instanceof Promise2) );
-            assert(e === err1);
-            donecall();
-        });
-
-        Promise2.onPossiblyUnhandledRejection(function(e, promise) {
-            assert( promise instanceof Promise2 );
-            assert( !(promise instanceof Promise1) );
-            assert(e === err2);
-            donecall();
-        });
-
-        assert( Promise1.onPossiblyUnhandledRejection !==
-                Promise2.onPossiblyUnhandledRejection );
-
-        var d1 = Promise1.pending();
-        var d2 = Promise2.pending();
-
-        d1.promise.then(function(){
-            throw err1;
-        });
-
-        d2.promise.then(function(){
-            throw err2;
-        });
-
-        setTimeout(function(){
-            d1.fulfill();
-            d2.fulfill();
-        }, 13);
-    });
-
-});
-
-},{"../../js/debug/promise.js":35,"assert":2}],126:[function(require,module,exports){
 /*global describe specify require global*/
 //TODO include the copyright
     "use strict";
@@ -19544,7 +19469,7 @@ describe("Cancel.4: Otherwise the promise is rejected with a CancellationError."
 });
 
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],127:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],126:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -19621,7 +19546,7 @@ describe("Implicitly casted thenable", function() {
         });
     });
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],128:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],127:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -19917,7 +19842,7 @@ describe("A promise handler that is caught in a filter", function() {
          }, 200 );
     });
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],129:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],128:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -20037,7 +19962,7 @@ describe("Rejecting a promise A with promise B", function(){
         done();
     });
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],130:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],129:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 // This module exports some valid rejection reason factories, keyed by human-readable versions of their names.
@@ -20095,7 +20020,7 @@ exports["a rejected promise"] = function () {
     return rejected(dummy);
 };
 
-},{}],131:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var adapter = global.adapter;
@@ -20143,7 +20068,7 @@ exports.testRejected = function (reason, test) {
     });
 };
 
-},{}],132:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
 
 var adapter = global.adapter;
@@ -20289,7 +20214,7 @@ exports.rejected = {
     },
 };
 
-},{}],133:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 var process=require("__browserify_process");"use strict";
 
 var assert = require("assert");
@@ -20339,7 +20264,7 @@ if( isNodeJS ) {
         });
     });
 }
-},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2}],134:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2}],133:[function(require,module,exports){
 var process=require("__browserify_process");"use strict";
 //https://github.com/domenic/promises-unwrapping/blob/master/run-tests.js
 
@@ -20552,7 +20477,7 @@ describe("Promise.all", function () {
         });
     });
 });
-},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2}],135:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2}],134:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -21094,7 +21019,7 @@ if( Promise.hasLongStackTraces() ) {
     });
 }
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],136:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],135:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -21343,7 +21268,7 @@ describe("Promise.props", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],137:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],136:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -21523,7 +21448,7 @@ describe("all", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],138:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],137:[function(require,module,exports){
 var process=require("__browserify_process");var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -21813,7 +21738,7 @@ describe("done", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2,"sinon":87}],139:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2,"sinon":87}],138:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22087,7 +22012,7 @@ describe("fin", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],140:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],139:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22215,7 +22140,7 @@ describe("inspect", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],141:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],140:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22275,7 +22200,7 @@ describe("PromiseResolver.asCallback", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],142:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],141:[function(require,module,exports){
 var process=require("__browserify_process");var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22471,7 +22396,7 @@ if( isNodeJS ) {
         });
     });
 }
-},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2,"sinon":87}],143:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"__browserify_process":15,"assert":2,"sinon":87}],142:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22871,7 +22796,7 @@ describe("progress", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],144:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],143:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23101,7 +23026,7 @@ describe("propagation", function () {
         return result;
     });
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],145:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],144:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23256,7 +23181,7 @@ describe("allSettled", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":21,"assert":2}],146:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],145:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23408,7 +23333,7 @@ describe("spread", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],147:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],146:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -23468,7 +23393,7 @@ describe("If promise is reused to get at the value many times over the course of
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],148:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],147:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -23554,7 +23479,7 @@ describe("When using a sparse array the resulting array should have equal sparsi
 });
 
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],149:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],148:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -23633,7 +23558,7 @@ describe("Promise.try", function(){
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],150:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],149:[function(require,module,exports){
 "use strict";
 var assert = require("assert");
 var Promise = require("../../js/debug/bluebird.js");
@@ -24077,7 +24002,7 @@ describe("Will not report rejections that are handled in time", function() {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],151:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],150:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -24197,7 +24122,7 @@ describe("when.all-test", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],152:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],151:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -24336,7 +24261,7 @@ describe("when.any-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],153:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],152:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -24864,7 +24789,7 @@ describe("when.defer-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],154:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],153:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25001,7 +24926,7 @@ describe("when.join-test", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],155:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],154:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25250,7 +25175,7 @@ describe("when.map-test", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],156:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],155:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25526,7 +25451,7 @@ describe("when.reduce-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],157:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],156:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25692,7 +25617,7 @@ describe("when.settle-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],158:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],157:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25916,7 +25841,7 @@ describe("when.some-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":21,"assert":2}],159:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":21,"assert":2}],158:[function(require,module,exports){
 /*
 Based on When.js tests
 
