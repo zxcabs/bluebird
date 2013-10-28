@@ -5,23 +5,11 @@
 
 #Introduction
 
-Bluebird is a full featured [promise](#what-are-promises-and-why-should-i-use-them) library with unmatched performance.
-
-Features:
-
-- [Promises A+ 3.x.x](https://github.com/promises-aplus/promises-spec)
-- [Promises A+ 2.x.x](https://github.com/domenic/promises-unwrapping)
-- [Cancellation](https://github.com/promises-aplus)
-- [Progression](https://github.com/promises-aplus/progress-spec)
-- [Synchronous inspection](https://github.com/promises-aplus/synchronous-inspection-spec)
-- All, any, some, settle, map, reduce, spread, join...
-- [Unhandled rejections and long, relevant stack traces](#error-handling)
-- [Sick performance](https://github.com/petkaantonov/bluebird/tree/master/benchmark/stats)
-
-Passes [AP2](https://github.com/petkaantonov/bluebird/tree/master/test/mocha), [AP3](https://github.com/petkaantonov/bluebird/tree/master/test/mocha), [Cancellation](https://github.com/petkaantonov/bluebird/blob/master/test/mocha/cancel.js), [Progress](https://github.com/petkaantonov/bluebird/blob/master/test/mocha/q_progress.js), [promises_unwrapping](https://github.com/petkaantonov/bluebird/blob/master/test/mocha/promises_unwrapping.js) (Just in time thenables), [Q](https://github.com/petkaantonov/bluebird/tree/master/test/mocha) and [When.js](https://github.com/petkaantonov/bluebird/tree/master/test) tests. See [testing](#testing).
+Bluebird is a fully featured [promise](#what-are-promises-and-why-should-i-use-them) library with focus on innovative features and performance.
 
 #Topics
 
+- [Features](#features)
 - [Quick start](#quick-start)
 - [API Reference and examples](https://github.com/petkaantonov/bluebird/blob/master/API.md)
 - [What are promises and why should I use them?](#what-are-promises-and-why-should-i-use-them)
@@ -35,6 +23,23 @@ Passes [AP2](https://github.com/petkaantonov/bluebird/tree/master/test/mocha), [
 - [Promise anti-patterns](https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
 - [Changelog](https://github.com/petkaantonov/bluebird/blob/master/changelog.md)
 
+#Features:
+
+- [Promises A+ 3.x.x](https://github.com/promises-aplus/promises-spec)
+- [Promises A+ 2.x.x](https://github.com/domenic/promises-unwrapping)
+- [Cancellation](https://github.com/promises-aplus)
+- [Progression](https://github.com/promises-aplus/progress-spec)
+- [Synchronous inspection](https://github.com/promises-aplus/synchronous-inspection-spec)
+- [`.bind`](https://github.com/petkaantonov/bluebird/blob/master/API.md#binddynamic-thisarg---promise)
+- [Complete parallel for C# 5.0 async and await](https://github.com/petkaantonov/bluebird/blob/master/API.md#promisecoroutinegeneratorfunction-generatorfunction---function)
+- [Collection methods](https://github.com/petkaantonov/bluebird/blob/master/API.md#collections) such as All, any, some, settle, map, filter, reduce, spread, join...
+- [Practical debugging solutions](#error-handling) such as unhandled rejection reporting, typed catches, catching only what you expect and very long, relevant stack traces without losing perf
+- [Sick performance](https://github.com/petkaantonov/bluebird/tree/master/benchmark/stats)
+
+Passes [AP2](https://github.com/petkaantonov/bluebird/tree/master/test/mocha), [AP3](https://github.com/petkaantonov/bluebird/tree/master/test/mocha), [Cancellation](https://github.com/petkaantonov/bluebird/blob/master/test/mocha/cancel.js), [Progress](https://github.com/petkaantonov/bluebird/blob/master/test/mocha/q_progress.js), [promises_unwrapping](https://github.com/petkaantonov/bluebird/blob/master/test/mocha/promises_unwrapping.js) (Just in time thenables), [Q](https://github.com/petkaantonov/bluebird/tree/master/test/mocha) and [When.js](https://github.com/petkaantonov/bluebird/tree/master/test) tests. See [testing](#testing).
+
+<hr>
+
 #Quick start
 
 ##Node.js
@@ -47,6 +52,14 @@ Then:
 ```js
 var Promise = require("bluebird");
 ```
+
+If you want to ensure you get your own fresh copy of bluebird, do instead:
+
+```js
+                                        //Note the extra function call
+var Promise = require("bluebird/js/main/promise")();
+```
+
 ##Browsers
 
 Download the [bluebird.js](https://github.com/petkaantonov/bluebird/tree/master/js/browser) file. And then use a script tag:
@@ -67,11 +80,126 @@ IE8 (ECMAS-262, edition 3) is supported if you include [es5-shim.js](https://git
 
 #What are promises and why should I use them?
 
-You should use promises to make robust asynchronous programming a joy.
+You should use promises to turn this:
 
-More info:
+```js
+readFile("file.json", function(err, val) {
+    if( err ) {
+        console.error("unable to read file");
+    }
+    else {
+        try {
+            val = JSON.parse(val);
+            console.log(val.success);
+        }
+        catch( e ) {
+            console.error("invalid json in file");
+        }
+    }
+});
+```
 
-- [You're missing the point of promises](http://domenic.me/2012/10/14/youre-missing-the-point-of-promises/).
+Into this:
+
+```js
+readFile("file.json").then(JSON.parse).then(function(val) {
+    console.log(val.success);
+})
+.catch(SyntaxError, function(e) {
+    console.error("invalid json in file");
+})
+.catch(function(e){
+    console.error("unable to read file")
+});
+```
+
+Actually you might notice the latter has a lot in common with code that would do the same using synchronous I/O:
+
+```js
+try {
+    var val = JSON.parse(readFile("file.json"));
+    console.log(val.success);
+}
+//Syntax actually not supported in JS but drives the point
+catch(SyntaxError e) {
+    console.error("invalid json in file");
+}
+catch(Error e) {
+    console.error("unable to read file")
+}
+```
+
+And that is the point - being able to have something that is a lot like `return` and `throw` in synchronous code.
+
+You can also use promises to improve code that was written with callback helpers:
+
+
+```js
+//Copyright Plato http://stackoverflow.com/a/19385911/995876
+//CC BY-SA 2.5
+mapSeries(URLs, function (URL, done) {
+    var options = {};
+    needle.get(URL, options, function (error, response, body) {
+        if (error) {
+            return done(error)
+        }
+        try {
+            var ret = JSON.parse(body);
+            return done(null, ret);
+        }
+        catch (e) {
+            done(e);
+        }
+    });
+}, function (err, results) {
+    if (err) {
+        console.log(err)
+    } else {
+        console.log('All Needle requests successful');
+        // results is a 1 to 1 mapping in order of URLs > needle.body
+        processAndSaveAllInDB(results, function (err) {
+            if (err) {
+                return done(err)
+            }
+            console.log('All Needle requests saved');
+            done(null);
+        });
+    }
+});
+```
+
+Is more pleasing to the eye when done with promises:
+
+```js
+Promise.promisifyAll(needle);
+var options = {};
+
+var current = Promise.fulfilled();
+Promise.map(URLs, function(URL) {
+    current = current.then(function () {
+        return needle.getAsync(URL, options);
+    });
+    return current;
+}).map(function(responseAndBody){
+    return JSON.parse(responseAndBody[1]);
+}).then(function (results) {
+    return processAndSaveAllInDB(results);
+}).then(function(){
+    console.log('All Needle requests saved');
+}).catch(function (e) {
+    console.log(e);
+});
+```
+
+Also promises don't just give you correspondences for synchronous features but can also be used as limited event emitters or callback aggregators.
+
+More reading:
+
+ - [Promise nuggets](http://spion.github.io/promise-nuggets/)
+ - [Why I am switching to promises](http://spion.github.io/posts/why-i-am-switching-to-promises.html)
+ - [What is the the point of promises](http://domenic.me/2012/10/14/youre-missing-the-point-of-promises/#toc_1)
+ - [Snippets for common problems](https://github.com/petkaantonov/bluebird/wiki/Snippets)
+ - [Promise anti-patterns](https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
 
 #Error handling
 
@@ -118,6 +246,77 @@ to enable long stack traces in all instances of bluebird.
 Long stack traces cannot be disabled after being enabled, and cannot be enabled after promises have alread been created. Long stack traces imply a substantial performance penalty, even after using every trick to optimize them.
 
 Long stack traces are enabled by default in the debug build.
+
+####Expected and unexpected errors
+
+A practical problem with Promises/A+ is that it models Javascript `try-catch` too closely for its own good. Therefore by default promises inherit `try-catch` warts such as the inability to specify the error types that the catch block is eligible for. It is an anti-pattern in every other language to use catch-all handlers because they swallow exceptions that you might not know about.
+
+Now, Javascript does have a perfectly fine and working way of creating error type hierarchies. It is still quite awkward to use them with the built-in `try-catch` however:
+
+```js
+try {
+    //code
+}
+catch(e) {
+    if( e instanceof WhatIWantError) {
+        //handle
+    }
+    else {
+        throw e;
+    }
+}
+```
+
+Without such checking, unexpected errors would be silently swallowed. However, with promises, bluebird brings the future (hopefully) here now and extends the `.catch` to [accept potential error type eligibility](https://github.com/petkaantonov/bluebird/blob/master/API.md#catchfunction-errorclass-function-handler---promise).
+
+For instance here it is expected that some evil or incompetent entity will try to crash our server from `SyntaxError` by providing syntactically invalid JSON:
+
+```js
+getJSONFromSomewhere().then(function(jsonString) {
+    return JSON.parse(jsonString);
+}).then(function(object) {
+    console.log("it was valid json: ", object);
+}).catch(SyntaxError, function(e){
+    console.log("don't be evil");
+});
+```
+
+Here any kind of unexpected error will automatically reported on stderr along with a stack trace because we only register a handler for the expected `SyntaxError`.
+
+Ok, so, that's pretty neat. But actually not many libraries define error types and it is in fact a complete ghetto out there with ad hoc strings being attached as some arbitrary property name like `.name`, `.type`, `.code`, not having any property at all or even throwing strings as errors and so on. So how can we still listen for expected errors?
+
+Bluebird defines a special error type `RejectionError` (you can get a reference from `Promise.RejectionError`). This type of error is given as rejection reason by promisified methods when
+their underlying library gives an untyped, but expected error. Primitives such as strings, and error objects that are directly created like `new Error("database didn't respond")` are considered untyped.
+
+Example of such library is the node core library `fs`. So if we promisify it, we can catch just the errors we want pretty easily and have programmer errors be redirected to unhandled rejection handler so that we notice them:
+
+```js
+//Read more about promisification in the API Reference:
+//https://github.com/petkaantonov/bluebird/blob/master/API.md
+var fs = Promise.promisifyAll(require("fs"));
+
+fs.readFileAsync("myfile.json").then(JSON.parse).then(function (json) {
+    console.log("Successful json")
+}).catch(SyntaxError, function (e) {
+    console.error("file contains invalid json");
+}).catch(Promise.RejectionError, function (e) {
+    console.error("unable to read file, because: ", e.message);
+});
+```
+
+The last `catch` handler is only invoked when the `fs` module explicitly used the `err` argument convention of async callbacks to inform of an expected error. The `RejectionError` instance will contain the original error in its `.cause` property but it does have a direct copy of the `.message` and `.stack` too. In this code any unexpected error - be it in our code or the `fs` module - would not be caught by these handlers and therefore not swallowed.
+
+Since a `catch` handler typed to `Promise.RejectionError` is expected to be used very often, it has a neat shorthand:
+
+```js
+.error(function (e) {
+    console.error("unable to read file, because: ", e.message);
+});
+```
+
+See [API documentation for `.error()`](https://github.com/petkaantonov/bluebird/blob/master/API.md#error-rejectedhandler----promise)
+
+<hr>
 
 ####How do long stack traces differ from e.g. Q?
 
@@ -173,7 +372,74 @@ Promise.fulfilled().then(function outer() {
         at Object.InjectedScript.evaluate (<anonymous>:450:21)
 
 
-A better and more practical example of the differences can be seen in gorgikosev's [debuggability competition](https://github.com/spion/async-compare#debuggability). (for `--error` and `--throw`, promises don't actually need to handle `--athrow` since that is something someone using a promises would never do)
+A better and more practical example of the differences can be seen in gorgikosev's [debuggability competition](https://github.com/spion/async-compare#debuggability).
+
+<hr>
+
+####Can I use long stack traces in production?
+
+Probably yes. Bluebird uses multiple innovative techniques to optimize long stack traces. Even with long stack traces, it is still way faster than similarly featured implementations that don't have long stack traces enabled and about same speed as minimal implementations. A slowdown of 4-5x is expected, not 50x.
+
+What techniques are used?
+
+#####V8 API second argument
+
+This technique utilizes the [slightly under-documented](https://code.google.com/p/v8/wiki/JavaScriptStackTraceApi#Stack_trace_collection_for_custom_exceptions) second argument of V8 `Error.captureStackTrace`. It turns out you can that the second argument can actually be used to make V8 skip all library internal stack frames [for free](https://github.com/v8/v8/blob/b5fabb9225e1eb1c20fd527b037e3f877296e52a/src/isolate.cc#L665). It only requires propagation of callers manually in library internals but this is not visible to you as user at all.
+
+Without this technique, every promise (well not every, see second technique) created would have to waste time creating and collecting library internal frames which will just be thrown away anyway. It also allows one to use smaller stack trace limits because skipped frames are not counted towards the limit whereas with collecting everything upfront and filtering afterwards would likely have to use higher limits to get more user stack frames in.
+
+#####Sharing stack traces
+
+Consider:
+
+```js
+function getSomethingAsync(fileName) {
+    return readFileAsync(fileName).then(function(){
+        //...
+    }).then(function() {
+        //...
+    }).then(function() {
+        //...
+    });
+}
+```
+
+Everytime you call this function it creates 4 promises and in a straight-forward long stack traces implementation it would collect 4 almost identical stack traces. Bluebird has a light weight internal data-structure (kcnown as context stack in the source code) to help tracking when traces can be re-used and this example would only collect one trace.
+
+#####Lazy formatting
+
+After a stack trace has been collected on an object, one must be careful not to reference the `.stack` property until necessary. Referencing the property causes
+an expensive format call and the stack property is turned into a string which uses much more memory.
+
+What about [Q #111](https://github.com/kriskowal/q/issues/111)?
+
+Long stack traces is not inherently the problem. For example with latest Q with stack traces disabled:
+
+```js
+var Q = require("q");
+
+
+function test(i){
+    if (i <= 0){
+       return Q.when('done')
+   } else {
+       return Q.when(i-1).then(test)
+   }
+}
+test(1000000000).then(function(output){console.log(output) });
+```
+
+After 2 minutes of running this, it will give:
+
+```js
+FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - process out of memory
+```
+
+So the problem with this is how much absolute memory is used per promise - not whether long traces are enabled or not.
+
+For some purpose, let's say 100000 parallel pending promises in memory at the same time is the maximum. You would then roughly use 100MB for them instead of 10MB with stack traces disabled.For comparison, just creating 100000 functions alone will use 14MB if they're closures. All numbers can be halved for 32-bit node.
+
+<hr>
 
 #Development
 
