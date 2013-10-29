@@ -353,7 +353,7 @@ Promise.rejected = function Promise$Rejected( reason ) {
     return ret;
 };
 
-Promise["try"] = Promise.attempt = function Promise$Try( fn, args, ctx ) {
+Promise["try"] = Promise.attempt = function Promise$_Try( fn, args, ctx ) {
     var ret = new Promise();
     ret._setTrace( Promise.attempt, void 0 );
     ret._cleanValues();
@@ -453,6 +453,7 @@ var longStackTraces = __DEBUG__ || __BROWSER__ || !!(
     typeof process.env === "object" &&
     process.env[ "BLUEBIRD_DEBUG" ]
 );
+
 
 Promise.longStackTraces = function Promise$LongStackTraces() {
     if( async.haveItemsQueued() &&
@@ -1125,7 +1126,6 @@ Promise.noConflict = function() {
     return Promise;
 };
 
-
 if( !CapturedTrace.isSupported() ) {
     Promise.longStackTraces = function(){};
     CapturedTrace.possiblyUnhandledRejection = function(){};
@@ -1137,5 +1137,4 @@ Promise.CancellationError = CancellationError;
 Promise.TimeoutError = TimeoutError;
 Promise.TypeError = TypeError;
 Promise.RejectionError = RejectionError;
-
 };
