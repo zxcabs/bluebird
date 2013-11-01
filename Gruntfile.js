@@ -1,7 +1,6 @@
 "use strict";
 Error.stackTraceLimit = 100;
 var astPasses = require("./ast_passes.js");
-var cc = require("closure-compiler");
 var node11 = parseInt(process.versions.node.split(".")[1], 10) >= 11;
 var Q = require("q");
 Q.longStackSupport = true;
@@ -462,7 +461,7 @@ module.exports = function( grunt ) {
         return paths;
     }
 
-    function build( paths ) {
+    function build( paths, isCI ) {
         var fs = require("fs");
         astPasses.readConstants(fs.readFileSync(CONSTANTS_FILE, "utf8"), CONSTANTS_FILE);
         if( !paths ) {
@@ -496,13 +495,18 @@ module.exports = function( grunt ) {
                 source.sourceCode = src;
             });
 
-            return Q.all([
-                buildMain( sources, optionalRequireCode ).then( function() {
-                    return buildBrowser( sources );
-                }),
-                buildDebug( sources, optionalRequireCode ),
-                buildZalgo( sources, optionalRequireCode )
-            ]);
+            if( isCI ) {
+                return buildDebug( sources, optionalRequireCode );
+            }
+            else {
+                return Q.all([
+                    buildMain( sources, optionalRequireCode ).then( function() {
+                        return buildBrowser( sources );
+                    }),
+                    buildDebug( sources, optionalRequireCode ),
+                    buildZalgo( sources, optionalRequireCode )
+                ]);
+            }
         });
     }
 
@@ -597,8 +601,8 @@ module.exports = function( grunt ) {
     }
 
     grunt.registerTask( "build", function() {
+        var isCI = !!grunt.option("ci");
         var done = this.async();
-
         var features = grunt.option("features");
         var paths = null;
         if( features ) {
@@ -606,7 +610,7 @@ module.exports = function( grunt ) {
             applyMutExPaths( paths, features );
         }
 
-        build( paths ).then(function() {
+        build( paths, isCI ).then(function() {
             done();
         }).catch(function(e) {
             if( e.fileName && e.stack ) {
@@ -623,6 +627,8 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( "testrun", function(){
         var testOption = grunt.option("run");
+
+
         if( !testOption ) testOption = "all";
         else {
             testOption = ("" + testOption);
