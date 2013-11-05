@@ -6,9 +6,11 @@ var Q = require("q");
 Q.longStackSupport = true;
 
 module.exports = function( grunt ) {
+    var isCI = !!grunt.option("ci");
 
     var optionalModuleDependencyMap = {
         "any.js": ['Promise', 'Promise$_All', 'PromiseArray'],
+        "race.js": ['Promise', 'Promise$_All', 'PromiseArray'],
         "call_get.js": ['Promise'],
         "filter.js": ['Promise', 'Promise$_All', 'PromiseArray', 'apiRejection'],
         "generators.js": ['Promise', 'apiRejection'],
@@ -28,6 +30,7 @@ module.exports = function( grunt ) {
     };
 
     var optionalModuleRequireMap = {
+        "race.js": true,
         "any.js": true,
         "call_get.js": true,
         "filter.js": true,
@@ -85,7 +88,7 @@ module.exports = function( grunt ) {
     }
 
     var CONSTANTS_FILE = './src/constants.js';
-    var BUILD_DEBUG_DEST = "./js/main/bluebird.js";
+    var BUILD_DEBUG_DEST = "./js/debug/bluebird.js";
 
     var license;
     function getLicense() {
@@ -221,6 +224,8 @@ module.exports = function( grunt ) {
                     "./src/progress.js",
                     "./src/cancel.js",
                     "./src/any.js",
+                    "./src/race.js",
+                    "./src/race_promise_array.js",
                     "./src/call_get.js",
                     "./src/filter.js",
                     "./src/generators.js",
@@ -241,7 +246,6 @@ module.exports = function( grunt ) {
                     "./src/promise.js",
                     "./src/promise_array.js",
                     "./src/settled_promise_array.js",
-                    "./src/any_promise_array.js",
                     "./src/some_promise_array.js",
                     "./src/properties_promise_array.js",
                     "./src/promise_inspection.js",
@@ -251,6 +255,10 @@ module.exports = function( grunt ) {
             }
         }
     };
+
+    if( !isCI ) {
+        gruntConfig.jshint.all.options.reporter = require("jshint-stylish");
+    }
 
     gruntConfig.bump = {
       options: {
@@ -401,6 +409,7 @@ module.exports = function( grunt ) {
     var optionalPaths = [
         "./src/synchronous_inspection.js",
         "./src/any.js",
+        "./src/race.js",
         "./src/call_get.js",
         "./src/filter.js",
         "./src/generators.js",
@@ -430,7 +439,7 @@ module.exports = function( grunt ) {
         "./src/promise.js",
         "./src/promise_array.js",
         "./src/settled_promise_array.js",
-        "./src/any_promise_array.js",
+        "./src/race_promise_array.js",
         "./src/some_promise_array.js",
         "./src/properties_promise_array.js",
         "./src/promise_inspection.js",
@@ -601,7 +610,7 @@ module.exports = function( grunt ) {
     }
 
     grunt.registerTask( "build", function() {
-        var isCI = !!grunt.option("ci");
+
         var done = this.async();
         var features = grunt.option("features");
         var paths = null;
