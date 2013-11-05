@@ -633,24 +633,56 @@ var util = require( "./util.js");
 var tryCatch1 = util.tryCatch1;
 var errorObj = util.errorObj;
 
-function CatchFilter( instances, callback, boundTo ) {
+function CatchFilter( instances, callback, promise ) {
     this._instances = instances;
     this._callback = callback;
-    this._boundTo = boundTo;
+    this._promise = promise;
 }
-CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
-    if( e === null || typeof e !== "object" ) {
-        throw e;
+
+
+function safePredicate( predicate, e ) {
+    var safeObject = {};
+    var retfilter = tryCatch1( predicate, safeObject, e );
+
+    if( retfilter === errorObj ) return retfilter;
+
+    var safeKeys = Object.keys(safeObject);
+    if( safeKeys.length ) {
+        errorObj.e = new TypeError(
+            "Catch filter must inherit from Error "
+          + "or be a simple predicate function" );
+        return errorObj;
     }
+    return retfilter;
+}
+
+CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
     var cb = this._callback;
+
     for( var i = 0, len = this._instances.length; i < len; ++i ) {
         var item = this._instances[i];
-        if( e instanceof item ) {
-            var ret = tryCatch1( cb, this._boundTo, e );
+        var itemIsErrorType = item === Error ||
+            ( item != null && item.prototype instanceof Error );
+
+        if( itemIsErrorType && e instanceof item ) {
+            var ret = tryCatch1( cb, this._promise._boundTo, e );
             if( ret === errorObj ) {
                 throw ret.e;
             }
             return ret;
+        } else if( typeof item === "function" && !itemIsErrorType ) {
+            var shouldHandle = safePredicate(item, e);
+            if( shouldHandle === errorObj ) {
+                this._promise._attachExtraTrace( errorObj.e );
+                e = errorObj.e;
+                break;
+            } else if(shouldHandle) {
+                var ret = tryCatch1( cb, this._promise._boundTo, e );
+                if( ret === errorObj ) {
+                    throw ret.e;
+                }
+                return ret;
+            }
         }
     }
     ensureNotHandled( e );
@@ -658,6 +690,7 @@ CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
 };
 
 module.exports = CatchFilter;
+
 },{"./errors.js":10,"./util.js":36}],9:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
@@ -1715,15 +1748,14 @@ function Promise$catch( fn ) {
             j = 0, i;
         for( i = 0; i < len - 1; ++i ) {
             var item = arguments[i];
-            if( typeof item === "function" &&
-                ( item.prototype instanceof Error ||
-                item === Error ) ) {
+            if( typeof item === "function" ) {
                 catchInstances[j++] = item;
             }
             else {
                 var catchFilterTypeError =
                     new TypeError(
-                        "A catch filter must be an error constructor");
+                        "A catch filter must be an error constructor "
+                        + "or a filter function");
 
                 this._attachExtraTrace( catchFilterTypeError );
                 async.invoke( this._reject, this, catchFilterTypeError );
@@ -1732,7 +1764,7 @@ function Promise$catch( fn ) {
         }
         catchInstances.length = j;
         fn = arguments[i];
-        var catchFilter = new CatchFilter( catchInstances, fn, this._boundTo );
+        var catchFilter = new CatchFilter( catchInstances, fn, this );
         return this._then( void 0, catchFilter.doFilter, void 0,
             catchFilter, void 0, this.caught );
     }
