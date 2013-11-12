@@ -1,8 +1,8 @@
 
 
-if (global.useQ) 
+if (global.useQ)
     var lifter = require('q').denodeify;
-else if (global.useBluebird) 
+else if (global.useBluebird)
     //Currently promisifies only Node style callbacks
     var lifter = require('bluebird').promisify;
 else if (global.useKew) {
@@ -20,6 +20,15 @@ else if (global.useKew) {
         }
     }
 }
+else if( global.useLiar) {
+    var lifter = require("liar").denodify;
+}
+else if( global.useRSVP ) {
+    var lifter = require("rsvp").denodeify;
+}
+else if( global.useDeferred) {
+    var lifter = require("deferred").promisify;
+}
 else {
     var lifter = require('when/node/function').lift
 }
@@ -28,7 +37,7 @@ var f = require('./dummy');
 
 var makefakes = require('./fakemaker');
 
-// A function taking n values or promises and returning 
+// A function taking n values or promises and returning
 // a promise
 function dummyP(n) {
     return lifter(f.dummy(n));

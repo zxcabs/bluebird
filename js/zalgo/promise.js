@@ -113,6 +113,8 @@ function Promise$catch( fn ) {
         }
         catchInstances.length = j;
         fn = arguments[i];
+
+        this._resetTrace( this.caught );
         var catchFilter = new CatchFilter( catchInstances, fn, this );
         return this._then( void 0, catchFilter.doFilter, void 0,
             catchFilter, void 0, this.caught );
@@ -690,6 +692,19 @@ function Promise$_tryAssumeStateOf( value, mustAsync ) {
     return true;
 };
 
+Promise.prototype._resetTrace = function Promise$_resetTrace( caller ) {
+    if( longStackTraces ) {
+        var context = this._peekContext();
+        var isTopLevel = context === void 0;
+        this._trace = new CapturedTrace(
+            typeof caller === "function"
+            ? caller
+            : this._resetTrace,
+            isTopLevel
+        );
+    }
+};
+
 Promise.prototype._setTrace = function Promise$_setTrace( caller, parent ) {
     if( longStackTraces ) {
         var context = this._peekContext();
@@ -936,8 +951,6 @@ Promise.noConflict = function() {
 
 if( !CapturedTrace.isSupported() ) {
     Promise.longStackTraces = function(){};
-    CapturedTrace.possiblyUnhandledRejection = function(){};
-    Promise.onPossiblyUnhandledRejection = function(){};
     longStackTraces = false;
 }
 

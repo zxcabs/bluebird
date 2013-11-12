@@ -3178,7 +3178,7 @@ process.chdir = function (dir) {
 
 },{}],16:[function(require,module,exports){
 var Promise = require("../js/debug/bluebird.js");
-(function (){
+Promise.onPossiblyUnhandledRejection();(function (){
     var global = window;
     global.adapter = Promise;
     global.sinon = require("sinon");
@@ -3631,7 +3631,7 @@ var inherits = require( "./util.js").inherits;
 
 var rignore = new RegExp(
     "\\b(?:Promise(?:Array|Spawn)?\\$_\\w+|tryCatch(?:1|2|Apply)|setTimeout" +
-    "|makeNodePromisified|processImmediate|nextTick" +
+    "|CatchFilter\\$_\\w+|makeNodePromisified|processImmediate|nextTick" +
     "|Async\\$\\w+)\\b"
 );
 
@@ -3663,10 +3663,12 @@ function CapturedTrace$PossiblyUnhandledRejection( reason ) {
     if( typeof console === "object" ) {
         var stack = reason.stack;
         var message = "Possibly unhandled " + formatStack( stack, reason );
-        if( typeof console.error === "function" ) {
+        if( typeof console.error === "function" ||
+            typeof console.error === "object" ) {
             console.error( message );
         }
-        else if( typeof console.log === "function" ) {
+        else if( typeof console.log === "function" ||
+            typeof console.error === "object" ) {
             console.log( message );
         }
     }
@@ -3687,6 +3689,7 @@ CapturedTrace.combine = function CapturedTrace$Combine( current, prev ) {
             break;
         }
     }
+
     current.push( "From previous event:" );
     var lines = current.concat( prev );
 
@@ -3822,6 +3825,18 @@ var captureStackTrace = (function stackDetection() {
         };
     }
     else {
+        formatStack = function( stack, error ) {
+            if( typeof stack === "string" ) return stack;
+
+            if( ( typeof error === "object" ||
+                typeof error === "function" ) &&
+                error.name !== void 0 &&
+                error.message !== void 0 ) {
+                return error.name + ". " + error.message;
+            }
+            return formatNonError( error );
+        };
+
         return null;
     }
 })();
@@ -3864,7 +3879,7 @@ function CatchFilter( instances, callback, promise ) {
 }
 
 
-function safePredicate( predicate, e ) {
+function CatchFilter$_safePredicate( predicate, e ) {
     var safeObject = {};
     var retfilter = tryCatch1( predicate, safeObject, e );
 
@@ -3880,7 +3895,7 @@ function safePredicate( predicate, e ) {
     return retfilter;
 }
 
-CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
+CatchFilter.prototype.doFilter = function CatchFilter$_doFilter( e ) {
     var cb = this._callback;
 
     for( var i = 0, len = this._instances.length; i < len; ++i ) {
@@ -3895,7 +3910,7 @@ CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
             }
             return ret;
         } else if( typeof item === "function" && !itemIsErrorType ) {
-            var shouldHandle = safePredicate(item, e);
+            var shouldHandle = CatchFilter$_safePredicate(item, e);
             if( shouldHandle === errorObj ) {
                 this._promise._attachExtraTrace( errorObj.e );
                 e = errorObj.e;
@@ -5024,6 +5039,8 @@ function Promise$catch( fn ) {
         }
         catchInstances.length = j;
         fn = arguments[i];
+
+        this._resetTrace( this.caught );
         var catchFilter = new CatchFilter( catchInstances, fn, this );
         return this._then( void 0, catchFilter.doFilter, void 0,
             catchFilter, void 0, this.caught );
@@ -5658,6 +5675,19 @@ function Promise$_tryAssumeStateOf( value, mustAsync ) {
     return true;
 };
 
+Promise.prototype._resetTrace = function Promise$_resetTrace( caller ) {
+    if( longStackTraces ) {
+        var context = this._peekContext();
+        var isTopLevel = context === void 0;
+        this._trace = new CapturedTrace(
+            typeof caller === "function"
+            ? caller
+            : this._resetTrace,
+            isTopLevel
+        );
+    }
+};
+
 Promise.prototype._setTrace = function Promise$_setTrace( caller, parent ) {
     ASSERT((this._trace == null),
     "this._trace == null");
@@ -5932,8 +5962,6 @@ Promise.noConflict = function() {
 
 if( !CapturedTrace.isSupported() ) {
     Promise.longStackTraces = function(){};
-    CapturedTrace.possiblyUnhandledRejection = function(){};
-    Promise.onPossiblyUnhandledRejection = function(){};
     longStackTraces = false;
 }
 
@@ -6534,7 +6562,7 @@ var notEnumerableProp = util.notEnumerableProp;
 var deprecated = util.deprecated;
 var ASSERT = require( "./assert.js" );
 
-Promise.prototype.error = function( fn ) {
+Promise.prototype.error = function Promise$_error( fn ) {
     return this.caught( RejectionError, fn );
 };
 
@@ -7619,7 +7647,6 @@ SomePromiseArray.prototype._promiseRejected =
 function SomePromiseArray$_promiseRejected( reason ) {
     if( this._isResolved() ) return;
     this._addRejected( reason );
-
     if( this.howMany() > this._canPossiblyFulfill() ) {
         if( this._values.length === this.length() ) {
             this._reject([]);
@@ -8028,7 +8055,7 @@ var inherits = require( "./util.js").inherits;
 
 var rignore = new RegExp(
     "\\b(?:Promise(?:Array|Spawn)?\\$_\\w+|tryCatch(?:1|2|Apply)|setTimeout" +
-    "|makeNodePromisified|processImmediate|nextTick" +
+    "|CatchFilter\\$_\\w+|makeNodePromisified|processImmediate|nextTick" +
     "|Async\\$\\w+)\\b"
 );
 
@@ -8054,10 +8081,12 @@ function CapturedTrace$PossiblyUnhandledRejection( reason ) {
     if( typeof console === "object" ) {
         var stack = reason.stack;
         var message = "Possibly unhandled " + formatStack( stack, reason );
-        if( typeof console.error === "function" ) {
+        if( typeof console.error === "function" ||
+            typeof console.error === "object" ) {
             console.error( message );
         }
-        else if( typeof console.log === "function" ) {
+        else if( typeof console.log === "function" ||
+            typeof console.error === "object" ) {
             console.log( message );
         }
     }
@@ -8078,6 +8107,7 @@ CapturedTrace.combine = function CapturedTrace$Combine( current, prev ) {
             break;
         }
     }
+
     current.push( "From previous event:" );
     var lines = current.concat( prev );
 
@@ -8206,6 +8236,18 @@ var captureStackTrace = (function stackDetection() {
         };
     }
     else {
+        formatStack = function( stack, error ) {
+            if( typeof stack === "string" ) return stack;
+
+            if( ( typeof error === "object" ||
+                typeof error === "function" ) &&
+                error.name !== void 0 &&
+                error.message !== void 0 ) {
+                return error.name + ". " + error.message;
+            }
+            return formatNonError( error );
+        };
+
         return null;
     }
 })();
@@ -9019,6 +9061,8 @@ function Promise$catch( fn ) {
         }
         catchInstances.length = j;
         fn = arguments[i];
+
+        this._resetTrace( this.caught );
         var catchFilter = new CatchFilter( catchInstances, fn, this );
         return this._then( void 0, catchFilter.doFilter, void 0,
             catchFilter, void 0, this.caught );
@@ -9600,6 +9644,19 @@ function Promise$_tryAssumeStateOf( value, mustAsync ) {
     return true;
 };
 
+Promise.prototype._resetTrace = function Promise$_resetTrace( caller ) {
+    if( longStackTraces ) {
+        var context = this._peekContext();
+        var isTopLevel = context === void 0;
+        this._trace = new CapturedTrace(
+            typeof caller === "function"
+            ? caller
+            : this._resetTrace,
+            isTopLevel
+        );
+    }
+};
+
 Promise.prototype._setTrace = function Promise$_setTrace( caller, parent ) {
     if( longStackTraces ) {
         var context = this._peekContext();
@@ -9846,8 +9903,6 @@ Promise.noConflict = function() {
 
 if( !CapturedTrace.isSupported() ) {
     Promise.longStackTraces = function(){};
-    CapturedTrace.possiblyUnhandledRejection = function(){};
-    Promise.onPossiblyUnhandledRejection = function(){};
     longStackTraces = false;
 }
 
@@ -10142,7 +10197,7 @@ var notEnumerableProp = util.notEnumerableProp;
 var deprecated = util.deprecated;
 var ASSERT = require( "./assert.js" );
 
-Promise.prototype.error = function( fn ) {
+Promise.prototype.error = function Promise$_error( fn ) {
     return this.caught( RejectionError, fn );
 };
 
@@ -15393,13 +15448,22 @@ var rejected = adapter.rejected;
 
 var dummy = { dummy: "dummy" }; // we fulfill or reject with this when we don't intend to test against it
 
+var undefinedThisStrict = (function() {
+    "use strict";
+    return this;
+})();
+
+var undefinedThisSloppy = (function() {
+    return this;
+})();
+
 describe("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e. with no `this` value).", function () {
     describe("strict mode", function () {
         specify("fulfilled", function (done) {
             fulfilled(dummy).then(function onFulfilled() {
                 "use strict";
 
-                assert.strictEqual(this, undefined);
+                assert.strictEqual(this, undefinedThisStrict);
                 done();
             });
         });
@@ -15408,7 +15472,7 @@ describe("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e.
             rejected(dummy).then(null, function onRejected() {
                 "use strict";
 
-                assert.strictEqual(this, undefined);
+                assert.strictEqual(this, undefinedThisStrict);
                 done();
             });
         });
@@ -15417,14 +15481,14 @@ describe("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e.
     describe("sloppy mode", function () {
         specify("fulfilled", function (done) {
             fulfilled(dummy).then(function onFulfilled() {
-                assert.strictEqual(this, global);
+                assert.strictEqual(this, undefinedThisSloppy);
                 done();
             });
         });
 
         specify("rejected", function (done) {
             rejected(dummy).then(null, function onRejected() {
-                assert.strictEqual(this, global);
+                assert.strictEqual(this, undefinedThisSloppy);
                 done();
             });
         });
@@ -16732,13 +16796,13 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", function () {
                         savedResolvePromise(dummy);
                         savedRejectPromise(dummy);
                         savedRejectPromise(dummy);
-                    }, 50);
+                    }, 4);
 
                     setTimeout(function () {
                         assert.strictEqual(timesFulfilled, 1);
                         assert.strictEqual(timesRejected, 0);
                         done();
-                    }, 100);
+                    }, 60);
                 });
             });
         });
@@ -19297,7 +19361,7 @@ if( isNodeJS ) {
         it("should enable long stack traces", function(done) {
             Promise.fulfilled().then(function() {
                 throw new Error("Oops");
-            }).catch(function(err) {
+            }).caught(function(err) {
                 process.nextTick(function() {
                     assert(err.stack.indexOf("From previous event") >= 0,
                            "env flag should enable long stack traces");
@@ -19309,77 +19373,82 @@ if( isNodeJS ) {
 }
 
 },{"../../js/main/bluebird.js":56,"__browserify_process":15,"assert":2}],127:[function(require,module,exports){
-"use strict";
+var process=require("__browserify_process");"use strict";
+
+var isNodeJS = typeof process !== "undefined" && process !== null &&
+    typeof process.execPath === "string";
 
 var assert = require("assert");
 
-var Promise1 = require( "../../js/debug/promise.js")();
-var Promise2 = require( "../../js/debug/promise.js")();
+if( isNodeJS ) {
+    var Promise1 = require( "../../js/debug/promise.js")();
+    var Promise2 = require( "../../js/debug/promise.js")();
 
-var err1 = new Error();
-var err2 = new Error();
+    var err1 = new Error();
+    var err2 = new Error();
 
-describe("Separate instances of bluebird", function() {
+    describe("Separate instances of bluebird", function() {
 
-    specify("Should have identical Error types", function( done ) {
-        assert( Promise1.CancellationError === Promise2.CancellationError );
-        assert( Promise1.RejectionError === Promise2.RejectionError );
-        assert( Promise1.TimeoutError === Promise2.TimeoutError );
-        done();
-    });
+        specify("Should have identical Error types", function( done ) {
+            assert( Promise1.CancellationError === Promise2.CancellationError );
+            assert( Promise1.RejectionError === Promise2.RejectionError );
+            assert( Promise1.TimeoutError === Promise2.TimeoutError );
+            done();
+        });
 
-    specify("Should not be identical", function( done ) {
-        assert( Promise1.onPossiblyUnhandledRejection !==
-                Promise2.onPossiblyUnhandledRejection );
-        assert( Promise1 !== Promise2 );
-        done();
-    });
+        specify("Should not be identical", function( done ) {
+            assert( Promise1.onPossiblyUnhandledRejection !==
+                    Promise2.onPossiblyUnhandledRejection );
+            assert( Promise1 !== Promise2 );
+            done();
+        });
 
-    specify("Should have different unhandled rejection handlers", function(done) {
-        var dones = 0;
-        var donecall = function() {
-            console.log('done');
-            if( ++dones === 2 ) {
-                done();
+        specify("Should have different unhandled rejection handlers", function(done) {
+            var dones = 0;
+            var donecall = function() {
+                if( ++dones === 2 ) {
+                    done();
+                }
             }
-        }
-        Promise1.onPossiblyUnhandledRejection(function(e, promise) {
-            assert( promise instanceof Promise1 );
-            assert( !(promise instanceof Promise2) );
-            assert(e === err1);
-            donecall();
+            Promise1.onPossiblyUnhandledRejection(function(e, promise) {
+                assert( promise instanceof Promise1 );
+                assert( !(promise instanceof Promise2) );
+                assert(e === err1);
+                donecall();
+            });
+
+            Promise2.onPossiblyUnhandledRejection(function(e, promise) {
+                assert( promise instanceof Promise2 );
+                assert( !(promise instanceof Promise1) );
+                assert(e === err2);
+                donecall();
+            });
+
+            assert( Promise1.onPossiblyUnhandledRejection !==
+                    Promise2.onPossiblyUnhandledRejection );
+
+            var d1 = Promise1.pending();
+            var d2 = Promise2.pending();
+
+            d1.promise.then(function(){
+                throw err1;
+            });
+
+            d2.promise.then(function(){
+                throw err2;
+            });
+
+            setTimeout(function(){
+                d1.fulfill();
+                d2.fulfill();
+            }, 13);
         });
 
-        Promise2.onPossiblyUnhandledRejection(function(e, promise) {
-            assert( promise instanceof Promise2 );
-            assert( !(promise instanceof Promise1) );
-            assert(e === err2);
-            donecall();
-        });
-
-        assert( Promise1.onPossiblyUnhandledRejection !==
-                Promise2.onPossiblyUnhandledRejection );
-
-        var d1 = Promise1.pending();
-        var d2 = Promise2.pending();
-
-        d1.promise.then(function(){
-            throw err1;
-        });
-
-        d2.promise.then(function(){
-            throw err2;
-        });
-
-        setTimeout(function(){
-            d1.fulfill();
-            d2.fulfill();
-        }, 13);
     });
 
-});
+}
 
-},{"../../js/debug/promise.js":34,"assert":2}],128:[function(require,module,exports){
+},{"../../js/debug/promise.js":34,"__browserify_process":15,"assert":2}],128:[function(require,module,exports){
 /*global describe specify require global*/
 //TODO include the copyright
     "use strict";
@@ -20051,8 +20120,6 @@ describe("A promise handler with a predicate filter", function() {
             done();
         });
         a.fulfill(3);
-
-
     });
 
     specify("will catch a thrown undefiend", function(done){
@@ -20090,6 +20157,7 @@ describe("A promise handler with a predicate filter", function() {
         }).caught(function(e) { return e.f.g; }, function(e){
             assert.fail();
         }).caught(TypeError, function(e){
+            //console.error(e.stack);
             done();
         }).caught(function(e) {
             assert.fail();
@@ -21286,7 +21354,22 @@ describe("RejectionError wrapping", function() {
     var CustomError = function(){
 
     }
-    CustomError.prototype = Object.create(Error.prototype);
+    CustomError.prototype = new Error();
+    CustomError.prototype.constructor = CustomError;
+
+    function isUntypedError( obj ) {
+        return obj instanceof Error &&
+            Object.getPrototypeOf( obj ) === Error.prototype;
+    }
+
+
+    if(!isUntypedError(new Error())) {
+        console.log("error must be untyped");
+    }
+
+    if(isUntypedError(new CustomError())) {
+        console.log("customerror must be typed");
+    }
 
     function stringback(cb) {
         cb("Primitive as error");
@@ -24759,10 +24842,16 @@ describe("when.any-test", function () {
 
     specify("should reject with all rejected input values if all inputs are rejected", function(done) {
         var input = [rejected(1), rejected(2), rejected(3)];
-        when.any(input).then(
+        var promise = when.any(input);
+
+        promise.then(
             fail,
             function(result) {
-                assert.deepEqual(result, [1, 2, 3]);
+                //Cannot use deep equality in IE8 because non-enumerable properties are not
+                //supported
+                assert(result[0] === 1);
+                assert(result[1] === 2);
+                assert(result[2] === 3);
                 done();
             }
         );
@@ -26328,7 +26417,10 @@ describe("when.some-test", function () {
         when.some(input, 2).then(
             fail,
             function(failed) {
-                assert.deepEqual(failed, [2, 3]);
+                //Cannot use deep equality in IE8 because non-enumerable properties are not
+                //supported
+                assert(failed[0] === 2);
+                assert(failed[1] === 3);
                 done();
             }
         )
@@ -26370,7 +26462,11 @@ describe("when.some-test", function () {
         when.some(arr, 2).then(assert.fail, function(rejectionReasons){
             //Should be apparent after 2 rejections that
             //it could never be fulfilled
-            assert.deepEqual(rejectionReasons, [1,2]);
+
+            //Cannot use deep equality in IE8 because non-enumerable properties are not
+            //supported
+            assert(rejectionReasons[0] === 1);
+            assert(rejectionReasons[1] === 2);
             done();
         });
 

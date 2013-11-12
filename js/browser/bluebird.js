@@ -1,5 +1,5 @@
 /**
- * bluebird build version 0.9.10-0
+ * bluebird build version 0.9.10-1
  * Features enabled: core, race, any, call_get, filter, generators, map, nodeify, promisify, props, reduce, settle, some, progress, cancel, complex_thenables, synchronous_inspection
  * Features disabled: simple_thenables
 */
@@ -420,7 +420,7 @@ var inherits = require( "./util.js").inherits;
 
 var rignore = new RegExp(
     "\\b(?:Promise(?:Array|Spawn)?\\$_\\w+|tryCatch(?:1|2|Apply)|setTimeout" +
-    "|makeNodePromisified|processImmediate|nextTick" +
+    "|CatchFilter\\$_\\w+|makeNodePromisified|processImmediate|nextTick" +
     "|Async\\$\\w+)\\b"
 );
 
@@ -446,10 +446,12 @@ function CapturedTrace$PossiblyUnhandledRejection( reason ) {
     if( typeof console === "object" ) {
         var stack = reason.stack;
         var message = "Possibly unhandled " + formatStack( stack, reason );
-        if( typeof console.error === "function" ) {
+        if( typeof console.error === "function" ||
+            typeof console.error === "object" ) {
             console.error( message );
         }
-        else if( typeof console.log === "function" ) {
+        else if( typeof console.log === "function" ||
+            typeof console.error === "object" ) {
             console.log( message );
         }
     }
@@ -470,6 +472,7 @@ CapturedTrace.combine = function CapturedTrace$Combine( current, prev ) {
             break;
         }
     }
+
     current.push( "From previous event:" );
     var lines = current.concat( prev );
 
@@ -598,6 +601,18 @@ var captureStackTrace = (function stackDetection() {
         };
     }
     else {
+        formatStack = function( stack, error ) {
+            if( typeof stack === "string" ) return stack;
+
+            if( ( typeof error === "object" ||
+                typeof error === "function" ) &&
+                error.name !== void 0 &&
+                error.message !== void 0 ) {
+                return error.name + ". " + error.message;
+            }
+            return formatNonError( error );
+        };
+
         return null;
     }
 })();
@@ -640,7 +655,7 @@ function CatchFilter( instances, callback, promise ) {
 }
 
 
-function safePredicate( predicate, e ) {
+function CatchFilter$_safePredicate( predicate, e ) {
     var safeObject = {};
     var retfilter = tryCatch1( predicate, safeObject, e );
 
@@ -656,7 +671,7 @@ function safePredicate( predicate, e ) {
     return retfilter;
 }
 
-CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
+CatchFilter.prototype.doFilter = function CatchFilter$_doFilter( e ) {
     var cb = this._callback;
 
     for( var i = 0, len = this._instances.length; i < len; ++i ) {
@@ -671,7 +686,7 @@ CatchFilter.prototype.doFilter = function CatchFilter$doFilter( e ) {
             }
             return ret;
         } else if( typeof item === "function" && !itemIsErrorType ) {
-            var shouldHandle = safePredicate(item, e);
+            var shouldHandle = CatchFilter$_safePredicate(item, e);
             if( shouldHandle === errorObj ) {
                 this._promise._attachExtraTrace( errorObj.e );
                 e = errorObj.e;
@@ -1764,6 +1779,8 @@ function Promise$catch( fn ) {
         }
         catchInstances.length = j;
         fn = arguments[i];
+
+        this._resetTrace( this.caught );
         var catchFilter = new CatchFilter( catchInstances, fn, this );
         return this._then( void 0, catchFilter.doFilter, void 0,
             catchFilter, void 0, this.caught );
@@ -2345,6 +2362,19 @@ function Promise$_tryAssumeStateOf( value, mustAsync ) {
     return true;
 };
 
+Promise.prototype._resetTrace = function Promise$_resetTrace( caller ) {
+    if( longStackTraces ) {
+        var context = this._peekContext();
+        var isTopLevel = context === void 0;
+        this._trace = new CapturedTrace(
+            typeof caller === "function"
+            ? caller
+            : this._resetTrace,
+            isTopLevel
+        );
+    }
+};
+
 Promise.prototype._setTrace = function Promise$_setTrace( caller, parent ) {
     if( longStackTraces ) {
         var context = this._peekContext();
@@ -2591,8 +2621,6 @@ Promise.noConflict = function() {
 
 if( !CapturedTrace.isSupported() ) {
     Promise.longStackTraces = function(){};
-    CapturedTrace.possiblyUnhandledRejection = function(){};
-    Promise.onPossiblyUnhandledRejection = function(){};
     longStackTraces = false;
 }
 
@@ -3172,7 +3200,7 @@ var notEnumerableProp = util.notEnumerableProp;
 var deprecated = util.deprecated;
 var ASSERT = require( "./assert.js" );
 
-Promise.prototype.error = function( fn ) {
+Promise.prototype.error = function Promise$_error( fn ) {
     return this.caught( RejectionError, fn );
 };
 
@@ -4223,7 +4251,6 @@ SomePromiseArray.prototype._promiseRejected =
 function SomePromiseArray$_promiseRejected( reason ) {
     if( this._isResolved() ) return;
     this._addRejected( reason );
-
     if( this.howMany() > this._canPossiblyFulfill() ) {
         if( this._values.length === this.length() ) {
             this._reject([]);

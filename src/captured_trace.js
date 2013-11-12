@@ -5,7 +5,7 @@ var inherits = require( "./util.js").inherits;
 
 var rignore = new RegExp(
     "\\b(?:Promise(?:Array|Spawn)?\\$_\\w+|tryCatch(?:1|2|Apply)|setTimeout" +
-    "|makeNodePromisified|processImmediate|nextTick" +
+    "|CatchFilter\\$_\\w+|makeNodePromisified|processImmediate|nextTick" +
     "|Async\\$\\w+)\\b"
 );
 
@@ -37,10 +37,14 @@ function CapturedTrace$PossiblyUnhandledRejection( reason ) {
     if( typeof console === "object" ) {
         var stack = reason.stack;
         var message = "Possibly unhandled " + formatStack( stack, reason );
-        if( typeof console.error === "function" ) {
+        if( typeof console.error === "function" ||
+            //IE9 gives "object"
+            typeof console.error === "object" ) {
             console.error( message );
         }
-        else if( typeof console.log === "function" ) {
+        else if( typeof console.log === "function" ||
+            //IE9 gives "object"
+            typeof console.error === "object" ) {
             console.log( message );
         }
     }
@@ -62,6 +66,7 @@ CapturedTrace.combine = function CapturedTrace$Combine( current, prev ) {
             break;
         }
     }
+
     current.push( FROM_PREVIOUS_EVENT );
     var lines = current.concat( prev );
 
@@ -199,6 +204,18 @@ var captureStackTrace = (function stackDetection() {
         };
     }
     else {
+        formatStack = function( stack, error ) {
+            if( typeof stack === "string" ) return stack;
+
+            if( ( typeof error === "object" ||
+                typeof error === "function" ) &&
+                error.name !== void 0 &&
+                error.message !== void 0 ) {
+                return error.name + ". " + error.message;
+            }
+            return formatNonError( error );
+        };
+
         return null;
     }
 })();

@@ -25,6 +25,7 @@ Bluebird is a fully featured [promise](#what-are-promises-and-why-should-i-use-t
 - [Snippets for common problems](https://github.com/petkaantonov/bluebird/wiki/Snippets)
 - [Promise anti-patterns](https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
 - [Changelog](https://github.com/petkaantonov/bluebird/blob/master/changelog.md)
+- [Optimization guide](#optimization-guide)
 
 #Features:
 
@@ -49,18 +50,10 @@ Passes [AP2](https://github.com/petkaantonov/bluebird/tree/master/test/mocha), [
 
     npm install bluebird
 
-
 Then:
 
 ```js
 var Promise = require("bluebird");
-```
-
-If you want to ensure you get your own fresh copy of bluebird, do instead:
-
-```js
-                                        //Note the extra function call
-var Promise = require("bluebird/js/main/promise")();
 ```
 
 ##Browsers
@@ -73,13 +66,17 @@ Download the [bluebird.js](https://github.com/petkaantonov/bluebird/tree/master/
 
 The global variable `Promise` becomes available after the above script tag.
 
-After quick start, see [API Reference and examples](https://github.com/petkaantonov/bluebird/blob/master/API.md)
-
-###Browser support
+####Browser support
 
 Browsers that [implement ECMA-262, edition 5](http://en.wikipedia.org/wiki/Ecmascript#Implementations) and later are supported.
 
+[![Selenium Test Status](https://saucelabs.com/browser-matrix/petka_antonov.svg)](https://saucelabs.com/u/petka_antonov)
+
 IE8 (ECMAS-262, edition 3) is supported if you include [es5-shim.js](https://github.com/kriskowal/es5-shim/blob/master/es5-shim.js) and [es5-sham.js](https://github.com/kriskowal/es5-shim/blob/master/es5-sham.js).
+
+After quick start, see [API Reference and examples](https://github.com/petkaantonov/bluebird/blob/master/API.md)
+
+<hr>
 
 #What are promises and why should I use them?
 
@@ -317,17 +314,35 @@ Since a `catch` handler typed to `Promise.RejectionError` is expected to be used
 });
 ```
 
-Finally, Bluebird also supports predicate-based filters. If you pass a 
+See [API documentation for `.error()`](https://github.com/petkaantonov/bluebird/blob/master/API.md#error-rejectedhandler----promise)
+
+Finally, Bluebird also supports predicate-based filters. If you pass a
 predicate function instead of an error type, the predicate will receive
-the error as an argument. The return result will be used determine whether 
-the error handler should be called. 
+the error as an argument. The return result will be used determine whether
+the error handler should be called.
 
 Predicates should allow for very fine grained control over caught errors:
 pattern matching, error typesets with set operations and many other techniques
 can be implemented on top of them.
 
+Example of using a predicate-based filter:
 
-See [API documentation for `.error()`](https://github.com/petkaantonov/bluebird/blob/master/API.md#error-rejectedhandler----promise)
+```js
+var Promise = require("bluebird");
+var request = Promise.promisify(require("request"));
+
+function clientError(e) {
+    return e.code >= 400 && e.code < 500;
+}
+
+request("http://www.google.com").then(function(contents){
+    console.log(contents);
+}).catch(clientError, function(e){
+   //A client error like 400 Bad Request happened
+});
+```
+
+
 
 <hr>
 
@@ -651,7 +666,9 @@ function guessWhatItPrints( url ) {
 
 #Optimization guide
 
-todo
+Articles about optimization will be periodically posted in [the wiki section](https://github.com/petkaantonov/bluebird/wiki), polishing edits are welcome.
+
+A single cohesive guide compiled from the articles will probably be done eventually.
 
 #License
 
