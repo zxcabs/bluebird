@@ -1,5 +1,5 @@
 /**
- * bluebird build version 0.9.10-1
+ * bluebird build version 0.9.10-2
  * Features enabled: core, race, any, call_get, filter, generators, map, nodeify, promisify, props, reduce, settle, some, progress, cancel, complex_thenables, synchronous_inspection
  * Features disabled: simple_thenables
 */
@@ -292,12 +292,7 @@ module.exports = Promise;
 "use strict";
 module.exports = function( Promise ) {
     Promise.prototype.call = function Promise$call( propertyName ) {
-        var len = arguments.length;
-
-        var args = new Array(len-1);
-        for( var i = 1; i < len; ++i ) {
-            args[ i - 1 ] = arguments[ i ];
-        }
+        var $_len = arguments.length;var args = new Array($_len - 1); for(var $_i = 1; $_i < $_len; ++$_i) {args[$_i - 1] = arguments[$_i];}
 
         return this._then( function( obj ) {
                 return obj[ propertyName ].apply( obj, args );
@@ -1896,11 +1891,8 @@ Promise.all = function Promise$All( promises ) {
 };
 
 Promise.join = function Promise$Join() {
-    var ret = new Array( arguments.length );
-    for( var i = 0, len = ret.length; i < len; ++i ) {
-        ret[i] = arguments[i];
-    }
-    return Promise$_All( ret, PromiseArray, Promise.join, void 0 ).promise();
+    var $_len = arguments.length;var args = new Array($_len); for(var $_i = 0; $_i < $_len; ++$_i) {args[$_i] = arguments[$_i];}
+    return Promise$_All( args, PromiseArray, Promise.join, void 0 ).promise();
 };
 Promise.fulfilled = function Promise$Fulfilled( value, caller ) {
     var ret = new Promise();
@@ -2257,7 +2249,7 @@ Promise.prototype._resolvePromise = function Promise$_resolvePromise(
     if( !isRejected && receiver === APPLY ) {
         if( isArray( value ) ) {
             for( var i = 0, len = value.length; i < len; ++i ) {
-                if( isPromise( value[i] ) ) {
+                if( isPromise( Promise._cast( value[i] ) ) ) {
                     this._spreadSlowCase(
                         onFulfilledOrRejected,
                         promise,
@@ -2991,15 +2983,12 @@ function nodebackForResolver( resolver ) {
         }
         else {
             if( arguments.length > 2 ) {
-                var len = arguments.length;
-                var val = new Array( len - 1 );
-                for( var i = 1; i < len; ++i ) {
-                    val[ i - 1 ] = arguments[ i ];
-                }
-
-                value = val;
+                var $_len = arguments.length;var args = new Array($_len - 1); for(var $_i = 1; $_i < $_len; ++$_i) {args[$_i - 1] = arguments[$_i];}
+                resolver.fulfill( args );
             }
-            resolver.fulfill( value );
+            else {
+                resolver.fulfill( value );
+            }
         }
     }
     return PromiseResolver$_callback;

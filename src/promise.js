@@ -305,11 +305,8 @@ Promise.all = function Promise$All( promises ) {
 };
 
 Promise.join = function Promise$Join() {
-    var ret = new Array( arguments.length );
-    for( var i = 0, len = ret.length; i < len; ++i ) {
-        ret[i] = arguments[i];
-    }
-    return Promise$_All( ret, PromiseArray, Promise.join, void 0 ).promise();
+    INLINE_SLICE(args, arguments);
+    return Promise$_All( args, PromiseArray, Promise.join, void 0 ).promise();
 };
 /**
  * Create a promise that is already fulfilled with the given
@@ -757,7 +754,7 @@ Promise.prototype._resolvePromise = function Promise$_resolvePromise(
             //since the spread target callback will have
             //a formal parameter for each item in the array
             for( var i = 0, len = value.length; i < len; ++i ) {
-                if( isPromise( value[i] ) ) {
+                if( isPromise( Promise._cast( value[i] ) ) ) {
                     this._spreadSlowCase(
                         onFulfilledOrRejected,
                         promise,
