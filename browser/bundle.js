@@ -20526,7 +20526,7 @@ exports.rejected = {
             tuple.reject(reason);
         }, 50);
         return tuple.promise;
-    },
+    }
 };
 
 },{}],135:[function(require,module,exports){
