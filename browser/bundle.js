@@ -7398,17 +7398,9 @@ var global = require("./global.js");
 var ASSERT = require("./assert.js");
 var schedule;
 if( typeof process !== "undefined" && process !== null &&
-    typeof process.cwd === "function" ) {
-    if( typeof global.setImmediate !== "undefined" ) {
-        schedule = function Promise$_Scheduler( fn ) {
-            global.setImmediate( fn );
-        };
-    }
-    else {
-        schedule = function Promise$_Scheduler( fn ) {
-            process.nextTick( fn );
-        };
-    }
+    typeof process.cwd === "function" &&
+    typeof process.nextTick === "function" ) {
+    schedule = process.nextTick;
 }
 else if( ( typeof MutationObserver === "function" ||
         typeof WebkitMutationObserver === "function" ||
@@ -10978,17 +10970,9 @@ var global = require("./global.js");
 var ASSERT = require("./assert.js");
 var schedule;
 if( typeof process !== "undefined" && process !== null &&
-    typeof process.cwd === "function" ) {
-    if( typeof global.setImmediate !== "undefined" ) {
-        schedule = function Promise$_Scheduler( fn ) {
-            global.setImmediate( fn );
-        };
-    }
-    else {
-        schedule = function Promise$_Scheduler( fn ) {
-            process.nextTick( fn );
-        };
-    }
+    typeof process.cwd === "function" &&
+    typeof process.nextTick === "function" ) {
+    schedule = process.nextTick;
 }
 else if( ( typeof MutationObserver === "function" ||
         typeof WebkitMutationObserver === "function" ||
@@ -23393,13 +23377,11 @@ if( isNodeJS ) {
         it("throws normally in the node process if the function throws", function (done) {
             clearHandlers();
             var promise = Q(10);
-            promise.nodeify(thrower);
             var turns = 0;
             process.nextTick(function(){
-
                 turns++;
             });
-            var doneCalls = 0;
+            promise.nodeify(thrower);
             process.addListener("uncaughtException", function(err) {
                 clearHandlersNoRestore();
                 assert( err === e );
@@ -23409,6 +23391,7 @@ if( isNodeJS ) {
         });
     });
 }
+
 },{"../../js/debug/bluebird.js":20,"__browserify_process":15,"assert":2,"sinon":91}],150:[function(require,module,exports){
 var assert = require("assert");
 
