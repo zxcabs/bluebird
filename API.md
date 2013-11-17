@@ -8,6 +8,8 @@
     - [`.finally(Function handler)`](#finallyfunction-handler---promise)
     - [`.bind(dynamic thisArg)`](#binddynamic-thisarg---promise)
     - [`.done([Function fulfilledHandler] [, Function rejectedHandler ] [, Function progressHandler ])`](#donefunction-fulfilledhandler--function-rejectedhandler---function-progresshandler----promise)
+    - [`.return(dynamic value)`](#returndynamic-value---promise)
+    - [`.throw(dynamic reason)`](#throwdynamic-reason---promise)
     - [`Promise.try(Function fn [, Array<dynamic>|dynamic arguments] [, dynamic ctx] )`](#promisetryfunction-fn--arraydynamicdynamic-arguments--dynamic-ctx----promise)
     - [`Promise.fulfilled(dynamic value)`](#promisefulfilleddynamic-value---promise)
     - [`Promise.rejected(dynamic reason)`](#promiserejecteddynamic-reason---promise)
@@ -449,6 +451,52 @@ Like `.then()`, but any unhandled rejection that ends up here will be thrown as 
 
 <hr>
 
+#####`.return(dynamic value)` -> `Promise`
+
+Convenience method for:
+
+```js
+.then(function() {
+   return value;
+});
+```
+
+in the case where `value` doesn't change its value.
+
+That means `value` is bound at the time of calling `.return()` so this will not work as expected:
+
+```js
+function getData() {
+    var data;
+
+    return query().then(function(result) {
+        data = result;
+    }).return(data);
+}
+```
+
+because `data` is `undefined` at the time `.return` is called.
+
+*For compatibility with earlier ECMAScript version, an alias `.thenReturn()` is provided for `.return()`.*
+
+<hr>
+
+#####`.throw(dynamic reason)` -> `Promise`
+
+Convenience method for:
+
+```js
+.then(function() {
+   throw reason;
+});
+```
+
+Same limitations apply as with `.return()`.
+
+*For compatibility with earlier ECMAScript version, an alias `.thenThrow()` is provided for `.throw()`.*
+
+<hr>
+
 #####`Promise.try(Function fn [, Array<dynamic>|dynamic arguments] [, dynamic ctx] )` -> `Promise`
 
 Start the chain of promises with `Promise.try`. Any synchronous exceptions will be turned into rejections on the returned promise.
@@ -469,6 +517,52 @@ Now if someone uses this function, they will catch all errors in their Promise `
 Note about second argument: if it's specifically a true array, its values become respective arguments for the function call. Otherwise it is passed as is as the first argument for the function call.
 
 *For compatibility with earlier ECMAScript version, an alias `Promise.attempt()` is provided for `Promise.try()`.*
+
+<hr>
+
+#####`Promise.method(Function fn)` -> `Function`
+
+Returns a new function that wraps the given function `fn`. The new function will always return a promise that is fulfilled with the original functions return values or rejected with thrown exceptions from the original function.
+
+This method is convenient when a function can sometimes return synchronously or throw synchronously.
+
+Example without using `Promise.method`:
+
+```js
+MyClass.prototype.method = function(input) {
+    if (!this.isValid(input)) {
+        return Promise.rejected(new TypeError("input is not valid"));
+    }
+
+    if (this.cache(input)) {
+        return Promise.fulfilled(this.someCachedValue);
+    }
+
+    return db.queryAsync(input).then(function(value) {
+        this.someCachedValue = value;
+        return value;
+    });
+};
+```
+
+Using the same function `Promise.method`, there is no need to manually wrap direct return or throw values into a promise:
+
+```js
+MyClass.prototype.method = Promise.method(function(input) {
+    if (!this.isValid(input)) {
+        throw new TypeError("input is not valid");
+    }
+
+    if (this.cachedFor(input)) {
+        return this.someCachedValue;
+    }
+
+    return db.queryAsync(input).bind(this).then(function(value) {
+        this.someCachedValue = value;
+        return value;
+    });
+});
+```
 
 <hr>
 
