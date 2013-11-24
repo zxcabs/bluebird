@@ -3220,7 +3220,6 @@ Promise.onPossiblyUnhandledRejection();(function (){
 {fn: function(){ return require('../test/mocha/following.js');}, name: '../test/mocha/following.js'},
 {fn: function(){ return require('../test/mocha/late_buffer_safety.js');}, name: '../test/mocha/late_buffer_safety.js'},
 {fn: function(){ return require('../test/mocha/method.js');}, name: '../test/mocha/method.js'},
-{fn: function(){ return require('../test/mocha/promises_unwrapping.js');}, name: '../test/mocha/promises_unwrapping.js'},
 {fn: function(){ return require('../test/mocha/promisify.js');}, name: '../test/mocha/promisify.js'},
 {fn: function(){ return require('../test/mocha/props.js');}, name: '../test/mocha/props.js'},
 {fn: function(){ return require('../test/mocha/q_all.js');}, name: '../test/mocha/q_all.js'},
@@ -3247,7 +3246,7 @@ Promise.onPossiblyUnhandledRejection();(function (){
 {fn: function(){ return require('../test/mocha/when_settle.js');}, name: '../test/mocha/when_settle.js'},
 {fn: function(){ return require('../test/mocha/when_some.js');}, name: '../test/mocha/when_some.js'},
 {fn: function(){ return require('../test/mocha/when_spread.js');}, name: '../test/mocha/when_spread.js'}];
-},{"../js/debug/bluebird.js":20,"../test/mocha/2.1.2.js":106,"../test/mocha/2.1.3.js":107,"../test/mocha/2.2.1.js":108,"../test/mocha/2.2.2.js":109,"../test/mocha/2.2.3.js":110,"../test/mocha/2.2.4.js":111,"../test/mocha/2.2.5.js":112,"../test/mocha/2.2.6.js":113,"../test/mocha/2.2.7.js":114,"../test/mocha/2.3.1.js":115,"../test/mocha/2.3.2.js":116,"../test/mocha/2.3.3.js":117,"../test/mocha/2.3.4.js":118,"../test/mocha/3.2.1.js":119,"../test/mocha/3.2.2.js":120,"../test/mocha/3.2.3.js":121,"../test/mocha/3.2.4.js":122,"../test/mocha/3.2.5.js":123,"../test/mocha/3.2.6.js":124,"../test/mocha/api_exceptions.js":125,"../test/mocha/async.js":126,"../test/mocha/bind.js":127,"../test/mocha/bluebird-debug-env-flag.js":128,"../test/mocha/bluebird-multiple-instances.js":129,"../test/mocha/cancel.js":130,"../test/mocha/cast.js":131,"../test/mocha/catch_filter.js":132,"../test/mocha/cycles.js":133,"../test/mocha/direct_resolving.js":134,"../test/mocha/following.js":135,"../test/mocha/late_buffer_safety.js":139,"../test/mocha/method.js":140,"../test/mocha/promises_unwrapping.js":141,"../test/mocha/promisify.js":142,"../test/mocha/props.js":143,"../test/mocha/q_all.js":144,"../test/mocha/q_done.js":145,"../test/mocha/q_fin.js":146,"../test/mocha/q_inspect.js":147,"../test/mocha/q_make_node_resolver.js":148,"../test/mocha/q_nodeify.js":149,"../test/mocha/q_progress.js":150,"../test/mocha/q_propagation.js":151,"../test/mocha/q_settle.js":152,"../test/mocha/q_spread.js":153,"../test/mocha/race.js":154,"../test/mocha/reused_promise.js":155,"../test/mocha/sparsity.js":156,"../test/mocha/try.js":157,"../test/mocha/unhandled_rejections.js":158,"../test/mocha/when_all.js":159,"../test/mocha/when_any.js":160,"../test/mocha/when_defer.js":161,"../test/mocha/when_join.js":162,"../test/mocha/when_map.js":163,"../test/mocha/when_reduce.js":164,"../test/mocha/when_settle.js":165,"../test/mocha/when_some.js":166,"../test/mocha/when_spread.js":167,"assert":2,"sinon":91}],17:[function(require,module,exports){
+},{"../js/debug/bluebird.js":20,"../test/mocha/2.1.2.js":106,"../test/mocha/2.1.3.js":107,"../test/mocha/2.2.1.js":108,"../test/mocha/2.2.2.js":109,"../test/mocha/2.2.3.js":110,"../test/mocha/2.2.4.js":111,"../test/mocha/2.2.5.js":112,"../test/mocha/2.2.6.js":113,"../test/mocha/2.2.7.js":114,"../test/mocha/2.3.1.js":115,"../test/mocha/2.3.2.js":116,"../test/mocha/2.3.3.js":117,"../test/mocha/2.3.4.js":118,"../test/mocha/3.2.1.js":119,"../test/mocha/3.2.2.js":120,"../test/mocha/3.2.3.js":121,"../test/mocha/3.2.4.js":122,"../test/mocha/3.2.5.js":123,"../test/mocha/3.2.6.js":124,"../test/mocha/api_exceptions.js":125,"../test/mocha/async.js":126,"../test/mocha/bind.js":127,"../test/mocha/bluebird-debug-env-flag.js":128,"../test/mocha/bluebird-multiple-instances.js":129,"../test/mocha/cancel.js":130,"../test/mocha/cast.js":131,"../test/mocha/catch_filter.js":132,"../test/mocha/cycles.js":133,"../test/mocha/direct_resolving.js":134,"../test/mocha/following.js":135,"../test/mocha/late_buffer_safety.js":139,"../test/mocha/method.js":140,"../test/mocha/promisify.js":141,"../test/mocha/props.js":142,"../test/mocha/q_all.js":143,"../test/mocha/q_done.js":144,"../test/mocha/q_fin.js":145,"../test/mocha/q_inspect.js":146,"../test/mocha/q_make_node_resolver.js":147,"../test/mocha/q_nodeify.js":148,"../test/mocha/q_progress.js":149,"../test/mocha/q_propagation.js":150,"../test/mocha/q_settle.js":151,"../test/mocha/q_spread.js":152,"../test/mocha/race.js":153,"../test/mocha/reused_promise.js":154,"../test/mocha/sparsity.js":155,"../test/mocha/try.js":156,"../test/mocha/unhandled_rejections.js":157,"../test/mocha/when_all.js":158,"../test/mocha/when_any.js":159,"../test/mocha/when_defer.js":160,"../test/mocha/when_join.js":161,"../test/mocha/when_map.js":162,"../test/mocha/when_reduce.js":163,"../test/mocha/when_settle.js":164,"../test/mocha/when_some.js":165,"../test/mocha/when_spread.js":166,"assert":2,"sinon":91}],17:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
  * 
@@ -3637,6 +3636,37 @@ var rtraceline = null;
 var formatStack = null;
 var areNamesMangled = false;
 
+function formatNonError( obj ) {
+    var str;
+    if (typeof obj === "function") {
+        str = "[function " +
+            (obj.name || "anonymous") +
+            "]";
+    }
+    else {
+        str = obj.toString();
+        var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/;
+        if( ruselessToString.test( str ) ) {
+            try {
+                var newStr = JSON.stringify(obj);
+                str = newStr;
+            }
+            catch( e ) {
+
+            }
+        }
+    }
+    return ("(<" + snip( str ) + ">, no stack trace)");
+}
+
+function snip( str ) {
+    var maxChars = 41;
+    if( str.length < maxChars ) {
+        return str;
+    }
+    return str.substr(0, maxChars - 3) + "...";
+}
+
 function CapturedTrace( ignoreUntil, isTopLevel ) {
     ASSERT(((typeof ignoreUntil) === "function"),
     "typeof ignoreUntil === \u0022function\u0022");
@@ -3659,8 +3689,14 @@ function CapturedTrace$captureStackTrace( ignoreUntil, isTopLevel ) {
 CapturedTrace.possiblyUnhandledRejection =
 function CapturedTrace$PossiblyUnhandledRejection( reason ) {
     if( typeof console === "object" ) {
-        var stack = reason.stack;
-        var message = "Possibly unhandled " + formatStack( stack, reason );
+        var message;
+        if (typeof reason === "object" || typeof reason === "function") {
+            var stack = reason.stack;
+            message = "Possibly unhandled " + formatStack( stack, reason );
+        }
+        else {
+            message = "Possibly unhandled " + String(reason);
+        }
         if( typeof console.error === "function" ||
             typeof console.error === "object" ) {
             console.error( message );
@@ -3712,35 +3748,10 @@ CapturedTrace.isSupported = function CapturedTrace$IsSupported() {
 };
 
 var captureStackTrace = (function stackDetection() {
-    function snip( str ) {
-        var maxChars = 41;
-        if( str.length < maxChars ) {
-            return str;
-        }
-        return str.substr(0, maxChars - 3) + "...";
-    }
-
-    function formatNonError( obj ) {
-        var str = obj.toString();
-        var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/;
-        if( ruselessToString.test( str ) ) {
-            try {
-                var newStr = JSON.stringify(obj);
-                str = newStr;
-            }
-            catch( e ) {
-
-            }
-        }
-        return ("(<" + snip( str ) + ">, no stack trace)");
-    }
-
     if( typeof Error.stackTraceLimit === "number" &&
         typeof Error.captureStackTrace === "function" ) {
         rtraceline = /^\s*at\s*/;
         formatStack = function( stack, error ) {
-            ASSERT(((typeof error) === "object"),
-    "typeof error === \u0022object\u0022");
             ASSERT((error !== null),
     "error !== null");
 
@@ -3960,164 +3971,81 @@ module.exports = function( Promise ) {
     var isObject = util.isObject;
     var tryCatch2 = util.tryCatch2;
 
-    function Thenable() {
-        this.errorObj = errorObj;
-        this.__id__ = 0;
-        this.treshold = 1000;
-        this.thenableCache = new Array( this.treshold );
-        this.promiseCache = new Array( this.treshold );
-        this._compactQueued = false;
-    }
-    Thenable.prototype.couldBe = function Thenable$couldBe( ret ) {
-        if( isPrimitive( ret ) ) {
-            return false;
-        }
-        var id = ret.__id_$thenable__;
-        if( typeof id === "number" &&
-            this.thenableCache[id] !== void 0 ) {
-            return true;
-        }
-        return ("then" in ret);
-    };
-
-    Thenable.prototype.is = function Thenable$is( ret, ref ) {
-        var id = ret.__id_$thenable__;
-        if( typeof id === "number" &&
-            this.thenableCache[id] !== void 0 ) {
-            ref.ref = this.thenableCache[id];
-            ref.promise = this.promiseCache[id];
-            return true;
-        }
-        return this._thenableSlowCase( ret, ref );
-    };
-
-    Thenable.prototype.addCache =
-    function Thenable$_addCache( thenable, promise ) {
-        var id = this.__id__;
-        this.__id__ = id + 1;
-        var descriptor = this._descriptor( id );
-        Object.defineProperty( thenable, "__id_$thenable__", descriptor );
-        this.thenableCache[id] = thenable;
-        this.promiseCache[id] = promise;
-        ASSERT((this.thenableCache[thenable.__id_$thenable__] === thenable),
-    "this.thenableCache[ thenable.__id_$thenable__ ] === thenable");
-        if( this.thenableCache.length > this.treshold &&
-            !this._compactQueued) {
-            this._compactQueued = true;
-            async.invokeLater( this._compactCache, this, void 0 );
-        }
-    };
-
-    Thenable.prototype.deleteCache = function Thenable$deleteCache( thenable ) {
-        var id = thenable.__id_$thenable__;
-        ASSERT(((typeof id) === "number"),
-    "typeof id === \u0022number\u0022");
-        ASSERT(((id | 0) === id),
-    "(id | 0) === id");
-        if( id === -1 ) {
-            return;
-        }
-        ASSERT((id > -1),
-    "id > -1");
-        ASSERT((id < this.__id__),
-    "id < this.__id__");
-        ASSERT((this.thenableCache[id] === thenable),
-    "this.thenableCache[id] === thenable");
-        this.thenableCache[id] = void 0;
-        this.promiseCache[id] = void 0;
-        thenable.__id_$thenable__ = -1;    };
-
-    var descriptor = {
-        value: 0,
-        enumerable: false,
-        writable: true,
-        configurable: true
-    };
-    Thenable.prototype._descriptor = function Thenable$_descriptor( id ) {
-        descriptor.value = id;
-        return descriptor;
-    };
-
-    Thenable.prototype._compactCache = function Thenable$_compactCache() {
-        var arr = this.thenableCache;
-        var promiseArr = this.promiseCache;
-        var skips = 0;
-        var j = 0;
-        for( var i = 0, len = arr.length; i < len; ++i ) {
-            var item = arr[ i ];
-            if( item === void 0 ) {
-                skips++;
-            }
-            else {
-                promiseArr[ j ] = promiseArr[ i ];
-                item.__id_$thenable__ = j;
-                arr[ j++ ] = item;
-            }
-        }
-        var newId = arr.length - skips;
-        if( newId === this.__id__ ) {
-            this.treshold *= 2;
-        }
-        else for( var i = newId, len = arr.length; i < len; ++i ) {
-            promiseArr[ j ] = arr[ i ] = void 0;
-        }
-
-        this.__id__ = newId;
-        this._compactQueued = false;
-    };
-
-    Thenable.prototype._thenableSlowCase =
-    function Thenable$_thenableSlowCase( ret, ref ) {
+    function getThen(obj) {
         try {
-            var then = ret.then;
-            if( typeof then === "function" ) {
-                ref.ref = then;
-                return true;
-            }
-            return false;
+            return obj.then;
         }
         catch(e) {
-            this.errorObj.e = e;
-            ref.ref = this.errorObj;
+            errorObj.e = e;
+            return errorObj;
+        }
+    }
+
+    function isThenable(obj, ref) {
+        if (isPrimitive(obj)) {
+            return false;
+        }
+        var then = getThen(obj);
+
+        if (then === errorObj) {
+            ref.ref = errorObj;
+            return false;
+        }
+
+        if (typeof then === "function") {
+            ref.ref = then;
             return true;
         }
-    };
+        return false;
+    }
 
-    var thenable = new Thenable( errorObj );
+    var ref = {ref: null};
+    function Promise$_Cast( obj, caller ) {
+        if( isObject( obj ) ) {
+            if( obj instanceof Promise ) {
+                return obj;
+            }
 
-    Promise._couldBeThenable = function( val ) {
-        return thenable.couldBe( val );
-    };
-
-    function doThenable( obj, ref, caller ) {
-        if( ref.promise != null ) {
-            return ref.promise;
+            if( isThenable( obj, ref ) ) {
+                caller = typeof caller === "function" ? caller : Promise$_Cast;
+                var then = ref.ref;
+                ref.ref = null;
+                return doThenable( obj, then, caller );
+            }
+            else if (ref.ref === errorObj) {
+                ref.ref = null;
+                return Promise.reject(errorObj.e);
+            }
+            ref.ref = null;
         }
-        var resolver = Promise.pending( caller );
-        var result = ref.ref;
-        if( result === errorObj ) {
-            resolver.reject( result.e );
-            return resolver.promise;
-        }
-        thenable.addCache( obj, resolver.promise );
+        return obj;
+    }
+
+    Promise._cast = Promise$_Cast;
+    Promise._isThenable = isThenable;
+
+    function doThenable( x, then, caller ) {
+        ASSERT(((typeof then) === "function"),
+    "typeof then === \u0022function\u0022");
+        var resolver = Promise.defer( caller );
+
         var called = false;
-        var ret = tryCatch2( result, obj, function t( a ) {
+        var ret = tryCatch2( then, x, function t( a ) {
             if( called ) return;
             called = true;
-            async.invoke( thenable.deleteCache, thenable, obj );
             var b = Promise$_Cast( a );
             if( b === a ) {
-                resolver.fulfill( a );
+                resolver.resolve( a );
             }
             else {
-                if( a === obj ) {
+                if( a === x ) {
                     ASSERT(resolver.promise.isPending(),
     "resolver.promise.isPending()");
                     resolver.promise._resolveFulfill( a );
                 }
                 else {
                     b._then(
-                        resolver.fulfill,
+                        resolver.resolve,
                         resolver.reject,
                         void 0,
                         resolver,
@@ -4129,146 +4057,102 @@ module.exports = function( Promise ) {
         }, function t( a ) {
             if( called ) return;
             called = true;
-            async.invoke( thenable.deleteCache, thenable, obj );
             resolver.reject( a );
         });
         if( ret === errorObj && !called ) {
             resolver.reject( ret.e );
-            async.invoke( thenable.deleteCache, thenable, obj );
         }
         return resolver.promise;
     }
 
-    function Promise$_Cast( obj, caller ) {
-        if( isObject( obj ) ) {
-            if( obj instanceof Promise ) {
-                return obj;
-            }
-            var ref = { ref: null, promise: null };
-            if( thenable.is( obj, ref ) ) {
-                caller = typeof caller === "function" ? caller : Promise$_Cast;
-                return doThenable( obj, ref, caller );
-            }
-        }
-        return obj;
-    }
-
     Promise.prototype._resolveThenable =
-    function Promise$_resolveThenable( x, ref ) {
-        if( ref.promise != null ) {
-            this._assumeStateOf( ref.promise, true );
-            return;
-        }
-        if( ref.ref === errorObj ) {
-            this._attachExtraTrace( ref.ref.e );
-            async.invoke( this._reject, this, ref.ref.e );
-        }
-        else {
-            thenable.addCache( x, this );
-            var then = ref.ref;
-            var localX = x;
-            var localP = this;
-            var key = {};
-            var called = false;
-            var t = function t( v ) {
-                if( called && this !== key ) return;
-                called = true;
-                var fn = localP._fulfill;
-                var b = Promise$_Cast( v );
+    function Promise$_resolveThenable(x, then) {
+        ASSERT(((typeof then) === "function"),
+    "typeof then === \u0022function\u0022");
+        var localP = this;
+        var key = {};
+        var called = false;
+        var t = function t( v ) {
+            if( called && this !== key ) return;
+            called = true;
+            var fn = localP._fulfill;
+            var b = Promise$_Cast( v );
 
-                if( b !== v ||
-                    ( b instanceof Promise && b.isPending() ) ) {
-                    if( v === x ) {
-                        async.invoke( fn, localP, v );
-                        async.invoke( thenable.deleteCache, thenable, localX );
-                    }
-                    else {
-                        b._then( t, r, void 0, key, void 0, t);
-                    }
-                    return;
+            if( b !== v ||
+                ( b instanceof Promise && b.isPending() ) ) {
+                if( v === x ) {
+                    async.invoke( fn, localP, v );
                 }
-
-
-                if( b instanceof Promise ) {
-                    var fn = b.isFulfilled()
-                        ? localP._fulfill : localP._reject;
-                    ASSERT(b.isResolved(),
-    "b.isResolved()");
-                    v = v._resolvedValue;
-                    b = Promise$_Cast( v );
-                    ASSERT(((b instanceof Promise) || (b === v)),
-    "b instanceof Promise || b === v");
-                    if( b !== v ||
-                        ( b instanceof Promise && b !== v ) ) {
-                        b._then( t, r, void 0, key, void 0, t);
-                        return;
-                    }
+                else {
+                    b._then( t, r, void 0, key, void 0, t);
                 }
-                async.invoke( fn, localP, v );
-                async.invoke( thenable.deleteCache,
-                        thenable, localX );
-            };
-
-            var r = function r( v ) {
-                if( called && this !== key ) return;
-                var fn = localP._reject;
-                called = true;
-
-                var b = Promise$_Cast( v );
-
-                if( b !== v ||
-                    ( b instanceof Promise && b.isPending() ) ) {
-                    if( v === x ) {
-                        async.invoke( fn, localP, v );
-                        async.invoke( thenable.deleteCache, thenable, localX );
-                    }
-                    else {
-                        b._then( t, r, void 0, key, void 0, t);
-                    }
-                    return;
-                }
-
-
-                if( b instanceof Promise ) {
-                    var fn = b.isFulfilled()
-                        ? localP._fulfill : localP._reject;
-                    ASSERT(b.isResolved(),
-    "b.isResolved()");
-                    v = v._resolvedValue;
-                    b = Promise$_Cast( v );
-                    if( b !== v ||
-                        ( b instanceof Promise && b.isPending() ) ) {
-                        b._then( t, r, void 0, key, void 0, t);
-                        return;
-                    }
-                }
-
-                async.invoke( fn, localP, v );
-                async.invoke( thenable.deleteCache,
-                    thenable, localX );
-
-            };
-            var threw = tryCatch2( then, x, t, r);
-            if( threw === errorObj &&
-                !called ) {
-                this._attachExtraTrace( threw.e );
-                async.invoke( this._reject, this, threw.e );
-                async.invoke( thenable.deleteCache, thenable, x );
+                return;
             }
+
+
+            if( b instanceof Promise ) {
+                var fn = b.isFulfilled()
+                    ? localP._fulfill : localP._reject;
+                ASSERT(b.isResolved(),
+    "b.isResolved()");
+                v = v._resolvedValue;
+                b = Promise$_Cast( v );
+                ASSERT(((b instanceof Promise) || (b === v)),
+    "b instanceof Promise || b === v");
+                if( b !== v ||
+                    ( b instanceof Promise && b !== v ) ) {
+                    b._then( t, r, void 0, key, void 0, t);
+                    return;
+                }
+            }
+            async.invoke( fn, localP, v );
+        };
+
+        var r = function r( v ) {
+            if( called && this !== key ) return;
+            var fn = localP._reject;
+            called = true;
+
+            var b = Promise$_Cast( v );
+
+            if( b !== v ||
+                ( b instanceof Promise && b.isPending() ) ) {
+                if( v === x ) {
+                    async.invoke( fn, localP, v );
+                }
+                else {
+                    b._then( t, r, void 0, key, void 0, t);
+                }
+                return;
+            }
+
+
+            if( b instanceof Promise ) {
+                var fn = b.isFulfilled()
+                    ? localP._fulfill : localP._reject;
+                ASSERT(b.isResolved(),
+    "b.isResolved()");
+                v = v._resolvedValue;
+                b = Promise$_Cast( v );
+                if( b !== v ||
+                    ( b instanceof Promise && b.isPending() ) ) {
+                    b._then( t, r, void 0, key, void 0, t);
+                    return;
+                }
+            }
+
+            async.invoke( fn, localP, v );
+        };
+        var threw = tryCatch2( then, x, t, r);
+
+        if( threw === errorObj &&
+            !called ) {
+            this._attachExtraTrace( threw.e );
+            async.invoke( this._reject, this, threw.e );
         }
     };
-
-    Promise.prototype._tryThenable = function Promise$_tryThenable( x ) {
-        var ref;
-        if( !thenable.is( x, ref = {ref: null, promise: null} ) ) {
-            return false;
-        }
-        this._resolveThenable( x, ref );
-        return true;
-    };
-
-    Promise._cast = Promise$_Cast;
 };
+
 },{"./assert.js":18,"./async.js":19,"./util.js":53}],26:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
@@ -5251,11 +5135,13 @@ Promise.join = function Promise$Join() {
     var $_len = arguments.length;var args = new Array($_len); for(var $_i = 0; $_i < $_len; ++$_i) {args[$_i] = arguments[$_i];}
     return Promise$_All( args, PromiseArray, Promise.join, void 0 ).promise();
 };
-Promise.fulfilled = function Promise$Fulfilled( value, caller ) {
+
+Promise.resolve = Promise.fulfilled =
+function Promise$Resolve( value, caller ) {
     var ret = new Promise();
     ret._setTrace( typeof caller === "function"
         ? caller
-        : Promise.fulfilled, void 0 );
+        : Promise.resolve, void 0 );
     if( ret._tryAssumeStateOf( value, false ) ) {
         return ret;
     }
@@ -5265,9 +5151,9 @@ Promise.fulfilled = function Promise$Fulfilled( value, caller ) {
     return ret;
 };
 
-Promise.rejected = function Promise$Rejected( reason ) {
+Promise.reject = Promise.rejected = function Promise$Reject( reason ) {
     var ret = new Promise();
-    ret._setTrace( Promise.rejected, void 0 );
+    ret._setTrace( Promise.reject, void 0 );
     ret._cleanValues();
     ret._setRejected();
     ret._resolvedValue = reason;
@@ -5315,10 +5201,10 @@ Promise["try"] = Promise.attempt = function Promise$_Try( fn, args, ctx ) {
     return ret;
 };
 
-Promise.pending = function Promise$Pending( caller ) {
+Promise.defer = Promise.pending = function Promise$Defer( caller ) {
     var promise = new Promise();
     promise._setTrace( typeof caller === "function"
-                              ? caller : Promise.pending, void 0 );
+                              ? caller : Promise.defer, void 0 );
     return new PromiseResolver( promise );
 };
 
@@ -5333,11 +5219,10 @@ Promise.bind = function Promise$Bind( obj ) {
 Promise.cast = function Promise$Cast( obj, caller ) {
     var ret = Promise._cast( obj, caller );
     if( !( ret instanceof Promise ) ) {
-        return Promise.fulfilled( ret, caller );
+        return Promise.resolve( ret, caller );
     }
     return ret;
 };
-
 
 Promise.onPossiblyUnhandledRejection =
 function Promise$OnPossiblyUnhandledRejection( fn ) {
@@ -5407,15 +5292,6 @@ function Promise$_then(
         ret._cancellationParent = this;
     }
 
-    if( this._isDelegated() ) {
-        this._unsetDelegated();
-        ASSERT((! this.isResolved()),
-    "!this.isResolved()");
-        var x = this._resolvedValue;
-        if( !this._tryThenable( x ) ) {
-            async.invoke( this._fulfill, this, x );
-        }
-    }
     return ret;
 };
 
@@ -5453,24 +5329,12 @@ Promise.prototype._setFollowing = function Promise$_setFollowing() {
     this._bitField = this._bitField | 536870912;
 };
 
-Promise.prototype._setDelegated = function Promise$_setDelegated() {
-    this._bitField = this._bitField | -1073741824;
-};
-
 Promise.prototype._setIsFinal = function Promise$_setIsFinal() {
     this._bitField = this._bitField | 33554432;
 };
 
 Promise.prototype._isFinal = function Promise$_isFinal() {
     return ( this._bitField & 33554432 ) > 0;
-};
-
-Promise.prototype._isDelegated = function Promise$_isDelegated() {
-    return ( this._bitField & -1073741824 ) === -1073741824;
-};
-
-Promise.prototype._unsetDelegated = function Promise$_unsetDelegated() {
-    this._bitField = this._bitField & ( ~-1073741824 );
 };
 
 Promise.prototype._setCancellable = function Promise$_setCancellable() {
@@ -5637,6 +5501,7 @@ Promise.prototype._isBound = function Promise$_isBound() {
 
 
 var ignore = CatchFilter.prototype.doFilter;
+var ref = {ref: null};
 Promise.prototype._resolvePromise = function Promise$_resolvePromise(
     onFulfilledOrRejected, receiver, value, promise
 ) {
@@ -5710,18 +5575,25 @@ Promise.prototype._resolvePromise = function Promise$_resolvePromise(
         if( promise._tryAssumeStateOf( x, true ) ) {
             return;
         }
-        else if( Promise._couldBeThenable( x ) ) {
-
-            if( promise._length() === 0 ) {
-                promise._resolvedValue = x;
-                promise._setDelegated();
-                return;
-            }
-            else if( promise._tryThenable( x ) ) {
-                return;
-            }
+        else if( Promise._isThenable( x, ref ) ) {
+            var then = ref.ref;
+            ref.ref = null;
+            promise._resolveThenable(x, then);
+            return;
         }
-        async.invoke( promise._fulfill, promise, x );
+
+
+        if (ref.ref === errorObj) {
+            ref.ref = null;
+            var e = errorObj.e;
+            promise._attachExtraTrace(e);
+            async.invoke(promise._reject, promise, e);
+        }
+        else {
+            ref.ref = null;
+            async.invoke( promise._fulfill, promise, x );
+        }
+
     }
 };
 
@@ -6504,7 +6376,8 @@ PromiseResolver.prototype.toString = function PromiseResolver$toString() {
     return "[object PromiseResolver]";
 };
 
-PromiseResolver.prototype.fulfill = function PromiseResolver$fulfill( value ) {
+PromiseResolver.prototype.resolve =
+PromiseResolver.prototype.fulfill = function PromiseResolver$resolve( value ) {
     if( this.promise._tryAssumeStateOf( value, false ) ) {
         return;
     }
@@ -8172,6 +8045,37 @@ var rtraceline = null;
 var formatStack = null;
 var areNamesMangled = false;
 
+function formatNonError( obj ) {
+    var str;
+    if (typeof obj === "function") {
+        str = "[function " +
+            (obj.name || "anonymous") +
+            "]";
+    }
+    else {
+        str = obj.toString();
+        var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/;
+        if( ruselessToString.test( str ) ) {
+            try {
+                var newStr = JSON.stringify(obj);
+                str = newStr;
+            }
+            catch( e ) {
+
+            }
+        }
+    }
+    return ("(<" + snip( str ) + ">, no stack trace)");
+}
+
+function snip( str ) {
+    var maxChars = 41;
+    if( str.length < maxChars ) {
+        return str;
+    }
+    return str.substr(0, maxChars - 3) + "...";
+}
+
 function CapturedTrace( ignoreUntil, isTopLevel ) {
     if( !areNamesMangled ) {
     }
@@ -8188,8 +8092,14 @@ function CapturedTrace$captureStackTrace( ignoreUntil, isTopLevel ) {
 CapturedTrace.possiblyUnhandledRejection =
 function CapturedTrace$PossiblyUnhandledRejection( reason ) {
     if( typeof console === "object" ) {
-        var stack = reason.stack;
-        var message = "Possibly unhandled " + formatStack( stack, reason );
+        var message;
+        if (typeof reason === "object" || typeof reason === "function") {
+            var stack = reason.stack;
+            message = "Possibly unhandled " + formatStack( stack, reason );
+        }
+        else {
+            message = "Possibly unhandled " + String(reason);
+        }
         if( typeof console.error === "function" ||
             typeof console.error === "object" ) {
             console.error( message );
@@ -8241,29 +8151,6 @@ CapturedTrace.isSupported = function CapturedTrace$IsSupported() {
 };
 
 var captureStackTrace = (function stackDetection() {
-    function snip( str ) {
-        var maxChars = 41;
-        if( str.length < maxChars ) {
-            return str;
-        }
-        return str.substr(0, maxChars - 3) + "...";
-    }
-
-    function formatNonError( obj ) {
-        var str = obj.toString();
-        var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/;
-        if( ruselessToString.test( str ) ) {
-            try {
-                var newStr = JSON.stringify(obj);
-                str = newStr;
-            }
-            catch( e ) {
-
-            }
-        }
-        return ("(<" + snip( str ) + ">, no stack trace)");
-    }
-
     if( typeof Error.stackTraceLimit === "number" &&
         typeof Error.captureStackTrace === "function" ) {
         rtraceline = /^\s*at\s*/;
@@ -8398,150 +8285,77 @@ module.exports = function( Promise ) {
     var isObject = util.isObject;
     var tryCatch2 = util.tryCatch2;
 
-    function Thenable() {
-        this.errorObj = errorObj;
-        this.__id__ = 0;
-        this.treshold = 1000;
-        this.thenableCache = new Array( this.treshold );
-        this.promiseCache = new Array( this.treshold );
-        this._compactQueued = false;
-    }
-    Thenable.prototype.couldBe = function Thenable$couldBe( ret ) {
-        if( isPrimitive( ret ) ) {
-            return false;
-        }
-        var id = ret.__id_$thenable__;
-        if( typeof id === "number" &&
-            this.thenableCache[id] !== void 0 ) {
-            return true;
-        }
-        return ("then" in ret);
-    };
-
-    Thenable.prototype.is = function Thenable$is( ret, ref ) {
-        var id = ret.__id_$thenable__;
-        if( typeof id === "number" &&
-            this.thenableCache[id] !== void 0 ) {
-            ref.ref = this.thenableCache[id];
-            ref.promise = this.promiseCache[id];
-            return true;
-        }
-        return this._thenableSlowCase( ret, ref );
-    };
-
-    Thenable.prototype.addCache =
-    function Thenable$_addCache( thenable, promise ) {
-        var id = this.__id__;
-        this.__id__ = id + 1;
-        var descriptor = this._descriptor( id );
-        Object.defineProperty( thenable, "__id_$thenable__", descriptor );
-        this.thenableCache[id] = thenable;
-        this.promiseCache[id] = promise;
-        if( this.thenableCache.length > this.treshold &&
-            !this._compactQueued) {
-            this._compactQueued = true;
-            async.invokeLater( this._compactCache, this, void 0 );
-        }
-    };
-
-    Thenable.prototype.deleteCache = function Thenable$deleteCache( thenable ) {
-        var id = thenable.__id_$thenable__;
-        if( id === -1 ) {
-            return;
-        }
-        this.thenableCache[id] = void 0;
-        this.promiseCache[id] = void 0;
-        thenable.__id_$thenable__ = -1;    };
-
-    var descriptor = {
-        value: 0,
-        enumerable: false,
-        writable: true,
-        configurable: true
-    };
-    Thenable.prototype._descriptor = function Thenable$_descriptor( id ) {
-        descriptor.value = id;
-        return descriptor;
-    };
-
-    Thenable.prototype._compactCache = function Thenable$_compactCache() {
-        var arr = this.thenableCache;
-        var promiseArr = this.promiseCache;
-        var skips = 0;
-        var j = 0;
-        for( var i = 0, len = arr.length; i < len; ++i ) {
-            var item = arr[ i ];
-            if( item === void 0 ) {
-                skips++;
-            }
-            else {
-                promiseArr[ j ] = promiseArr[ i ];
-                item.__id_$thenable__ = j;
-                arr[ j++ ] = item;
-            }
-        }
-        var newId = arr.length - skips;
-        if( newId === this.__id__ ) {
-            this.treshold *= 2;
-        }
-        else for( var i = newId, len = arr.length; i < len; ++i ) {
-            promiseArr[ j ] = arr[ i ] = void 0;
-        }
-
-        this.__id__ = newId;
-        this._compactQueued = false;
-    };
-
-    Thenable.prototype._thenableSlowCase =
-    function Thenable$_thenableSlowCase( ret, ref ) {
+    function getThen(obj) {
         try {
-            var then = ret.then;
-            if( typeof then === "function" ) {
-                ref.ref = then;
-                return true;
-            }
-            return false;
+            return obj.then;
         }
         catch(e) {
-            this.errorObj.e = e;
-            ref.ref = this.errorObj;
+            errorObj.e = e;
+            return errorObj;
+        }
+    }
+
+    function isThenable(obj, ref) {
+        if (isPrimitive(obj)) {
+            return false;
+        }
+        var then = getThen(obj);
+
+        if (then === errorObj) {
+            ref.ref = errorObj;
+            return false;
+        }
+
+        if (typeof then === "function") {
+            ref.ref = then;
             return true;
         }
-    };
+        return false;
+    }
 
-    var thenable = new Thenable( errorObj );
+    var ref = {ref: null};
+    function Promise$_Cast( obj, caller ) {
+        if( isObject( obj ) ) {
+            if( obj instanceof Promise ) {
+                return obj;
+            }
 
-    Promise._couldBeThenable = function( val ) {
-        return thenable.couldBe( val );
-    };
-
-    function doThenable( obj, ref, caller ) {
-        if( ref.promise != null ) {
-            return ref.promise;
+            if( isThenable( obj, ref ) ) {
+                caller = typeof caller === "function" ? caller : Promise$_Cast;
+                var then = ref.ref;
+                ref.ref = null;
+                return doThenable( obj, then, caller );
+            }
+            else if (ref.ref === errorObj) {
+                ref.ref = null;
+                return Promise.reject(errorObj.e);
+            }
+            ref.ref = null;
         }
-        var resolver = Promise.pending( caller );
-        var result = ref.ref;
-        if( result === errorObj ) {
-            resolver.reject( result.e );
-            return resolver.promise;
-        }
-        thenable.addCache( obj, resolver.promise );
+        return obj;
+    }
+
+    Promise._cast = Promise$_Cast;
+    Promise._isThenable = isThenable;
+
+    function doThenable( x, then, caller ) {
+        var resolver = Promise.defer( caller );
+
         var called = false;
-        var ret = tryCatch2( result, obj, function t( a ) {
+        var ret = tryCatch2( then, x, function t( a ) {
             if( called ) return;
             called = true;
-            async.invoke( thenable.deleteCache, thenable, obj );
             var b = Promise$_Cast( a );
             if( b === a ) {
-                resolver.fulfill( a );
+                resolver.resolve( a );
             }
             else {
-                if( a === obj ) {
+                if( a === x ) {
                     resolver.promise._resolveFulfill( a );
                 }
                 else {
                     b._then(
-                        resolver.fulfill,
+                        resolver.resolve,
                         resolver.reject,
                         void 0,
                         resolver,
@@ -8553,140 +8367,94 @@ module.exports = function( Promise ) {
         }, function t( a ) {
             if( called ) return;
             called = true;
-            async.invoke( thenable.deleteCache, thenable, obj );
             resolver.reject( a );
         });
         if( ret === errorObj && !called ) {
             resolver.reject( ret.e );
-            async.invoke( thenable.deleteCache, thenable, obj );
         }
         return resolver.promise;
     }
 
-    function Promise$_Cast( obj, caller ) {
-        if( isObject( obj ) ) {
-            if( obj instanceof Promise ) {
-                return obj;
-            }
-            var ref = { ref: null, promise: null };
-            if( thenable.is( obj, ref ) ) {
-                caller = typeof caller === "function" ? caller : Promise$_Cast;
-                return doThenable( obj, ref, caller );
-            }
-        }
-        return obj;
-    }
-
     Promise.prototype._resolveThenable =
-    function Promise$_resolveThenable( x, ref ) {
-        if( ref.promise != null ) {
-            this._assumeStateOf( ref.promise, true );
-            return;
-        }
-        if( ref.ref === errorObj ) {
-            this._attachExtraTrace( ref.ref.e );
-            async.invoke( this._reject, this, ref.ref.e );
-        }
-        else {
-            thenable.addCache( x, this );
-            var then = ref.ref;
-            var localX = x;
-            var localP = this;
-            var key = {};
-            var called = false;
-            var t = function t( v ) {
-                if( called && this !== key ) return;
-                called = true;
-                var fn = localP._fulfill;
-                var b = Promise$_Cast( v );
+    function Promise$_resolveThenable(x, then) {
+        var localP = this;
+        var key = {};
+        var called = false;
+        var t = function t( v ) {
+            if( called && this !== key ) return;
+            called = true;
+            var fn = localP._fulfill;
+            var b = Promise$_Cast( v );
 
-                if( b !== v ||
-                    ( b instanceof Promise && b.isPending() ) ) {
-                    if( v === x ) {
-                        async.invoke( fn, localP, v );
-                        async.invoke( thenable.deleteCache, thenable, localX );
-                    }
-                    else {
-                        b._then( t, r, void 0, key, void 0, t);
-                    }
-                    return;
+            if( b !== v ||
+                ( b instanceof Promise && b.isPending() ) ) {
+                if( v === x ) {
+                    async.invoke( fn, localP, v );
                 }
-
-
-                if( b instanceof Promise ) {
-                    var fn = b.isFulfilled()
-                        ? localP._fulfill : localP._reject;
-                    v = v._resolvedValue;
-                    b = Promise$_Cast( v );
-                    if( b !== v ||
-                        ( b instanceof Promise && b !== v ) ) {
-                        b._then( t, r, void 0, key, void 0, t);
-                        return;
-                    }
+                else {
+                    b._then( t, r, void 0, key, void 0, t);
                 }
-                async.invoke( fn, localP, v );
-                async.invoke( thenable.deleteCache,
-                        thenable, localX );
-            };
-
-            var r = function r( v ) {
-                if( called && this !== key ) return;
-                var fn = localP._reject;
-                called = true;
-
-                var b = Promise$_Cast( v );
-
-                if( b !== v ||
-                    ( b instanceof Promise && b.isPending() ) ) {
-                    if( v === x ) {
-                        async.invoke( fn, localP, v );
-                        async.invoke( thenable.deleteCache, thenable, localX );
-                    }
-                    else {
-                        b._then( t, r, void 0, key, void 0, t);
-                    }
-                    return;
-                }
-
-
-                if( b instanceof Promise ) {
-                    var fn = b.isFulfilled()
-                        ? localP._fulfill : localP._reject;
-                    v = v._resolvedValue;
-                    b = Promise$_Cast( v );
-                    if( b !== v ||
-                        ( b instanceof Promise && b.isPending() ) ) {
-                        b._then( t, r, void 0, key, void 0, t);
-                        return;
-                    }
-                }
-
-                async.invoke( fn, localP, v );
-                async.invoke( thenable.deleteCache,
-                    thenable, localX );
-
-            };
-            var threw = tryCatch2( then, x, t, r);
-            if( threw === errorObj &&
-                !called ) {
-                this._attachExtraTrace( threw.e );
-                async.invoke( this._reject, this, threw.e );
-                async.invoke( thenable.deleteCache, thenable, x );
+                return;
             }
+
+
+            if( b instanceof Promise ) {
+                var fn = b.isFulfilled()
+                    ? localP._fulfill : localP._reject;
+                v = v._resolvedValue;
+                b = Promise$_Cast( v );
+                if( b !== v ||
+                    ( b instanceof Promise && b !== v ) ) {
+                    b._then( t, r, void 0, key, void 0, t);
+                    return;
+                }
+            }
+            async.invoke( fn, localP, v );
+        };
+
+        var r = function r( v ) {
+            if( called && this !== key ) return;
+            var fn = localP._reject;
+            called = true;
+
+            var b = Promise$_Cast( v );
+
+            if( b !== v ||
+                ( b instanceof Promise && b.isPending() ) ) {
+                if( v === x ) {
+                    async.invoke( fn, localP, v );
+                }
+                else {
+                    b._then( t, r, void 0, key, void 0, t);
+                }
+                return;
+            }
+
+
+            if( b instanceof Promise ) {
+                var fn = b.isFulfilled()
+                    ? localP._fulfill : localP._reject;
+                v = v._resolvedValue;
+                b = Promise$_Cast( v );
+                if( b !== v ||
+                    ( b instanceof Promise && b.isPending() ) ) {
+                    b._then( t, r, void 0, key, void 0, t);
+                    return;
+                }
+            }
+
+            async.invoke( fn, localP, v );
+        };
+        var threw = tryCatch2( then, x, t, r);
+
+        if( threw === errorObj &&
+            !called ) {
+            this._attachExtraTrace( threw.e );
+            async.invoke( this._reject, this, threw.e );
         }
     };
-
-    Promise.prototype._tryThenable = function Promise$_tryThenable( x ) {
-        var ref;
-        if( !thenable.is( x, ref = {ref: null, promise: null} ) ) {
-            return false;
-        }
-        this._resolveThenable( x, ref );
-        return true;
-    };
-
-    Promise._cast = Promise$_Cast;
 };
+
 },{"./assert.js":55,"./async.js":56,"./util.js":90}],63:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
@@ -9382,11 +9150,13 @@ Promise.join = function Promise$Join() {
     var $_len = arguments.length;var args = new Array($_len); for(var $_i = 0; $_i < $_len; ++$_i) {args[$_i] = arguments[$_i];}
     return Promise$_All( args, PromiseArray, Promise.join, void 0 ).promise();
 };
-Promise.fulfilled = function Promise$Fulfilled( value, caller ) {
+
+Promise.resolve = Promise.fulfilled =
+function Promise$Resolve( value, caller ) {
     var ret = new Promise();
     ret._setTrace( typeof caller === "function"
         ? caller
-        : Promise.fulfilled, void 0 );
+        : Promise.resolve, void 0 );
     if( ret._tryAssumeStateOf( value, false ) ) {
         return ret;
     }
@@ -9396,9 +9166,9 @@ Promise.fulfilled = function Promise$Fulfilled( value, caller ) {
     return ret;
 };
 
-Promise.rejected = function Promise$Rejected( reason ) {
+Promise.reject = Promise.rejected = function Promise$Reject( reason ) {
     var ret = new Promise();
-    ret._setTrace( Promise.rejected, void 0 );
+    ret._setTrace( Promise.reject, void 0 );
     ret._cleanValues();
     ret._setRejected();
     ret._resolvedValue = reason;
@@ -9446,10 +9216,10 @@ Promise["try"] = Promise.attempt = function Promise$_Try( fn, args, ctx ) {
     return ret;
 };
 
-Promise.pending = function Promise$Pending( caller ) {
+Promise.defer = Promise.pending = function Promise$Defer( caller ) {
     var promise = new Promise();
     promise._setTrace( typeof caller === "function"
-                              ? caller : Promise.pending, void 0 );
+                              ? caller : Promise.defer, void 0 );
     return new PromiseResolver( promise );
 };
 
@@ -9464,11 +9234,10 @@ Promise.bind = function Promise$Bind( obj ) {
 Promise.cast = function Promise$Cast( obj, caller ) {
     var ret = Promise._cast( obj, caller );
     if( !( ret instanceof Promise ) ) {
-        return Promise.fulfilled( ret, caller );
+        return Promise.resolve( ret, caller );
     }
     return ret;
 };
-
 
 Promise.onPossiblyUnhandledRejection =
 function Promise$OnPossiblyUnhandledRejection( fn ) {
@@ -9536,13 +9305,6 @@ function Promise$_then(
         ret._cancellationParent = this;
     }
 
-    if( this._isDelegated() ) {
-        this._unsetDelegated();
-        var x = this._resolvedValue;
-        if( !this._tryThenable( x ) ) {
-            async.invoke( this._fulfill, this, x );
-        }
-    }
     return ret;
 };
 
@@ -9576,24 +9338,12 @@ Promise.prototype._setFollowing = function Promise$_setFollowing() {
     this._bitField = this._bitField | 536870912;
 };
 
-Promise.prototype._setDelegated = function Promise$_setDelegated() {
-    this._bitField = this._bitField | -1073741824;
-};
-
 Promise.prototype._setIsFinal = function Promise$_setIsFinal() {
     this._bitField = this._bitField | 33554432;
 };
 
 Promise.prototype._isFinal = function Promise$_isFinal() {
     return ( this._bitField & 33554432 ) > 0;
-};
-
-Promise.prototype._isDelegated = function Promise$_isDelegated() {
-    return ( this._bitField & -1073741824 ) === -1073741824;
-};
-
-Promise.prototype._unsetDelegated = function Promise$_unsetDelegated() {
-    this._bitField = this._bitField & ( ~-1073741824 );
 };
 
 Promise.prototype._setCancellable = function Promise$_setCancellable() {
@@ -9721,6 +9471,7 @@ Promise.prototype._isBound = function Promise$_isBound() {
 
 
 var ignore = CatchFilter.prototype.doFilter;
+var ref = {ref: null};
 Promise.prototype._resolvePromise = function Promise$_resolvePromise(
     onFulfilledOrRejected, receiver, value, promise
 ) {
@@ -9794,18 +9545,25 @@ Promise.prototype._resolvePromise = function Promise$_resolvePromise(
         if( promise._tryAssumeStateOf( x, true ) ) {
             return;
         }
-        else if( Promise._couldBeThenable( x ) ) {
-
-            if( promise._length() === 0 ) {
-                promise._resolvedValue = x;
-                promise._setDelegated();
-                return;
-            }
-            else if( promise._tryThenable( x ) ) {
-                return;
-            }
+        else if( Promise._isThenable( x, ref ) ) {
+            var then = ref.ref;
+            ref.ref = null;
+            promise._resolveThenable(x, then);
+            return;
         }
-        async.invoke( promise._fulfill, promise, x );
+
+
+        if (ref.ref === errorObj) {
+            ref.ref = null;
+            var e = errorObj.e;
+            promise._attachExtraTrace(e);
+            async.invoke(promise._reject, promise, e);
+        }
+        else {
+            ref.ref = null;
+            async.invoke( promise._fulfill, promise, x );
+        }
+
     }
 };
 
@@ -21164,219 +20922,6 @@ describe("Promise.method", function(){
 });
 
 },{"../../js/debug/bluebird.js":20,"assert":2}],141:[function(require,module,exports){
-var process=require("__browserify_process");"use strict";
-//https://github.com/domenic/promises-unwrapping/blob/master/run-tests.js
-
-var assert = require("assert");
-
-var adapter = require("../../js/debug/bluebird.js");
-
-adapter.done = function (promise, onFulfilled, onRejected) {
-    promise.then(onFulfilled, onRejected).caught(function (reason) {
-        process.nextTick(function () {
-            throw reason;
-        });
-    });
-};
-
-var fulfilled = adapter.fulfilled;
-var rejected = adapter.rejected;
-var pending = adapter.pending;
-var Promise = adapter;
-Promise.resolve = Promise.fulfilled;
-Promise.reject = Promise.rejected;
-
-var sentinel = { sentinel: "SENTINEL" };
-
-function fulfilledThenable(value) {
-    var thenable = {
-        timesCalled: 0,
-        timesGotten: 0
-    };
-
-    Object.defineProperty(thenable, "then", {
-        get: function () {
-            ++thenable.timesGotten;
-            return function (onFulfilled, onRejected) {
-                ++this.timesCalled;
-                onFulfilled(value);
-            };
-        }
-    });
-
-    return thenable;
-}
-
-describe("Memoization of thenables", function () {
-    specify("retrieving a value twice, in parallel, should only call `then` once.", function (done) {
-        var tuple = adapter.pending();
-        var thenable = fulfilledThenable(sentinel);
-        var derived = tuple.promise.then(function () { return thenable; });
-
-        tuple.fulfill();
-
-        setTimeout(function(){
-            assert.strictEqual(thenable.timesCalled, 0);
-            assert.strictEqual(thenable.timesGotten, 0);
-            var valuesGotten = 0;
-
-            adapter.done(derived, function (value) {
-                assert.strictEqual(thenable.timesCalled, 1);
-                assert.strictEqual(thenable.timesGotten, 1);
-                assert.strictEqual(value, sentinel);
-                ++valuesGotten;
-            });
-
-            adapter.done(derived, function (value) {
-                assert.strictEqual(thenable.timesCalled, 1);
-                assert.strictEqual(thenable.timesGotten, 1);
-                assert.strictEqual(value, sentinel);
-                ++valuesGotten;
-            });
-
-            setTimeout(function () {
-                assert.strictEqual(thenable.timesCalled, 1);
-                assert.strictEqual(thenable.timesGotten, 1);
-                assert.strictEqual(valuesGotten, 2);
-                done();
-                }, 50);
-        }, 50 );
-    });
-
-    specify("retrieving a value twice, in sequence, should only call `then` once.", function (done) {
-        var tuple = adapter.pending();
-        var thenable = fulfilledThenable(sentinel);
-        var derived = tuple.promise.then(function () { return thenable; });
-
-        tuple.fulfill();
-
-        setTimeout( function() {
-                assert.strictEqual(thenable.timesCalled, 0);
-                assert.strictEqual(thenable.timesGotten, 0);
-                var valuesGotten = 0;
-
-                adapter.done(derived, function (value) {
-                    assert.strictEqual(thenable.timesCalled, 1);
-                    assert.strictEqual(thenable.timesGotten, 1);
-                    assert.strictEqual(value, sentinel);
-                    ++valuesGotten;
-                });
-
-                setTimeout(function () {
-                    adapter.done(derived, function (value) {
-                        assert.strictEqual(thenable.timesCalled, 1);
-                        assert.strictEqual(thenable.timesGotten, 1);
-                        assert.strictEqual(value, sentinel);
-                        ++valuesGotten;
-                    });
-
-                    setTimeout(function () {
-                        assert.strictEqual(thenable.timesCalled, 1);
-                        assert.strictEqual(thenable.timesGotten, 1);
-                        assert.strictEqual(valuesGotten, 2);
-                        done();
-                    }, 50);
-                }, 50);
-        }, 50);
-    });
-
-    specify("when multiple promises are resolved to the thenable", function (done) {
-        var tuple1 = adapter.pending();
-        var tuple2 = adapter.pending();
-        var thenable = fulfilledThenable(sentinel);
-        var derived1 = tuple1.promise.then(function () { return thenable; });
-        var derived2 = tuple2.promise.then(function () { return thenable; });
-
-        tuple1.fulfill();
-        tuple2.fulfill();
-
-        var valuesGotten = 0;
-        adapter.done(derived1, function (value) {
-            assert.strictEqual(thenable.timesCalled, 1);
-            assert.strictEqual(thenable.timesGotten, 1);
-            assert.strictEqual(value, sentinel);
-            ++valuesGotten;
-        });
-
-        adapter.done(derived2, function (value) {
-            assert.strictEqual(thenable.timesCalled, 1);
-            assert.strictEqual(thenable.timesGotten, 1);
-            assert.strictEqual(value, sentinel);
-            ++valuesGotten;
-        });
-
-        setTimeout(function () {
-            assert.strictEqual(valuesGotten, 2);
-            done();
-        }, 50);
-    });
-});
-
-describe("Promise.all", function () {
-    it("fulfills if passed an empty array", function (done) {
-        adapter.done(Promise.all([]), function (value) {
-            assert(Array.isArray(value));
-            assert.deepEqual(value, []);
-            done();
-        });
-    });
-
-    it("fulfills if passed an array of mixed fulfilled promises and values", function (done) {
-        adapter.done(Promise.all([0, Promise.resolve(1), 2, Promise.resolve(3)]), function (value) {
-            assert(Array.isArray(value));
-            assert.deepEqual(value, [0, 1, 2, 3]);
-            done();
-        });
-    });
-
-    it("rejects if any passed promise is rejected", function (done) {
-        var foreverPending = new Promise(function () {});
-        var error = new Error("Rejected");
-        var rejected = Promise.reject(error);
-
-        adapter.done(Promise.all([foreverPending, rejected]),
-            function (value) {
-                assert(false, "should never get here");
-                done();
-            },
-            function (reason) {
-                assert.strictEqual(reason, error);
-                done();
-            }
-        );
-    });
-
-    it("resolves foreign thenables", function (done) {
-        var normal = Promise.resolve(1);
-        var foreign = { then: function (f) { f(2); } };
-
-        adapter.done(Promise.all([normal, foreign]), function (value) {
-            assert.deepEqual(value, [1, 2]);
-            done();
-        });
-    });
-
-    it("fulfills when passed an sparse array, skipping the omitted values", function (done) {
-        //This behavior is opposite from Q and not as usable or intuitive
-        done();
-        /*
-        adapter.done(Promise.all([Promise.resolve(0), , , Promise.resolve(1)]), function (value) {
-            assert.deepEqual(value, [0, 1]);
-            done();
-        });*/
-    });
-
-
-    it("does not modify the input array", function (done) {
-        var input = [0, 1];
-
-        adapter.done(Promise.all(input), function (value) {
-            assert.notStrictEqual(input, value);
-            done();
-        });
-    });
-});
-},{"../../js/debug/bluebird.js":20,"__browserify_process":15,"assert":2}],142:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -22015,7 +21560,7 @@ describe("RejectionError wrapping", function() {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],143:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],142:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22264,7 +21809,7 @@ describe("Promise.props", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],144:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],143:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22444,7 +21989,7 @@ describe("all", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],145:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],144:[function(require,module,exports){
 var process=require("__browserify_process");var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -22734,7 +22279,7 @@ describe("done", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":20,"__browserify_process":15,"assert":2,"sinon":91}],146:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"__browserify_process":15,"assert":2,"sinon":91}],145:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23008,7 +22553,7 @@ describe("fin", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],147:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],146:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23136,7 +22681,7 @@ describe("inspect", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":20,"assert":2}],148:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],147:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23197,7 +22742,7 @@ describe("PromiseResolver.asCallback", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],149:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],148:[function(require,module,exports){
 var process=require("__browserify_process");var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23392,7 +22937,7 @@ if( isNodeJS ) {
     });
 }
 
-},{"../../js/debug/bluebird.js":20,"__browserify_process":15,"assert":2,"sinon":91}],150:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"__browserify_process":15,"assert":2,"sinon":91}],149:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -23792,7 +23337,7 @@ describe("progress", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],151:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],150:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -24022,7 +23567,7 @@ describe("propagation", function () {
         return result;
     });
 });
-},{"../../js/debug/bluebird.js":20,"assert":2}],152:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],151:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -24177,7 +23722,7 @@ describe("allSettled", function () {
     });
 
 });
-},{"../../js/debug/bluebird.js":20,"assert":2}],153:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],152:[function(require,module,exports){
 var assert = require("assert");
 
 var adapter = require("../../js/debug/bluebird.js");
@@ -24349,7 +23894,7 @@ describe("spread", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],154:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],153:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -24483,7 +24028,7 @@ describe("Promise.race", function(){
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],155:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],154:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -24543,7 +24088,7 @@ describe("If promise is reused to get at the value many times over the course of
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],156:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],155:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -24662,7 +24207,7 @@ describe("When using a sparse array the resulting array should have equal sparsi
 });
 
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],157:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],156:[function(require,module,exports){
 "use strict";
 
 var assert = require("assert");
@@ -24769,7 +24314,7 @@ describe("Promise.try", function(){
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],158:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],157:[function(require,module,exports){
 "use strict";
 var assert = require("assert");
 var Promise = require("../../js/debug/bluebird.js");
@@ -25213,7 +24758,7 @@ describe("Will not report rejections that are handled in time", function() {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],159:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],158:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25333,7 +24878,7 @@ describe("when.all-test", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],160:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],159:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -25480,7 +25025,7 @@ describe("when.any-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],161:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],160:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -26008,7 +25553,7 @@ describe("when.defer-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],162:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],161:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -26145,7 +25690,7 @@ describe("when.join-test", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],163:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],162:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -26394,7 +25939,7 @@ describe("when.map-test", function () {
 
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],164:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],163:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -26670,7 +26215,7 @@ describe("when.reduce-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],165:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],164:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -26836,7 +26381,7 @@ describe("when.settle-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],166:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],165:[function(require,module,exports){
 /*
 Based on When.js tests
 
@@ -27067,7 +26612,7 @@ describe("when.some-test", function () {
     });
 });
 
-},{"../../js/debug/bluebird.js":20,"assert":2}],167:[function(require,module,exports){
+},{"../../js/debug/bluebird.js":20,"assert":2}],166:[function(require,module,exports){
 /*
 Based on When.js tests
 
