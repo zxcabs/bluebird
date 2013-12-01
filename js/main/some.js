@@ -20,35 +20,37 @@
  * THE SOFTWARE.
  */
 "use strict";
-module.exports = function( Promise, Promise$_All, PromiseArray, apiRejection ) {
+module.exports = function(Promise, Promise$_All, PromiseArray, apiRejection) {
 
-    var SomePromiseArray = require( "./some_promise_array.js" )(PromiseArray);
-    var ASSERT = require( "./assert.js" );
+    var SomePromiseArray = require("./some_promise_array.js")(PromiseArray);
+    var ASSERT = require("./assert.js");
 
-    function Promise$_Some( promises, howMany, useBound, caller ) {
-        if( ( howMany | 0 ) !== howMany ) {
+    function Promise$_Some(promises, howMany, useBound, caller) {
+        if ((howMany | 0) !== howMany) {
             return apiRejection("howMany must be an integer");
         }
         var ret = Promise$_All(
             promises,
             SomePromiseArray,
             caller,
-            useBound === true ? promises._boundTo : void 0
-        );
+            useBound === true && promises._isBound()
+                ? promises._boundTo
+                : void 0
+       );
         var promise = ret.promise();
         if (promise.isRejected()) {
             return promise;
         }
-        ret.setHowMany( howMany );
+        ret.setHowMany(howMany);
         return promise;
     }
 
-    Promise.some = function Promise$Some( promises, howMany ) {
-        return Promise$_Some( promises, howMany, false, Promise.some );
+    Promise.some = function Promise$Some(promises, howMany) {
+        return Promise$_Some(promises, howMany, false, Promise.some);
     };
 
-    Promise.prototype.some = function Promise$some( count ) {
-        return Promise$_Some( this, count, true, this.some );
+    Promise.prototype.some = function Promise$some(count) {
+        return Promise$_Some(this, count, true, this.some);
     };
 
 };

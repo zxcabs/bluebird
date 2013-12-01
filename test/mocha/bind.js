@@ -47,6 +47,34 @@ describe("when using .bind", function() {
 
     });
 
+    describe("with timeout", function() {
+        describe("this should refer to the bound object", function() {
+            specify( "in straight-forward handler", function(done) {
+                fulfilled(3).bind(THIS).timeout(500).then(function(v) {
+                    assert(v === 3);
+                    assert(this === THIS);
+                    done();
+                });
+            });
+            specify( "in rejected handler", function(done) {
+                rejected(3).bind(THIS).timeout(500).then(assert.fail, function(v){
+                    assert(v === 3);
+                    assert(this === THIS);
+                    done();
+                });
+            });
+
+            specify( "in rejected handler after timeout", function(done) {
+                new Promise(function(){})
+                    .bind(THIS).timeout(10).caught(Promise.TimeoutError, function(err){
+                    assert(this === THIS);
+                    done();
+                });
+            });
+        })
+
+    });
+
     describe("With catch filters", function() {
         describe("this should refer to the bound object", function() {
             specify( "in an immediately trapped catch handler", function(done) {
@@ -629,6 +657,61 @@ describe("when using .bind", function() {
         });
     });
 
+
+    describe("With race", function() {
+        describe("this should refer to the bound object", function() {
+            specify( "after race with immediate values", function(done) {
+                fulfilled([1,2,3]).bind(THIS).race().then(function(v){
+                    assert( v === 1 );
+                    assert( this === THIS );
+                    done();
+                });
+            });
+            specify( "after race with eventual values", function(done) {
+                var d1 = pending();
+                var p1 = d1.promise;
+
+                var d2 = pending();
+                var p2 = d2.promise;
+
+                var d3 = pending();
+                var p3 = d3.promise;
+
+                fulfilled([p1, p2, p3]).bind(THIS).race().then(function(v){
+                    assert(v === 1);
+                    assert( this === THIS );
+                    done();
+                });
+
+                setTimeout(function(){
+                    d1.fulfill(1);
+                    d2.fulfill(2);
+                    d3.fulfill(3);
+                }, 50);
+            });
+        });
+
+        describe("this should not refer to the bound object", function() {
+            specify( "in the promises created within the handler", function(done) {
+                var d1 = pending();
+                var p1 = d1.promise;
+
+                fulfilled([1,2,3]).bind(THIS).filter(function(){
+                    return Promise.race([p1]).then(function(){
+                        assert( this !== THIS );
+                        return 1;
+                    })
+                }).then(function(){
+                    assert( this === THIS );
+                    done();
+                });
+
+                setTimeout(function(){
+                    d1.fulfill(1);
+                }, 50);
+            });
+        });
+    });
 
     describe("With settle", function() {
         describe("this should refer to the bound object", function() {

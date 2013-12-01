@@ -28,10 +28,7 @@ function resolver( fulfill ) {
     setTimeout(fulfill, freeMs );
 };
 
-Q.delay = function(ms) {
-    freeMs = ms;
-    return new Promise(resolver);
-};
+Q.delay = Promise.delay;
 
 Q.defer = function() {
     var ret = pending();
@@ -394,5 +391,57 @@ describe("progress", function () {
         def.notify();
 
         return deferred.promise;
+    });
+
+    specify("should not choke when internal functions are registered on the promise", function(done) {
+        var d = adapter.defer();
+        var progress = 0;
+
+        //calls ._then on the d.promise with smuggled data and void 0 progress handler
+        Promise.race([d.promise]).then(function(v){
+            assert(v === 3);
+            assert(progress === 1);
+            done();
+        });
+
+        d.promise.progressed(function(v){
+            assert(v === 5);
+            progress++;
+        });
+
+        d.progress(5);
+
+        setTimeout(function(){
+            d.fulfill(3);
+        }, 13);
+    });
+
+    specify("GH-36", function(done) {
+        var order = [];
+        var p = Promise.resolve();
+
+        var _d = Promise.defer();
+        var progress = 0;
+
+        _d.progress(progress)
+        _d.resolve()
+        _d.promise.progressed(function() {
+            order.push(1);
+            p.then(function() {
+                order.push(3);
+            })
+        })
+
+        _d.promise.then(function() {
+            order.push(2);
+            p.then(function() {
+                order.push(4);
+            });
+        });
+
+        setTimeout(function(){
+            assert.deepEqual(order, [1,2,3,4]);
+            done();
+        }, 13);
     });
 });

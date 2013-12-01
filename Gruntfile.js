@@ -50,8 +50,9 @@ module.exports = function( grunt ) {
 
 
     var optionalModuleDependencyMap = {
+        "timers.js": ['Promise', 'INTERNAL'],
         "any.js": ['Promise', 'Promise$_All', 'PromiseArray'],
-        "race.js": ['Promise', 'Promise$_All', 'PromiseArray'],
+        "race.js": ['Promise', 'INTERNAL'],
         "call_get.js": ['Promise'],
         "filter.js": ['Promise', 'Promise$_All', 'PromiseArray', 'apiRejection'],
         "generators.js": ['Promise', 'apiRejection'],
@@ -63,12 +64,13 @@ module.exports = function( grunt ) {
         "settle.js": ['Promise', 'Promise$_All', 'PromiseArray'],
         "some.js": ['Promise', 'Promise$_All', 'PromiseArray', 'apiRejection'],
         "progress.js": ['Promise'],
-        "cancel.js": ['Promise'],
+        "cancel.js": ['Promise', 'INTERNAL'],
         "synchronous_inspection.js": ['Promise']
 
     };
 
     var optionalModuleRequireMap = {
+        "timers.js": true,
         "race.js": true,
         "any.js": true,
         "call_get.js": true,
@@ -264,7 +266,6 @@ module.exports = function( grunt ) {
                     "./src/cancel.js",
                     "./src/any.js",
                     "./src/race.js",
-                    "./src/race_promise_array.js",
                     "./src/call_get.js",
                     "./src/filter.js",
                     "./src/generators.js",
@@ -346,7 +347,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-bump');
 
     function runIndependentTest( file, cb , env) {
         var fs = require("fs");
@@ -462,7 +462,6 @@ module.exports = function( grunt ) {
             return Q.nfcall(fs.readFile, dest, "utf8" );
         }).then(function( src ) {
             src = header + src;
-            src = src.replace( "longStackTraces = false", "longStackTraces = true" );
             return Q.nfcall(fs.writeFile, dest, src );
         });
     }
@@ -476,6 +475,7 @@ module.exports = function( grunt ) {
     }
 
     var optionalPaths = [
+        "./src/timers.js",
         "./src/synchronous_inspection.js",
         "./src/any.js",
         "./src/race.js",
@@ -510,7 +510,6 @@ module.exports = function( grunt ) {
         "./src/promise.js",
         "./src/promise_array.js",
         "./src/settled_promise_array.js",
-        "./src/race_promise_array.js",
         "./src/some_promise_array.js",
         "./src/properties_promise_array.js",
         "./src/promise_inspection.js",

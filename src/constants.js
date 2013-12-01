@@ -21,26 +21,34 @@ CONSTANT(CALLBACK_PROGRESS_OFFSET, 2);
 CONSTANT(CALLBACK_PROMISE_OFFSET, 3);
 CONSTANT(CALLBACK_RECEIVER_OFFSET, 4);
 CONSTANT(CALLBACK_SIZE, 5);
-//Layout for .bitField
-//RRWF NCTR LLLL LLLL LLLL LLLL LLLL LLLL
+//Layout for ._bitField
+//QQWF NCTR BLLL LLLL LLLL LLLL LLLL LLLL
+//Q = isGcQueued (Both bits are either on or off to represent
+//                    1 bit due to 31-bit integers in 32-bit v8)
 //W = isFollowing (The promise that is being followed is not stored explicitly)
 //F = isFulfilled
 //N = isRejected
 //C = isCancellable
 //T = isFinal (used for .done() implementation)
+//B = isBound (to avoid property load misses
+//              that would come from reading ._boundTo === void 0)
 
 //R = [Reserved]
-//L = Length, 24 bit unsigned
+//L = Length, 23 bit unsigned
+CONSTANT(NO_STATE, 0x0|0);
+CONSTANT(IS_GC_QUEUED, 0xC0000000|0)
 CONSTANT(IS_FOLLOWING, 0x20000000|0);
 CONSTANT(IS_FULFILLED, 0x10000000|0);
 CONSTANT(IS_REJECTED, 0x8000000|0);
 CONSTANT(IS_CANCELLABLE, 0x4000000|0);
 CONSTANT(IS_FINAL, 0x2000000|0);
-CONSTANT(LENGTH_MASK, 0xFFFFFF|0);
+CONSTANT(IS_BOUND, 0x800000|0);
+CONSTANT(LENGTH_MASK, 0x7FFFFF|0);
 CONSTANT(LENGTH_CLEAR_MASK, ~LENGTH_MASK);
 CONSTANT(MAX_LENGTH, LENGTH_MASK);
 CONSTANT(IS_REJECTED_OR_FULFILLED, IS_REJECTED | IS_FULFILLED);
 CONSTANT(IS_FOLLOWING_OR_REJECTED_OR_FULFILLED, IS_REJECTED_OR_FULFILLED | IS_FOLLOWING);
+
 
 CONSTANT(BEFORE_PROMISIFIED_SUFFIX, "__beforePromisified__");
 CONSTANT(AFTER_PROMISIFIED_SUFFIX, "Async");
