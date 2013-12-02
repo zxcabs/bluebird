@@ -55,10 +55,10 @@ module.exports = function( grunt ) {
         "race.js": ['Promise', 'INTERNAL'],
         "call_get.js": ['Promise'],
         "filter.js": ['Promise', 'Promise$_All', 'PromiseArray', 'apiRejection'],
-        "generators.js": ['Promise', 'apiRejection'],
+        "generators.js": ['Promise', 'apiRejection', 'INTERNAL'],
         "map.js": ['Promise', 'Promise$_All', 'PromiseArray', 'apiRejection'],
         "nodeify.js": ['Promise'],
-        "promisify.js": ['Promise'],
+        "promisify.js": ['Promise', 'INTERNAL'],
         "props.js": ['Promise', 'PromiseArray'],
         "reduce.js": ['Promise', 'Promise$_All', 'PromiseArray', 'apiRejection'],
         "settle.js": ['Promise', 'Promise$_All', 'PromiseArray'],
@@ -259,6 +259,7 @@ module.exports = function( grunt ) {
 
             files: {
                 src: [
+                    "./src/finally.js",
                     "./src/direct_resolve.js",
                     "./src/synchronous_inspection.js",
                     "./src/thenables.js",
@@ -494,6 +495,7 @@ module.exports = function( grunt ) {
     ];
 
     var mandatoryPaths = [
+        "./src/finally.js",
         "./src/es5.js",
         "./src/bluebird.js",
         "./src/thenables.js",

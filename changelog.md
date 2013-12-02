@@ -1,3 +1,34 @@
+## 0.11.3-0 (2013-12-02)
+
+Features:
+
+ - Improve performance of generators
+
+Bugfixes:
+
+ - Fix critical bug with collection methods.
+
+## 0.11.2-0 (2013-12-02)
+
+Features:
+
+ - Improve performance of all collection methods
+
+## 0.11.1-0 (2013-12-02)
+
+Features:
+
+- Improve overall performance.
+- Improve performance of promisified functions.
+- Improve performance of catch filters.
+- Improve performance of .finally.
+
+Bugfixes:
+
+- Fix `.finally()` rejecting if passed non-function. It will now ignore non-functions like `.then`.
+- Fix `.finally()` not converting thenables returned from the handler to promises.
+- `.spread()` now rejects if the ultimate value given to it is not spreadable.
+
 ## 0.11.0-0 (2013-12-02)
 
 Features:
