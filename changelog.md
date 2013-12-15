@@ -1,3 +1,19 @@
+## 0.11.5-0 (2013-12-03)
+
+Features:
+
+ - Improve performance of collection methods
+ - Improve performance of promise chains
+
+## 0.11.4-1 (2013-12-02)
+
+## 0.11.4-0 (2013-12-02)
+
+Bugfixes:
+
+ - Fix `Promise.some` behavior with arguments like negative integers, 0...
+ - Fix stack traces of synchronously throwing promisified functions'
+
 ## 0.11.3-0 (2013-12-02)
 
 Features:

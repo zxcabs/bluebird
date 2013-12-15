@@ -33,6 +33,7 @@ function ensureNotHandled(reason) {
         ((field = reason[ERROR_HANDLED_KEY]) !== void 0)) {
         reason[ERROR_HANDLED_KEY] = withHandledUnmarked(field);
     }
+    return reason;
 }
 
 function attachDefaultState(obj) {
@@ -76,6 +77,10 @@ var TypeError = global.TypeError;
 if (typeof TypeError !== "function") {
     TypeError = subError("TypeError", "type error");
 }
+var RangeError = global.RangeError;
+if (typeof RangeError !== "function") {
+    RangeError = subError("RangeError", "range error");
+}
 var CancellationError = subError("CancellationError", "cancellation error");
 var TimeoutError = subError("TimeoutError", "timeout error");
 
@@ -110,6 +115,7 @@ if (!errorTypes) {
 module.exports = {
     Error: Error,
     TypeError: TypeError,
+    RangeError: RangeError,
     CancellationError: errorTypes.CancellationError,
     RejectionError: errorTypes.RejectionError,
     TimeoutError: errorTypes.TimeoutError,

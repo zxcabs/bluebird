@@ -140,8 +140,9 @@ function makeNodePromisifiedEval(callback, receiver, originalName) {
         "}" +
         "}" +
         "catch(e){ " +
-        "" +
-        "promise._reject(maybeWrapAsError(e));" +
+        "var wrapped = maybeWrapAsError(e);" +
+        "promise._attachExtraTrace(wrapped);" +
+        "promise._reject(wrapped);" +
         "}" +
         "return promise;" +
         "" +
@@ -165,7 +166,9 @@ function makeNodePromisifiedClosure(callback, receiver) {
             callback.apply(_receiver, withAppended(arguments, fn));
         }
         catch(e) {
-            promise._reject(maybeWrapAsError(e));
+            var wrapped = maybeWrapAsError(e);
+            promise._attachExtraTrace(wrapped);
+            promise._reject(wrapped);
         }
         return promise;
     }
@@ -201,27 +204,26 @@ function _promisify(callback, receiver, isAll) {
     }
 }
 
-Promise.promisify = function Promise$Promisify(callback, receiver) {
-    if (typeof callback === "object" && callback !== null) {
-        deprecated("Promise.promisify for promisifying entire objects " +
-            "is deprecated. Use Promise.promisifyAll instead.");
-        return _promisify(callback, receiver, true);
+Promise.promisify = function Promise$Promisify(fn, receiver) {
+    if (typeof fn === "object" && fn !== null) {
+        deprecated(OBJECT_PROMISIFY_DEPRECATED);
+        return _promisify(fn, receiver, true);
     }
-    if (typeof callback !== "function") {
-        throw new TypeError("callback must be a function");
+    if (typeof fn !== "function") {
+        throw new TypeError(NOT_FUNCTION_ERROR);
     }
-    if (isPromisified(callback)) {
-        return callback;
+    if (isPromisified(fn)) {
+        return fn;
     }
     return _promisify(
-        callback,
+        fn,
         arguments.length < 2 ? THIS : receiver,
         false);
 };
 
 Promise.promisifyAll = function Promise$PromisifyAll(target) {
     if (typeof target !== "function" && typeof target !== "object") {
-        throw new TypeError("Cannot promisify " + typeof target);
+        throw new TypeError(PROMISIFY_TYPE_ERROR);
     }
     return _promisify(target, void 0, true);
 };

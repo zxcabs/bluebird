@@ -22,6 +22,7 @@
 "use strict";
 module.exports = function (PromiseArray) {
 var util = require("./util.js");
+var RangeError = require("./errors.js").RangeError;
 var inherits = util.inherits;
 var isArray = util.isArray;
 
@@ -29,22 +30,34 @@ function SomePromiseArray(values, caller, boundTo) {
     this.constructor$(values, caller, boundTo);
     this._howMany = 0;
     this._unwrap = false;
+    this._initialized = false;
 }
 inherits(SomePromiseArray, PromiseArray);
 
 SomePromiseArray.prototype._init = function SomePromiseArray$_init() {
-    this._init$(void 0, 1);
-    var isArrayResolved = isArray(this._values);
-    this._holes = isArrayResolved
-        ? this._values.length - this.length()
-        : 0;
-
-    if (!this._isResolved() && isArrayResolved) {
-        this._howMany = Math.max(0, Math.min(this._howMany, this.length()));
-        if (this.howMany() > this._canPossiblyFulfill() ) {
-            this._reject([]);
-        }
+    if (!this._initialized) {
+        return;
     }
+    if (this._howMany === 0) {
+        this._resolve([]);
+        return;
+    }
+    this._init$(void 0, -2);
+    var isArrayResolved = isArray(this._values);
+    this._holes = isArrayResolved ? this._values.length - this.length() : 0;
+
+    if (!this._isResolved() &&
+        isArrayResolved &&
+        this._howMany > this._canPossiblyFulfill()) {
+        var message = "(Promise.some) input array contains less than " +
+                        this._howMany  + " promises";
+        this._reject(new RangeError(message));
+    }
+};
+
+SomePromiseArray.prototype.init = function SomePromiseArray$init() {
+    this._initialized = true;
+    this._init();
 };
 
 SomePromiseArray.prototype.setUnwrap = function SomePromiseArray$setUnwrap() {

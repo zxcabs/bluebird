@@ -12,8 +12,6 @@ CONSTANT(ERROR_HANDLED, 2);
 //promise.js
 CONSTANT(USE_BOUND, true);
 CONSTANT(DONT_USE_BOUND, false);
-CONSTANT(MUST_ASYNC, true);
-CONSTANT(MAY_SYNC, false);
 
 CONSTANT(CALLBACK_FULFILL_OFFSET, 0);
 CONSTANT(CALLBACK_REJECT_OFFSET, 1);
@@ -22,7 +20,7 @@ CONSTANT(CALLBACK_PROMISE_OFFSET, 3);
 CONSTANT(CALLBACK_RECEIVER_OFFSET, 4);
 CONSTANT(CALLBACK_SIZE, 5);
 //Layout for ._bitField
-//QQWF NCTR BLLL LLLL LLLL LLLL LLLL LLLL
+//QQWF NCTR BPLL LLLL LLLL LLLL LLLL LLLL
 //Q = isGcQueued (Both bits are either on or off to represent
 //                    1 bit due to 31-bit integers in 32-bit v8)
 //W = isFollowing (The promise that is being followed is not stored explicitly)
@@ -30,11 +28,11 @@ CONSTANT(CALLBACK_SIZE, 5);
 //N = isRejected
 //C = isCancellable
 //T = isFinal (used for .done() implementation)
-//B = isBound (to avoid property load misses
-//              that would come from reading ._boundTo === void 0)
-
+//B = isBound
+//P = isProxied (optimization when .then listeners on a promise are
+//                just respective fate sealers on some other promise)
 //R = [Reserved]
-//L = Length, 23 bit unsigned
+//L = Length, 22 bit unsigned
 CONSTANT(NO_STATE, 0x0|0);
 CONSTANT(IS_GC_QUEUED, 0xC0000000|0)
 CONSTANT(IS_FOLLOWING, 0x20000000|0);
@@ -43,7 +41,8 @@ CONSTANT(IS_REJECTED, 0x8000000|0);
 CONSTANT(IS_CANCELLABLE, 0x4000000|0);
 CONSTANT(IS_FINAL, 0x2000000|0);
 CONSTANT(IS_BOUND, 0x800000|0);
-CONSTANT(LENGTH_MASK, 0x7FFFFF|0);
+CONSTANT(IS_PROXIED, 0x400000|0);
+CONSTANT(LENGTH_MASK, 0x3FFFFF|0);
 CONSTANT(LENGTH_CLEAR_MASK, ~LENGTH_MASK);
 CONSTANT(MAX_LENGTH, LENGTH_MASK);
 CONSTANT(IS_REJECTED_OR_FULFILLED, IS_REJECTED | IS_FULFILLED);
@@ -54,10 +53,11 @@ CONSTANT(BEFORE_PROMISIFIED_SUFFIX, "__beforePromisified__");
 CONSTANT(AFTER_PROMISIFIED_SUFFIX, "Async");
 
 //promise_array.js
-CONSTANT(RESOLVE_UNDEFINED, 0);
-CONSTANT(RESOLVE_ARRAY, 1);
-CONSTANT(RESOLVE_OBJECT, 2);
-CONSTANT(RESOLVE_FOREVER_PENDING, 3);
+//MUST BE NEGATIVE NUMBERS
+CONSTANT(RESOLVE_UNDEFINED, -1);
+CONSTANT(RESOLVE_ARRAY, -2);
+CONSTANT(RESOLVE_OBJECT, -3);
+CONSTANT(RESOLVE_FOREVER_PENDING, -4);
 
 //queue.js
 CONSTANT(QUEUE_MAX_CAPACITY, (1 << 30) | 0);
@@ -71,4 +71,21 @@ CONSTANT(FROM_PREVIOUS_EVENT, "From previous event:");
 CONSTANT(THROW, 1);
 CONSTANT(RETURN, 2);
 
+
+//deprecated
+CONSTANT(OBJECT_PROMISIFY_DEPRECATED, "Promise.promisify for promisifying entire objects is deprecated. Use Promise.promisifyAll instead.");
+
+//errors
+CONSTANT(CONSTRUCT_ERROR_ARG, "the promise constructor requires a resolver function");
+CONSTANT(CONSTRUCT_ERROR_INVOCATION, "the promise constructor cannot be invoked directly");
 CONSTANT(COLLECTION_ERROR,  "expecting an array, a promise or a thenable" );
+CONSTANT(NOT_GENERATOR_ERROR, "generatorFunction must be a function");
+CONSTANT(NOT_FUNCTION_ERROR, "fn must be a function");
+CONSTANT(LONG_STACK_TRACES_ERROR, "cannot enable long stack traces after promises have been created");
+CONSTANT(INSPECTION_VALUE_ERROR, "cannot get fulfillment value of a non-fulfilled promise");
+CONSTANT(INSPECTION_REASON_ERROR, "cannot get rejection reason of a non-rejected promise");
+CONSTANT(PROMISIFY_TYPE_ERROR, "the target of promisifyAll must be an object or a function");
+CONSTANT(CIRCULAR_RESOLUTION_ERROR, "circular promise resolution chain");
+CONSTANT(PROPS_TYPE_ERROR, "cannot await properties of a non-object");
+CONSTANT(POSITIVE_INTEGER_ERROR, "expecting a positive integer");
+CONSTANT(TIMEOUT_ERROR, "operation timed out after");

@@ -27,25 +27,19 @@ module.exports = function(Promise, INTERNAL) {
     var apiRejection = require("./errors_api_rejection")(Promise);
     var TimeoutError = Promise.TimeoutError;
 
-    var promiseDelayer = function Promise$_promiseDelayer(value, ms) {
-        ASSERT(this instanceof Promise);
-        ASSERT(typeof ms === "number");
-        setTimeout(afterDelay, ms, value, this);
-    };
-
-    var afterDelay = function Promise$_afterDelay(value, promise) {
-        promise._fulfill(value);
-    };
-
     var afterTimeout = function Promise$_afterTimeout(promise, message, ms) {
         //Don't waste time concatting strings or creating stack traces
         if (!promise.isPending()) return;
         if (typeof message !== "string") {
-            message = "Operation timed out after " + ms + " ms"
+            message = TIMEOUT_ERROR + " " + ms + " ms"
         }
         var err = new TimeoutError(message)
         promise._attachExtraTrace(err);
-        promise._reject(err);
+        promise._rejectUnchecked(err);
+    };
+
+    var afterDelay = function Promise$_afterDelay(value, promise) {
+        promise._fulfill(value);
     };
 
     Promise.delay = function Promise$Delay(value, ms, caller) {
@@ -54,7 +48,7 @@ module.exports = function(Promise, INTERNAL) {
             value = void 0;
         }
         if ((ms | 0) !== ms || ms < 0) {
-            return apiRejection("Promise.delay expects a positive integer");
+            return apiRejection(POSITIVE_INTEGER_ERROR);
         }
         if (typeof caller !== "function") {
             caller = Promise.delay;
@@ -71,14 +65,10 @@ module.exports = function(Promise, INTERNAL) {
                 promise._cancellationParent = maybePromise;
             }
             promise._setTrace(caller, maybePromise);
-            maybePromise._then(
-                promiseDelayer,
-                promise._reject,
-                promise._progress,
-                promise,
-                ms,
-                caller
-            )
+            promise._follow(maybePromise);
+            return promise.then(function(value) {
+                return Promise.delay(value, ms);
+            });
         }
         else {
             promise._setTrace(caller, void 0);
@@ -93,8 +83,7 @@ module.exports = function(Promise, INTERNAL) {
 
     Promise.prototype.timeout = function Promise$timeout(ms, message) {
         if ((ms | 0) !== ms || ms < 0) {
-            return apiRejection("Promise.prototype.timeout " +
-                "expects a positive integer");
+            return apiRejection(POSITIVE_INTEGER_ERROR);
         }
 
         var ret = new Promise(INTERNAL);
@@ -105,10 +94,7 @@ module.exports = function(Promise, INTERNAL) {
             ret._setCancellable();
             ret._cancellationParent = this;
         }
-
-        this._then(ret._fulfill, ret._reject, ret._progress,
-            ret, null, this.timeout);
-
+        ret._follow(this);
         setTimeout(afterTimeout, ms, ret, message, ms);
         return ret;
     };
