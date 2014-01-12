@@ -186,7 +186,7 @@ somePromise.then(function(){
 });
 ```
 
-For a paramater to be considered a type of error that you want to filter, you need the constructor to have its `.prototype` property be `instanceof Error`.
+For a parameter to be considered a type of error that you want to filter, you need the constructor to have its `.prototype` property be `instanceof Error`.
 
 Such a constructor can be minimally created like so:
 
@@ -260,7 +260,7 @@ request("http://www.google.com").then(function(contents){
 
 #####`.error( [rejectedHandler] )` -> `Promise`
 
-Like `.catch` but instead of catching all types of exceptions, it only catches those that don't originate from thrown erros but rather from explicit rejections.
+Like `.catch` but instead of catching all types of exceptions, it only catches those that don't originate from thrown errors but rather from explicit rejections.
 
 For example, if a promisified function errbacks the node-style callback with an error, that could be caught with `.error()`. However if the node-style callback **throws** an error, only `.catch` would catch that.
 
@@ -593,7 +593,7 @@ Create a promise that is rejected with the given `reason`.
 
 #####`Promise.defer()` -> `PromiseResolver`
 
-Create a promise with undecided fate and return a `PromiseResolver` to control it. See [Promise resultion](#promise-resolution).
+Create a promise with undecided fate and return a `PromiseResolver` to control it. See [Promise resolution](#promise-resolution).
 
 <hr>
 
@@ -1197,7 +1197,7 @@ Doing `Promise.coroutine(function*(){})` is almost like using the C# `async` key
 
 If you yield an array then its elements are implicitly waited for.
 
-You can combine it with ES6 destructing for some neat syntax:
+You can combine it with ES6 destructuring for some neat syntax:
 
 ```js
 var getData = Promise.coroutine(function* (urlA, urlB) {
@@ -1533,7 +1533,7 @@ Given an array, or a promise of an array, which contains promises (or a mix of p
 In this example we create a promise that is fulfilled only when the pictures, comments and tweets are all loaded.
 
 ```js
-Promise.all([getPictures(), getComments(), getTweets()].then(function(results){
+Promise.all([getPictures(), getComments(), getTweets()]).then(function(results){
     //Everything loaded and good to go
     var pictures = results[0];
     var comments = results[1];
@@ -1677,11 +1677,11 @@ Promise.join(a, b).spread(function(aResult, bResult) {
 
 Map an array, or a promise of an array, which contains a promises (or a mix of promises and values) with the given `mapper` function with the signature `(item, index, arrayLength)` where `item` is the resolved value of a respective promise in the input array. If any promise in the input array is rejected the returned promise is rejected as well.
 
-If the `mapper` function returns promises, the returned promise will wait for all the mapped results to be resolved as well.
+If the `mapper` function returns promises or thenables, the returned promise will wait for all the mapped results to be resolved as well.
 
 *(TODO: an example where this is useful)*
 
-*The original array is not modified. Sparse array holes are not visited and the resulting array retains the same sparsity as the original array.*
+*The original array is not modified.*
 
 <hr>
 
@@ -1689,9 +1689,21 @@ If the `mapper` function returns promises, the returned promise will wait for al
 
 Reduce an array, or a promise of an array, which contains a promises (or a mix of promises and values) with the given `reducer` function with the signature `(total, current, index, arrayLength)` where `item` is the resolved value of a respective promise in the input array. If any promise in the input array is rejected the returned promise is rejected as well.
 
-*(TODO: an example where this is useful)*
+If the reducer function returns a promise or a thenable, the result for the promise is awaited for before continuing with next iteration.
 
-*The original array is not modified. Sparse array holes are not visited. If no `intialValue` is given and the array doesn't contain at least 2 items, the callback will not be called and `undefined` is returned. If `initialValue` is given and the array doesn't have at least 1 item, `initialValue` is returned.*
+Read given files sequentially while summing their contents as an integer. Each file contains just the text `10`.
+
+```js
+Promise.reduce(["file1.txt", "file2.txt", "file3.txt"], function(total, fileName) {
+    return fs.readFileAsync(fileName, "utf8").then(function(contents) {
+        return total + parseInt(contents, 10);
+    });
+}, 0).then(function(total) {
+    //Total is 30
+});
+```
+
+*The original array is not modified. If no `intialValue` is given and the array doesn't contain at least 2 items, the callback will not be called and `undefined` is returned. If `initialValue` is given and the array doesn't have at least 1 item, `initialValue` is returned.*
 
 <hr>
 
@@ -1703,6 +1715,6 @@ The return values from the filtered functions are coerced to booleans, with the 
 
 [See the instance method `.filter()` for an example.](#filterfunction-filterer---promise)
 
-*The original array is not modified. Sparse array holes are not visited.
+*The original array is not modified.
 
 <hr>
