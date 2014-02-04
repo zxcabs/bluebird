@@ -102,27 +102,23 @@ function ajaxGetAsync(url) {
 }
 ```
 
-*Performance tips*
+If you pass a promise object to the `resolve` function, the created promise will follow the state of that promise.
 
-`new Promise(resolver)` should be avoided in performance sensitive code.
+<hr>
 
-In V8, anytime you call the above, you will create 3 function identities and 2 context objects because the `resolve, reject` callbacks require .binding for API ergonomics.
-
-For instance when implementing a `delay` function, it's possible to just do this:
+To make sure a function that returns a promise is following the implicit but critically important contract of promises, you can start a function with `new Promise` if you cannot start a chain immediately:
 
 ```js
-function delay(ms, value) {
-    var resolver = Promise.defer();
-    setTimeout(function(){
-        resolver.resolve(value);
-    }, ms);
-    return resolver.promise;
+function getConnection(urlString) {
+    return new Promise(function(resolve) {
+        //Without new Promise, this throwing will throw an actual exception
+        var params = parse(urlString);
+        resolve(getAdapater(params).getConnection());
+    });
 }
 ```
 
-The above will only create 1 function identity and a context object and wasn't too hard to write. The savings are relatively good - it's possible to create 2.5 additional bluebird promises from the memory we saved (`(2 * 80 + 60) / 88 =~ 2.5`).
-
-Note that it isn't really about raw memory - I know you have plenty. It's about the additional GC work which uses CPU.
+The above ensures `getConnection()` fulfills the contract of a promise-returning function of never throwing a synchronous exception. Also see [`Promise.try`](#promisetryfunction-fn--arraydynamicdynamic-arguments--dynamic-ctx----promise) and [`Promise.method`](#promisemethodfunction-fn---function)
 
 <hr>
 
@@ -221,7 +217,7 @@ MyCustomError.prototype.constructor = MyCustomError;
 
 Using CoffeeScript's `class` for the same:
 
-```js
+```coffee
 class MyCustomError extends Error
   constructor: (@message) ->
     @name = "MyCustomError"
@@ -595,6 +591,8 @@ Create a promise that is rejected with the given `reason`.
 
 Create a promise with undecided fate and return a `PromiseResolver` to control it. See [Promise resolution](#promise-resolution).
 
+The use of `Promise.defer` is discouraged - it is much more awkward and error-prone than using `new Promise`.
+
 <hr>
 
 #####`Promise.cast(dynamic value)` -> `Promise`
@@ -705,6 +703,8 @@ A `PromiseResolver` can be used to control the fate of a promise. It is like "De
 
 The methods of a `PromiseResolver` have no effect if the fate of the underlying promise is already decided (follow, reject, fulfill).
 
+The use of `Promise.defer` and deferred objects is discouraged - it is much more awkward and error-prone than using `new Promise`.
+
 <hr>
 
 #####`.resolve(dynamic value)` -> `undefined`
@@ -787,7 +787,7 @@ Same as calling [`Promise.delay(this, ms)`](#promisedelaydynamic-value-int-ms---
 
 #####`.timeout(int ms [, String message])` -> `Promise`
 
-Returns a promise that will be fulfilled with this promise's fulfillment value or rejection reason. However, if this promise is not fulfilled or rejected within `ms` milliseconds, the returned promise is fulfilled with `TimeoutError` (get reference from `Promise.TimeoutError`).
+Returns a promise that will be fulfilled with this promise's fulfillment value or rejection reason. However, if this promise is not fulfilled or rejected within `ms` milliseconds, the returned promise is rejected with a `Promise.TimeoutError` instance.
 
 You may specify a custom error message with the `message` parameter.
 

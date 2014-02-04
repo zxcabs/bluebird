@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013 Petka Antonov
+ * Copyright (c) 2014 Petka Antonov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,6 +18,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ * 
  */
 "use strict";
 var global = require("./global.js");
@@ -59,7 +60,7 @@ function ensureNotHandled(reason) {
 
 function markAsOriginatingFromRejection(e) {
     try {
-        notEnumerableProp(e, "__rejectionError__", RejectionError);
+        notEnumerableProp(e, "isAsync", true);
     }
     catch(ignore) {}
 }
@@ -67,7 +68,7 @@ function markAsOriginatingFromRejection(e) {
 function originatesFromRejection(e) {
     if (e == null) return false;
     return ((e instanceof RejectionError) ||
-        e["__rejectionError__"] === RejectionError);
+        e["isAsync"] === true);
 }
 
 function attachDefaultState(obj) {
@@ -97,6 +98,7 @@ function canAttach(obj) {
 
 function subError(nameProperty, defaultMessage) {
     function SubError(message) {
+        if (!(this instanceof SubError)) return new SubError(message);
         this.message = typeof message === "string" ? message : defaultMessage;
         this.name = nameProperty;
         if (Error.captureStackTrace) {
@@ -122,6 +124,7 @@ function RejectionError(message) {
     this.name = "RejectionError";
     this.message = message;
     this.cause = message;
+    this.isAsync = true;
 
     if (message instanceof Error) {
         this.message = message.message;
