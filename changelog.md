@@ -1,3 +1,37 @@
+## 1.0.5 (2014-02-15)
+
+Features:
+
+ - Node.js performance: promisified functions try to check amount of passed arguments in most optimal order
+ - Node.js promisified functions will have same `.length` as the original function minus one (for the callback parameter)
+
+## 1.0.4 (2014-02-09)
+
+Features:
+
+ - Possibly unhandled rejection handler will always get a stack trace, even if the rejection or thrown error was not an error
+ - Unhandled rejections are tracked per promise, not per error. So if you create multiple branches from a single ancestor and that ancestor gets rejected, each branch with no error handler with the end will cause a possibly unhandled rejection handler invocation
+
+Bugfixes:
+
+ - Fix unhandled non-writable objects or primitives not reported by possibly unhandled rejection handler
+
+## 1.0.3 (2014-02-05)
+
+Bugfixes:
+
+ - [#93](https://github.com/petkaantonov/bluebird/issues/88)
+
+## 1.0.2 (2014-02-04)
+
+Features:
+
+ - Significantly improve performance of foreign bluebird thenables
+
+Bugfixes:
+
+ - [#88](https://github.com/petkaantonov/bluebird/issues/88)
+
 ## 1.0.1 (2014-01-28)
 
 Features:

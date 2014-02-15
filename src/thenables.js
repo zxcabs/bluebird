@@ -2,6 +2,7 @@
 module.exports = function(Promise, INTERNAL) {
     var ASSERT = require("./assert.js");
     var util = require("./util.js");
+    var canAttach = require("./errors.js").canAttach;
     var errorObj = util.errorObj;
     var isObject = util.isObject;
 
@@ -21,10 +22,25 @@ module.exports = function(Promise, INTERNAL) {
             if (obj instanceof Promise) {
                 return obj;
             }
+            //Make casting from another bluebird fast
+            else if (isAnyBluebirdPromise(obj)) {
+                var ret = new Promise(INTERNAL);
+                ret._setTrace(caller, void 0);
+                obj._then(
+                    ret._fulfillUnchecked,
+                    ret._rejectUncheckedCheckError,
+                    ret._progressUnchecked,
+                    ret,
+                    null,
+                    void 0
+                );
+                ret._setFollowing();
+                return ret;
+            }
             var then = getThen(obj);
             if (then === errorObj) {
                 caller = typeof caller === "function" ? caller : Promise$_Cast;
-                if (originalPromise !== void 0) {
+                if (originalPromise !== void 0 && canAttach(then.e)) {
                     originalPromise._attachExtraTrace(then.e);
                 }
                 return Promise.reject(then.e, caller);
@@ -37,29 +53,14 @@ module.exports = function(Promise, INTERNAL) {
         return obj;
     }
 
+    var hasProp = {}.hasOwnProperty;
     function isAnyBluebirdPromise(obj) {
-        try {
-            return typeof obj._resolveFromSyncValue === "function";
-        }
-        catch(ignore) {
-            return false;
-        }
+        return hasProp.call(obj, "_promise0");
     }
 
     function Promise$_doThenable(x, then, caller, originalPromise) {
         ASSERT(typeof then === "function");
         ASSERT(arguments.length === 4);
-        //Make casting from another bluebird fast
-        if (isAnyBluebirdPromise(x)) {
-            var ret = new Promise(INTERNAL);
-            ret._follow(x);
-            ret._setTrace(caller, void 0);
-            return ret;
-        }
-        return Promise$_doThenableSlowCase(x, then, caller, originalPromise);
-    }
-
-    function Promise$_doThenableSlowCase(x, then, caller, originalPromise) {
         var resolver = Promise.defer(caller);
         var called = false;
         try {
@@ -73,10 +74,11 @@ module.exports = function(Promise, INTERNAL) {
         catch(e) {
             if (!called) {
                 called = true;
+                var trace = canAttach(e) ? e : new Error(e + "");
                 if (originalPromise !== void 0) {
-                    originalPromise._attachExtraTrace(e);
+                    originalPromise._attachExtraTrace(trace);
                 }
-                resolver.promise._reject(e);
+                resolver.promise._reject(e, trace);
             }
         }
         return resolver.promise;
@@ -90,7 +92,7 @@ module.exports = function(Promise, INTERNAL) {
                 if (originalPromise !== void 0) {
                     originalPromise._attachExtraTrace(e);
                 }
-                resolver.promise._reject(e);
+                resolver.promise._reject(e, void 0);
                 return;
             }
             resolver.resolve(y);
@@ -99,12 +101,11 @@ module.exports = function(Promise, INTERNAL) {
         function Promise$_rejectFromThenable(r) {
             if (called) return;
             called = true;
-
+            var trace = canAttach(r) ? r : new Error(r + "");
             if (originalPromise !== void 0) {
-                originalPromise._attachExtraTrace(r);
+                originalPromise._attachExtraTrace(trace);
             }
-            resolver.promise._attachExtraTrace(r);
-            resolver.promise._reject(r);
+            resolver.promise._reject(r, trace);
         }
 
         function Promise$_progressFromThenable(v) {
