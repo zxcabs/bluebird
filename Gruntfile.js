@@ -12,15 +12,14 @@ module.exports = function( grunt ) {
     function getBrowsers() {
         //Terse format to generate the verbose format required by sauce
         var browsers = {
-            "internet explorer|Windows XP": ["7"],
-            "internet explorer|Windows 7": ["8"],
             "internet explorer|WIN8": ["10"],
             "internet explorer|WIN8.1": ["11"],
             "firefox|Windows 7": ["3.5", "3.6", "4", "25"],
+            "firefox|WIN8.1": null,
             "chrome|Windows 7": null,
             "safari|Windows 7": ["5"],
-            "safari|OS X 10.8": ["6"],
-            "iphone|OS X 10.8": ["6.0"]
+            "iphone|OS X 10.8": ["6.0"],
+            "iphone|OS X 10.9": ["7"]
         };
 
         var ret = [];
@@ -366,8 +365,9 @@ module.exports = function( grunt ) {
         ];
         var flags = node11 ? ["--harmony-generators"] : [];
         if( file.indexOf( "mocha/") > -1 || file === "aplus.js" ) {
-            var node = spawn('node', flags.concat(["../mocharun.js", file]),
-                             {cwd: p, stdio: stdio, env: env});
+            var node = spawn(typeof node11 === "string" ? node11 : 'node',
+                flags.concat(["../mocharun.js", file]),
+                {cwd: p, stdio: stdio, env: env});
         }
         else {
             var node = spawn('node', flags.concat(["./"+file]),
@@ -411,18 +411,20 @@ module.exports = function( grunt ) {
         var Q = require("q");
         var root = cleanDirectory("./js/debug/");
 
-        return Q.all(sources.map(function( source ) {
-            var src = astPasses.expandAsserts( source.sourceCode, source.fileName );
-            src = astPasses.inlineExpansion( src, source.fileName );
-            src = astPasses.expandConstants( src, source.fileName );
-            src = src.replace( /__DEBUG__/g, "true" );
-            src = src.replace( /__BROWSER__/g, "false" );
-            if( source.fileName === "promise.js" ) {
-                src = applyOptionalRequires( src, optionalRequireCode );
-            }
-            var path = root + source.fileName;
-            return writeFileAsync(path, src);
-        }));
+        return Q.nfcall(require('mkdirp'), root).then(function(){
+            return Q.all(sources.map(function( source ) {
+                var src = astPasses.expandAsserts( source.sourceCode, source.fileName );
+                src = astPasses.inlineExpansion( src, source.fileName );
+                src = astPasses.expandConstants( src, source.fileName );
+                src = src.replace( /__DEBUG__/g, "true" );
+                src = src.replace( /__BROWSER__/g, "false" );
+                if( source.fileName === "promise.js" ) {
+                    src = applyOptionalRequires( src, optionalRequireCode );
+                }
+                var path = root + source.fileName;
+                return writeFileAsync(path, src);
+            }));
+        });
     }
 
     function buildZalgo( sources, optionalRequireCode ) {
@@ -700,7 +702,11 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( "testrun", function(){
         var testOption = grunt.option("run");
+        var node11path = grunt.option("node11");
 
+        if (typeof node11path === "string" && node11path) {
+            node11 = node11path;
+        }
 
         if( !testOption ) testOption = "all";
         else {

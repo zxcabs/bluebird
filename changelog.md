@@ -1,3 +1,36 @@
+## 1.1.0 (2014-03-08)
+
+Features:
+
+ - Implement [`Promise.prototype.tap()`](#tapfunction-handler---promise)
+ - Implement [`Promise.coroutine.addYieldHAndler()`](#promisecoroutineaddyieldhandlerfunction-handler---void)
+ - Deprecate `Promise.prototype.spawn`
+
+Bugfixes:
+
+ - Fix already rejected promises being reported as unhandled when handled through collection methods
+ - Fix browserisfy crashing from checking `process.version.indexOf`
+
+## 1.0.8 (2014-03-03)
+
+Bugfixes:
+
+ - Fix active domain being lost across asynchronous boundaries in Node.JS 10.xx
+
+## 1.0.7 (2014-02-25)
+
+Bugfixes:
+
+ - Fix handled errors being reported
+
+## 1.0.6 (2014-02-17)
+
+Bugfixes:
+
+ -  Fix bug with unhandled rejections not being reported
+    when using `Promise.try` or `Promise.method` without
+    attaching further handlers
+
 ## 1.0.5 (2014-02-15)
 
 Features:

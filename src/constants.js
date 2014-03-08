@@ -82,6 +82,7 @@ CONSTANT(PARAM_COUNTS_TO_TRY, 5);
 
 //deprecated
 CONSTANT(OBJECT_PROMISIFY_DEPRECATED, "Promise.promisify for promisifying entire objects is deprecated. Use Promise.promisifyAll instead.");
+CONSTANT(SPAWN_DEPRECATED, "Promise.spawn is deprecated. Use Promise.coroutine instead.");
 
 //errors
 CONSTANT(CONSTRUCT_ERROR_ARG, "the promise constructor requires a resolver function");
@@ -97,3 +98,4 @@ CONSTANT(CIRCULAR_RESOLUTION_ERROR, "circular promise resolution chain");
 CONSTANT(PROPS_TYPE_ERROR, "cannot await properties of a non-object");
 CONSTANT(POSITIVE_INTEGER_ERROR, "expecting a positive integer");
 CONSTANT(TIMEOUT_ERROR, "operation timed out after");
+CONSTANT(YIELDED_NON_PROMISE_ERROR, "A value was yielded that could not be treated as a promise");

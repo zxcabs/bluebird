@@ -1,5 +1,5 @@
 /**
- * bluebird build version 1.0.5
+ * bluebird build version 1.1.0
  * Features enabled: core, timers, race, any, call_get, filter, generators, map, nodeify, promisify, props, reduce, settle, some, progress, cancel, synchronous_inspection
 */
 /**
@@ -1142,6 +1142,7 @@ module.exports = function(Promise) {
  * THE SOFTWARE.
  * 
  */
+"use strict";
 module.exports = function(Promise, NEXT_FILTER) {
     var util = require("./util.js");
     var wrapsPrimitiveReceiver = util.wrapsPrimitiveReceiver;
@@ -1195,7 +1196,7 @@ module.exports = function(Promise, NEXT_FILTER) {
 
         if (ret !== void 0) {
             var maybePromise = Promise._cast(ret, finallyHandler, void 0);
-            if (Promise.is(maybePromise)) {
+            if (maybePromise instanceof Promise) {
                 return promisedFinally(maybePromise, reasonOrValue,
                                         promise.isFulfilled());
             }
@@ -1210,8 +1211,25 @@ module.exports = function(Promise, NEXT_FILTER) {
         }
     }
 
-    Promise.prototype.lastly = Promise.prototype["finally"] =
-    function Promise$finally(handler) {
+    function tapHandler(value) {
+        var promise = this.promise;
+        var handler = this.handler;
+
+        var ret = promise._isBound()
+                        ? handler.call(promise._boundTo, value)
+                        : handler(value);
+
+        if (ret !== void 0) {
+            var maybePromise = Promise._cast(ret, tapHandler, void 0);
+            if (maybePromise instanceof Promise) {
+                return promisedFinally(maybePromise, value, true);
+            }
+        }
+        return value;
+    }
+
+    Promise.prototype._passThroughHandler =
+    function Promise$_passThroughHandler(handler, isFinally, caller) {
         if (typeof handler !== "function") return this.then();
 
         var promiseAndHandler = {
@@ -1219,8 +1237,19 @@ module.exports = function(Promise, NEXT_FILTER) {
             handler: handler
         };
 
-        return this._then(finallyHandler, finallyHandler, void 0,
-                promiseAndHandler, void 0, this.lastly);
+        return this._then(
+                isFinally ? finallyHandler : tapHandler,
+                isFinally ? finallyHandler : void 0, void 0,
+                promiseAndHandler, void 0, caller);
+    };
+
+    Promise.prototype.lastly =
+    Promise.prototype["finally"] = function Promise$finally(handler) {
+        return this._passThroughHandler(handler, true, this.lastly);
+    };
+
+    Promise.prototype.tap = function Promise$tap(handler) {
+        return this._passThroughHandler(handler, false, this.tap);
     };
 };
 
@@ -1252,6 +1281,7 @@ module.exports = function(Promise, apiRejection, INTERNAL) {
     var PromiseSpawn = require("./promise_spawn.js")(Promise, INTERNAL);
     var errors = require("./errors.js");
     var TypeError = errors.TypeError;
+    var deprecated = require("./util.js").deprecated;
 
     Promise.coroutine = function Promise$Coroutine(generatorFunction) {
         if (typeof generatorFunction !== "function") {
@@ -1267,7 +1297,10 @@ module.exports = function(Promise, apiRejection, INTERNAL) {
         };
     };
 
+    Promise.coroutine.addYieldHandler = PromiseSpawn.addYieldHandler;
+
     Promise.spawn = function Promise$Spawn(generatorFunction) {
+        deprecated("Promise.spawn is deprecated. Use Promise.coroutine instead.");
         if (typeof generatorFunction !== "function") {
             return apiRejection("generatorFunction must be a function");
         }
@@ -1278,7 +1311,7 @@ module.exports = function(Promise, apiRejection, INTERNAL) {
     };
 };
 
-},{"./errors.js":10,"./promise_spawn.js":24}],16:[function(require,module,exports){
+},{"./errors.js":10,"./promise_spawn.js":24,"./util.js":39}],16:[function(require,module,exports){
 /**
  * Copyright (c) 2014 Petka Antonov
  * 
@@ -1889,6 +1922,7 @@ Promise.reject = Promise.rejected = function Promise$Reject(reason) {
         var trace = new Error(reason + "");
         ret._setCarriedStackTrace(trace);
     }
+    ret._ensurePossibleRejectionHandled();
     return ret;
 };
 
@@ -1902,6 +1936,7 @@ function Promise$_resolveFromSyncValue(value, caller) {
         this._cleanValues();
         this._setRejected();
         this._settledValue = value.e;
+        this._ensurePossibleRejectionHandled();
     }
     else {
         var maybePromise = Promise._cast(value, caller, void 0);
@@ -2414,6 +2449,8 @@ function Promise$_follow(promise) {
             promise._getCarriedStackTrace());
     }
 
+    if (promise._isRejectionUnhandled()) promise._unsetRejectionIsUnhandled();
+
     if (debugging &&
         promise._traceParent == null) {
         promise._traceParent = this;
@@ -2696,7 +2733,9 @@ function Promise$_notifyUnhandledRejection() {
             this._unsetCarriedStackTrace();
             reason = trace;
         }
-        CapturedTrace.possiblyUnhandledRejection(reason, this);
+        if (typeof CapturedTrace.possiblyUnhandledRejection === "function") {
+            CapturedTrace.possiblyUnhandledRejection(reason, this);
+        }
     }
 };
 
@@ -2953,6 +2992,7 @@ function PromiseArray$_settlePromiseAt(index) {
         this._promiseFulfilled(value._settledValue, index);
     }
     else if (value.isRejected()) {
+        value._unsetRejectionIsUnhandled();
         this._promiseRejected(value._settledValue, index);
     }
 };
@@ -3274,11 +3314,30 @@ module.exports = PromiseResolver;
 "use strict";
 module.exports = function(Promise, INTERNAL) {
 var errors = require("./errors.js");
+var ASSERT = require("./assert.js");
 var TypeError = errors.TypeError;
 var util = require("./util.js");
 var isArray = util.isArray;
 var errorObj = util.errorObj;
 var tryCatch1 = util.tryCatch1;
+var yieldHandlers = [];
+
+function promiseFromYieldHandler(value) {
+    var _yieldHandlers = yieldHandlers;
+    var _errorObj = errorObj;
+    var _Promise = Promise;
+    var len = _yieldHandlers.length;
+    for (var i = 0; i < len; ++i) {
+        var result = tryCatch1(_yieldHandlers[i], void 0, value);
+        if (result === _errorObj) {
+            return _Promise.reject(_errorObj.e);
+        }
+        var maybePromise = _Promise._cast(result,
+            promiseFromYieldHandler, void 0);
+        if (maybePromise instanceof _Promise) return maybePromise;
+    }
+    return null;
+}
 
 function PromiseSpawn(generatorFunction, receiver, caller) {
     var promise = this._promise = new Promise(INTERNAL);
@@ -3323,9 +3382,10 @@ PromiseSpawn.prototype._continue = function PromiseSpawn$_continue(result) {
                 maybePromise = Promise.all(maybePromise);
             }
             else {
-                this._throw(new TypeError(
-                    "A value was yielded that could not be treated as a promise"
-               ));
+                maybePromise = promiseFromYieldHandler(maybePromise);
+            }
+            if (maybePromise === null) {
+                this._throw(new TypeError("A value was yielded that could not be treated as a promise"));
                 return;
             }
         }
@@ -3354,10 +3414,15 @@ PromiseSpawn.prototype._next = function PromiseSpawn$_next(value) {
    );
 };
 
+PromiseSpawn.addYieldHandler = function PromiseSpawn$AddYieldHandler(fn) {
+    if (typeof fn !== "function") throw new TypeError("fn must be a function");
+    yieldHandlers.push(fn);
+};
+
 return PromiseSpawn;
 };
 
-},{"./errors.js":10,"./util.js":39}],25:[function(require,module,exports){
+},{"./assert.js":2,"./errors.js":10,"./util.js":39}],25:[function(require,module,exports){
 /**
  * Copyright (c) 2014 Petka Antonov
  * 
@@ -3479,6 +3544,15 @@ function parameterCount(fn) {
     return 0;
 }
 
+function propertyAccess(id) {
+    var rident = /^[a-z$_][a-z$_0-9]*$/i;
+
+    if (rident.test(id)) {
+        return "." + id;
+    }
+    else return "['" + id.replace(/(['\\])/g, "\\$1") + "']";
+}
+
 function makeNodePromisifiedEval(callback, receiver, originalName, fn) {
     var newParameterCount = Math.max(0, parameterCount(fn) - 1);
     var argumentOrder = switchCaseArgumentOrder(newParameterCount);
@@ -3496,7 +3570,7 @@ function makeNodePromisifiedEval(callback, receiver, originalName, fn) {
 
         if (typeof callback === "string" &&
             receiver === THIS) {
-            return "this['" + callback + "']("+args.join(",") +
+            return "this" + propertyAccess(callback) + "("+args.join(",") +
                 comma +" fn);"+
                 "break;";
         }
@@ -3522,7 +3596,7 @@ function makeNodePromisifiedEval(callback, receiver, originalName, fn) {
             "args[i] = fn;" +
 
             (typeof callback === "string"
-            ? "this['" + callback + "'].apply("
+            ? "this" + propertyAccess(callback) + ".apply("
             : "callback.apply(") +
 
             (receiver === THIS ? "this" : "receiver") +
@@ -4210,13 +4284,15 @@ var ASSERT = require("./assert.js");
 var schedule;
 if (typeof process !== "undefined" && process !== null &&
     typeof process.cwd === "function" &&
-    typeof process.nextTick === "function") {
-
-    schedule = process.nextTick;
+    typeof process.nextTick === "function" &&
+    typeof process.version === "string") {
+    schedule = function Promise$_Scheduler(fn) {
+        process.nextTick(fn);
+    };
 }
-else if ((typeof MutationObserver === "function" ||
-        typeof WebkitMutationObserver === "function" ||
-        typeof WebKitMutationObserver === "function") &&
+else if ((typeof global.MutationObserver === "function" ||
+        typeof global.WebkitMutationObserver === "function" ||
+        typeof global.WebKitMutationObserver === "function") &&
         typeof document !== "undefined" &&
         typeof document.createElement === "function") {
 
@@ -4273,11 +4349,11 @@ else if (typeof global.postMessage === "function" &&
 
     })();
 }
-else if (typeof MessageChannel === "function") {
+else if (typeof global.MessageChannel === "function") {
     schedule = (function(){
         var queuedFn = void 0;
 
-        var channel = new MessageChannel();
+        var channel = new global.MessageChannel();
         channel.port1.onmessage = function Promise$_Scheduler() {
                 var fn = queuedFn;
                 queuedFn = void 0;
