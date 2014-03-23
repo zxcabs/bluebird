@@ -61,7 +61,8 @@ module.exports = function( grunt ) {
         "settle.js": ['Promise', 'Promise$_CreatePromiseArray', 'PromiseArray'],
         "some.js": ['Promise', 'Promise$_CreatePromiseArray', 'PromiseArray', 'apiRejection'],
         "progress.js": ['Promise', 'isPromiseArrayProxy'],
-        "cancel.js": ['Promise', 'INTERNAL']
+        "cancel.js": ['Promise', 'INTERNAL'],
+        "using.js": ['Promise', 'apiRejection']
 
     };
 
@@ -80,7 +81,8 @@ module.exports = function( grunt ) {
         "settle.js": true,
         "some.js": true,
         "progress.js": true,
-        "cancel.js": true
+        "cancel.js": true,
+        "using.js": true
 
     };
 
@@ -286,7 +288,8 @@ module.exports = function( grunt ) {
                     "./src/some_promise_array.js",
                     "./src/properties_promise_array.js",
                     "./src/promise_resolver.js",
-                    "./src/promise_spawn.js"
+                    "./src/promise_spawn.js",
+                    "./src/using.js"
                 ]
             }
         }
@@ -496,7 +499,8 @@ module.exports = function( grunt ) {
         "./src/settle.js",
         "./src/some.js",
         "./src/progress.js",
-        "./src/cancel.js"
+        "./src/cancel.js",
+        "./src/using.js"
     ];
 
     var mandatoryPaths = [
