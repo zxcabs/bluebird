@@ -35,7 +35,7 @@ Promise.prototype.nodeify = function Promise$nodeify(nodeback) {
             Promise$_errorAdapter,
             void 0,
             nodeback,
-            this._isBound() ? this._boundTo : null
+            this._boundTo
         );
         return;
     }
